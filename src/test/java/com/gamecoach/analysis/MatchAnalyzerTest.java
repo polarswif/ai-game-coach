@@ -79,7 +79,7 @@ class MatchAnalyzerTest {
 
         PlayerAnalysis player17 = analyzer.analyze(match, "Player17");
         assertEquals(7, player17.heroes().size());
-        assertEquals(Role.UNKNOWN, player17.heroes().get(1).role());   // The Hood is not in the role table yet
+        assertEquals(Role.VANGUARD, player17.heroes().get(1).role());  // The Hood
     }
 
     @Test
