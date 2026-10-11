@@ -44,6 +44,11 @@ public class HeroRoleCatalog {
         return rolesByHero.getOrDefault(normalize(hero), Role.UNKNOWN);
     }
 
+    /** True for "Deadpool" and the labeled forms like "Deadpool (Strategist)". */
+    public static boolean isDeadpool(String hero) {
+        return hero != null && normalize(hero).startsWith("deadpool");
+    }
+
     private void load(InputStream in) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         String line;

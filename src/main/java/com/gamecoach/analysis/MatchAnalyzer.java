@@ -3,6 +3,7 @@ package com.gamecoach.analysis;
 import com.gamecoach.model.HeroStats;
 import com.gamecoach.model.MatchDetails;
 import com.gamecoach.model.PlayerLine;
+import com.gamecoach.model.Role;
 
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,15 @@ public class MatchAnalyzer {
 
         List<HeroPlayed> heroes = new ArrayList<>();
         for (HeroStats hero : player.heroes()) {
-            heroes.add(new HeroPlayed(hero.hero(), roles.roleOf(hero.hero()),
+            Role role = roles.roleOf(hero.hero());
+            Role suggested = null;
+            if (HeroRoleCatalog.isDeadpool(hero.hero()) && player.heroes().size() == 1) {
+                suggested = guessRoleFromStats(stats);
+                if (role == Role.UNKNOWN) {
+                    role = suggested;   // no label on the scoreboard, so the guess is the best we have
+                }
+            }
+            heroes.add(new HeroPlayed(hero.hero(), role, suggested,
                     hero.kills(), hero.deaths(), hero.assists()));
         }
 
@@ -80,6 +89,24 @@ public class MatchAnalyzer {
             }
         }
         return better + 1;
+    }
+
+    /**
+     * Guesses which role a Deadpool player was in from how their stats rank on their own team.
+     * Teams usually run 2 Vanguards, 2 Duelists and 2 Strategists, so a top-2 healer on the team
+     * was most likely a Strategist, and a top-2 blocker most likely a Vanguard. Healing is checked
+     * first because only Strategists heal in large amounts. Otherwise: Duelist.
+     */
+    static Role guessRoleFromStats(Map<Stat, StatComparison> stats) {
+        StatComparison healing = stats.get(Stat.HEALING);
+        if (healing.value() > 0 && healing.teamRank() <= 2) {
+            return Role.STRATEGIST;
+        }
+        StatComparison blocked = stats.get(Stat.BLOCKED);
+        if (blocked.value() > 0 && blocked.teamRank() <= 2) {
+            return Role.VANGUARD;
+        }
+        return Role.DUELIST;
     }
 
     private static Integer accuracyRank(PlayerLine player, List<PlayerLine> lobby) {

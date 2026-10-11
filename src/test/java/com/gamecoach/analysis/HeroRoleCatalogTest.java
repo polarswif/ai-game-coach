@@ -5,6 +5,8 @@ import com.gamecoach.model.Role;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HeroRoleCatalogTest {
 
@@ -27,8 +29,13 @@ class HeroRoleCatalogTest {
     }
 
     @Test
-    void deadpoolIsUnknownBecauseHisRoleChangesEachMatch() {
-        assertEquals(Role.UNKNOWN, catalog.roleOf("Deadpool"));
+    void deadpoolUsesTheCommunityLabels() {
+        assertEquals(Role.VANGUARD, catalog.roleOf("Deadpool (Vanguard)"));
+        assertEquals(Role.DUELIST, catalog.roleOf("deadpool (duelist)"));
+        assertEquals(Role.STRATEGIST, catalog.roleOf("Deadpool (Strategist)"));
+        assertEquals(Role.UNKNOWN, catalog.roleOf("Deadpool"));   // no label: the analyzer guesses
+        assertTrue(HeroRoleCatalog.isDeadpool("Deadpool (Duelist)"));
+        assertFalse(HeroRoleCatalog.isDeadpool("Daredevil"));
     }
 
     @Test

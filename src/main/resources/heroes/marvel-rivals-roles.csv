@@ -1,8 +1,9 @@
 # Marvel Rivals hero -> role. One hero per line: name,ROLE (VANGUARD, DUELIST or STRATEGIST).
 # Names are matched without regard to upper/lower case or extra spaces.
 # Full 54-hero roster as of Season 10 (Gorr added in 10.0). Add new heroes here as they release.
-# Deadpool is deliberately NOT listed: he picks Vanguard, Duelist or Strategist each match,
-# so a fixed role would be wrong half the time. He comes out as UNKNOWN.
+# Deadpool can play all three roles, so he is listed the way the community labels him:
+# "Deadpool (Vanguard)", "Deadpool (Duelist)", "Deadpool (Strategist)". A plain "Deadpool"
+# is not listed; MatchAnalyzer guesses his role from the player's stats instead.
 # A few heroes have a second line for another spelling the scoreboard might show.
 
 # Vanguards (14)
@@ -21,6 +22,7 @@ The Hood,VANGUARD
 The Thing,VANGUARD
 Thor,VANGUARD
 Venom,VANGUARD
+Deadpool (Vanguard),VANGUARD
 
 # Duelists (27)
 Black Cat,DUELIST
@@ -51,6 +53,7 @@ Storm,DUELIST
 The Punisher,DUELIST
 Winter Soldier,DUELIST
 Wolverine,DUELIST
+Deadpool (Duelist),DUELIST
 
 # Strategists (12)
 Adam Warlock,STRATEGIST
@@ -66,3 +69,4 @@ Mantis,STRATEGIST
 Rocket Raccoon,STRATEGIST
 Ultron,STRATEGIST
 White Fox,STRATEGIST
+Deadpool (Strategist),STRATEGIST
