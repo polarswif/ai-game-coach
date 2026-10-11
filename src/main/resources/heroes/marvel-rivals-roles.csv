@@ -1,22 +1,37 @@
 # Marvel Rivals hero -> role. One hero per line: name,ROLE (VANGUARD, DUELIST or STRATEGIST).
-# Names are matched without regard to upper/lower case.
-# Heroes missing from this list are treated as UNKNOWN; add new heroes here as they release.
-# Not yet listed because their roles are unconfirmed here: The Hood, Jubilee.
+# Names are matched without regard to upper/lower case or extra spaces.
+# Full 54-hero roster as of Season 10 (Gorr added in 10.0). Add new heroes here as they release.
+# Deadpool is deliberately NOT listed: he picks Vanguard, Duelist or Strategist each match,
+# so a fixed role would be wrong half the time. He comes out as UNKNOWN.
+# A few heroes have a second line for another spelling the scoreboard might show.
+
+# Vanguards (14)
 Angela,VANGUARD
-Bruce Banner,VANGUARD
 Captain America,VANGUARD
+Devil Dinosaur,VANGUARD
 Doctor Strange,VANGUARD
 Emma Frost,VANGUARD
 Groot,VANGUARD
 Hulk,VANGUARD
+Bruce Banner,VANGUARD
 Magneto,VANGUARD
 Peni Parker,VANGUARD
+Rogue,VANGUARD
+The Hood,VANGUARD
 The Thing,VANGUARD
 Thor,VANGUARD
 Venom,VANGUARD
+
+# Duelists (27)
+Black Cat,DUELIST
 Black Panther,DUELIST
 Black Widow,DUELIST
 Blade,DUELIST
+Cyclops,DUELIST
+Daredevil,DUELIST
+Elsa Bloodstone,DUELIST
+Gorr,DUELIST
+Gorr the God Butcher,DUELIST
 Hawkeye,DUELIST
 Hela,DUELIST
 Human Torch,DUELIST
@@ -36,12 +51,18 @@ Storm,DUELIST
 The Punisher,DUELIST
 Winter Soldier,DUELIST
 Wolverine,DUELIST
+
+# Strategists (12)
 Adam Warlock,STRATEGIST
 Cloak & Dagger,STRATEGIST
+Cloak and Dagger,STRATEGIST
+Gambit,STRATEGIST
 Invisible Woman,STRATEGIST
 Jeff the Land Shark,STRATEGIST
+Jubilee,STRATEGIST
 Loki,STRATEGIST
 Luna Snow,STRATEGIST
 Mantis,STRATEGIST
 Rocket Raccoon,STRATEGIST
 Ultron,STRATEGIST
+White Fox,STRATEGIST

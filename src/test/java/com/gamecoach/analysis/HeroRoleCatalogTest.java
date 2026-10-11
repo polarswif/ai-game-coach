@@ -18,6 +18,20 @@ class HeroRoleCatalogTest {
     }
 
     @Test
+    void newerHeroesAreListed() {
+        assertEquals(Role.DUELIST, catalog.roleOf("Gorr"));
+        assertEquals(Role.DUELIST, catalog.roleOf("Gorr the God Butcher"));
+        assertEquals(Role.VANGUARD, catalog.roleOf("The Hood"));
+        assertEquals(Role.STRATEGIST, catalog.roleOf("Jubilee"));
+        assertEquals(Role.VANGUARD, catalog.roleOf("Devil Dinosaur"));
+    }
+
+    @Test
+    void deadpoolIsUnknownBecauseHisRoleChangesEachMatch() {
+        assertEquals(Role.UNKNOWN, catalog.roleOf("Deadpool"));
+    }
+
+    @Test
     void lookupIgnoresCaseAndExtraSpaces() {
         assertEquals(Role.STRATEGIST, catalog.roleOf("Jeff The Land Shark"));
         assertEquals(Role.STRATEGIST, catalog.roleOf("  cloak  &  dagger "));
