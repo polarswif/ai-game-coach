@@ -1,0 +1,47 @@
+# Marvel Rivals hero -> role. One hero per line: name,ROLE (VANGUARD, DUELIST or STRATEGIST).
+# Names are matched without regard to upper/lower case.
+# Heroes missing from this list are treated as UNKNOWN; add new heroes here as they release.
+# Not yet listed because their roles are unconfirmed here: The Hood, Jubilee.
+Angela,VANGUARD
+Bruce Banner,VANGUARD
+Captain America,VANGUARD
+Doctor Strange,VANGUARD
+Emma Frost,VANGUARD
+Groot,VANGUARD
+Hulk,VANGUARD
+Magneto,VANGUARD
+Peni Parker,VANGUARD
+The Thing,VANGUARD
+Thor,VANGUARD
+Venom,VANGUARD
+Black Panther,DUELIST
+Black Widow,DUELIST
+Blade,DUELIST
+Hawkeye,DUELIST
+Hela,DUELIST
+Human Torch,DUELIST
+Iron Fist,DUELIST
+Iron Man,DUELIST
+Magik,DUELIST
+Mister Fantastic,DUELIST
+Moon Knight,DUELIST
+Namor,DUELIST
+Phoenix,DUELIST
+Psylocke,DUELIST
+Scarlet Witch,DUELIST
+Spider-Man,DUELIST
+Squirrel Girl,DUELIST
+Star-Lord,DUELIST
+Storm,DUELIST
+The Punisher,DUELIST
+Winter Soldier,DUELIST
+Wolverine,DUELIST
+Adam Warlock,STRATEGIST
+Cloak & Dagger,STRATEGIST
+Invisible Woman,STRATEGIST
+Jeff the Land Shark,STRATEGIST
+Loki,STRATEGIST
+Luna Snow,STRATEGIST
+Mantis,STRATEGIST
+Rocket Raccoon,STRATEGIST
+Ultron,STRATEGIST

@@ -1,15 +1,18 @@
 package com.gamecoach.service;
 
+import com.gamecoach.analysis.PlayerAnalysis;
 import com.gamecoach.model.Feedback;
 import com.gamecoach.model.MatchDetails;
-import com.gamecoach.model.PlayerLine;
 
 /**
- * Turns a match scoreboard into coaching feedback for one player.
- * Today: a fake implementation. Later: one that calls the Claude API.
+ * Turns a match and one player's analysis into coaching feedback.
+ * Today: a fake implementation. Build step 2 adds one that calls the Claude API.
  */
 public interface CoachingService {
 
-    /** @param player the row on the scoreboard that belongs to the person being coached */
-    Feedback coach(MatchDetails match, PlayerLine player);
+    /**
+     * @param match    the full scoreboard, for context
+     * @param analysis the computed comparisons for the player being coached
+     */
+    Feedback coach(MatchDetails match, PlayerAnalysis analysis);
 }

@@ -1,28 +1,42 @@
 package com.gamecoach.service;
 
+import com.gamecoach.analysis.PlayerAnalysis;
+import com.gamecoach.analysis.Stat;
+import com.gamecoach.analysis.StatComparison;
 import com.gamecoach.model.Feedback;
 import com.gamecoach.model.MatchDetails;
-import com.gamecoach.model.PlayerLine;
 
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/** Canned feedback for development. Active with the "dev" Spring profile. */
+/**
+ * Canned feedback for development, filled in with real numbers from the analysis.
+ * Active when application.properties has gamecoach.coach.provider=fake.
+ */
 @Service
-@Profile("dev")
+@ConditionalOnProperty(name = "gamecoach.coach.provider", havingValue = "fake")
 public class FakeCoachingService implements CoachingService {
 
     @Override
-    public Feedback coach(MatchDetails match, PlayerLine player) {
+    public Feedback coach(MatchDetails match, PlayerAnalysis analysis) {
+        StatComparison assists = analysis.stats().get(Stat.ASSISTS);
+        StatComparison deaths = analysis.stats().get(Stat.DEATHS);
+
+        List<String> weaknesses = new ArrayList<>();
+        if (analysis.accuracyPercent() != null) {
+            weaknesses.add(String.format("[fake] Accuracy was %.1f%%, which is worth reviewing.",
+                    analysis.accuracyPercent()));
+        }
+        weaknesses.add("[fake] You died " + deaths.value() + " times on " + match.map()
+                + " (rank " + deaths.teamRank() + " of " + analysis.teamSize() + " on your team).");
+
         return new Feedback(
-                List.of(
-                        "[fake] You recorded " + player.assists() + " assists, so you were involved in a lot of fights."),
-                List.of(
-                        "[fake] Accuracy was " + String.format("%.1f", player.accuracyPercent()) + "%, which is worth reviewing.",
-                        "[fake] You died " + player.deaths() + " times on " + match.map() + "."),
-                List.of(
-                        "[fake] Next match, focus on staying alive between fights."));
+                List.of("[fake] You recorded " + assists.value() + " assists, rank " + assists.teamRank()
+                        + " of " + analysis.teamSize() + " on your team."),
+                weaknesses,
+                List.of("[fake] Next match, focus on staying alive between fights."));
     }
 }
