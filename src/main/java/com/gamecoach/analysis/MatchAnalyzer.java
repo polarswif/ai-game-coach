@@ -2,6 +2,7 @@ package com.gamecoach.analysis;
 
 import com.gamecoach.model.HeroStats;
 import com.gamecoach.model.MatchDetails;
+import com.gamecoach.model.MatchResult;
 import com.gamecoach.model.PlayerLine;
 import com.gamecoach.model.Role;
 
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-/** Computes the comparisons the coach needs: KDA, per-minute stats, team share, and ranks. */
+/** Computes the comparisons the coach needs: KDA, per-minute stats, team share, ranks, and hero roles. */
 @Service
 public class MatchAnalyzer {
 
@@ -23,9 +24,16 @@ public class MatchAnalyzer {
         this.roles = roles;
     }
 
-    /** Throws NoSuchElementException if no player in the match has that name (case is ignored). */
+    /**
+     * Analyzes the player with this name (case is ignored), or the uploader's highlighted row
+     * when the name is null or blank. Throws NoSuchElementException if there is no such row.
+     */
     public PlayerAnalysis analyze(MatchDetails match, String playerName) {
-        PlayerLine player = findPlayer(match, playerName);
+        return analyze(match, findPlayer(match, playerName));
+    }
+
+    /** Analyzes one row of the match. Useful when the row's name is hidden. */
+    public PlayerAnalysis analyze(MatchDetails match, PlayerLine player) {
         List<PlayerLine> lobby = match.players();
         List<PlayerLine> team = lobby.stream().filter(p -> p.team().equals(player.team())).toList();
         double minutes = Math.max(match.duration().toSeconds() / 60.0, 1.0 / 60);
@@ -42,24 +50,24 @@ public class MatchAnalyzer {
                     rank(player, lobby, stat)));
         }
 
+        // No "Heroes Used" list captured: the row's portrait is the only hero we know about.
+        List<HeroStats> used = player.heroes().isEmpty()
+                ? List.of(HeroStats.nameOnly(player.lastHero()))
+                : player.heroes();
         List<HeroPlayed> heroes = new ArrayList<>();
-        for (HeroStats hero : player.heroes()) {
-            Role role = roles.roleOf(hero.hero());
-            Role suggested = null;
-            if (HeroRoleCatalog.isDeadpool(hero.hero()) && player.heroes().size() == 1) {
-                suggested = guessRoleFromStats(stats);
-                if (role == Role.UNKNOWN) {
-                    role = suggested;   // no label on the scoreboard, so the guess is the best we have
-                }
-            }
-            heroes.add(new HeroPlayed(hero.hero(), role, suggested,
-                    hero.kills(), hero.deaths(), hero.assists()));
+        for (HeroStats hero : used) {
+            boolean last = HeroRoleCatalog.sameHero(hero.hero(), player.lastHero());
+            Role role = roleOf(hero.hero(), last, player, used.size(), stats);
+            heroes.add(new HeroPlayed(hero.hero(), role, last, hero.kills(), hero.deaths(), hero.assists()));
         }
 
         return new PlayerAnalysis(
                 player.name(),
                 player.team(),
+                player.role(),
                 won(match, player.team()),
+                player.mvp(),
+                player.svp(),
                 team.size(),
                 lobby.size(),
                 round((player.kills() + player.assists()) / (double) Math.max(player.deaths(), 1), 2),
@@ -69,13 +77,39 @@ public class MatchAnalyzer {
                 accuracyRank(player, lobby));
     }
 
+    /**
+     * Works out one hero's role, trying the most reliable source first:
+     * 1. The role table. Most heroes have one fixed role, and "Deadpool (Strategist)" is listed too.
+     * 2. The row's role icon, but only for the last hero played, since that's the hero it belongs to.
+     *    This covers a plain "Deadpool" and heroes newer than the table.
+     * 3. For a Deadpool row with no readable icon, a guess from the stats. It's last because it can
+     *    be wrong: a damage-heavy Strategist Deadpool looks like a Duelist on paper.
+     */
+    private Role roleOf(String hero, boolean last, PlayerLine player, int heroCount,
+                        Map<Stat, StatComparison> stats) {
+        Role fromTable = roles.roleOf(hero);
+        if (fromTable != Role.UNKNOWN) {
+            return fromTable;
+        }
+        if (last && player.role() != null && player.role() != Role.UNKNOWN) {
+            return player.role();
+        }
+        if (HeroRoleCatalog.isDeadpool(hero) && heroCount == 1) {
+            return guessRoleFromStats(stats);   // only safe when the row's totals are all Deadpool's
+        }
+        return Role.UNKNOWN;
+    }
+
     private static PlayerLine findPlayer(MatchDetails match, String name) {
+        boolean wantUploader = name == null || name.isBlank();
         for (PlayerLine line : match.players()) {
-            if (line.name().equalsIgnoreCase(name)) {
+            if (wantUploader ? line.uploader() : name.equalsIgnoreCase(line.name())) {
                 return line;
             }
         }
-        throw new NoSuchElementException(name + " is not in match " + match.matchId());
+        throw new NoSuchElementException(wantUploader
+                ? "Match " + match.matchId() + " has no highlighted uploader row"
+                : name + " is not in match " + match.matchId());
     }
 
     /** 1 + the number of players who did strictly better, so ties share a rank. */
@@ -92,10 +126,9 @@ public class MatchAnalyzer {
     }
 
     /**
-     * Guesses which role a Deadpool player was in from how their stats rank on their own team.
+     * Last-resort guess at a Deadpool player's role from how their stats rank on their own team.
      * Teams usually run 2 Vanguards, 2 Duelists and 2 Strategists, so a top-2 healer on the team
-     * was most likely a Strategist, and a top-2 blocker most likely a Vanguard. Healing is checked
-     * first because only Strategists heal in large amounts. Otherwise: Duelist.
+     * was probably a Strategist, and a top-2 blocker probably a Vanguard. Otherwise: Duelist.
      */
     static Role guessRoleFromStats(Map<Stat, StatComparison> stats) {
         StatComparison healing = stats.get(Stat.HEALING);
@@ -123,9 +156,10 @@ public class MatchAnalyzer {
         return better + 1;
     }
 
+    /** The banner is from team A's point of view, so team B won when team A lost. */
     private static boolean won(MatchDetails match, String team) {
-        return "A".equals(team) ? match.teamAScore() > match.teamBScore()
-                                : match.teamBScore() > match.teamAScore();
+        boolean teamAWon = match.result() == MatchResult.VICTORY;
+        return "A".equals(team) == teamAWon;
     }
 
     private static double round(double value, int decimals) {

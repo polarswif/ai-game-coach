@@ -33,7 +33,7 @@ class HeroRoleCatalogTest {
         assertEquals(Role.VANGUARD, catalog.roleOf("Deadpool (Vanguard)"));
         assertEquals(Role.DUELIST, catalog.roleOf("deadpool (duelist)"));
         assertEquals(Role.STRATEGIST, catalog.roleOf("Deadpool (Strategist)"));
-        assertEquals(Role.UNKNOWN, catalog.roleOf("Deadpool"));   // no label: the analyzer guesses
+        assertEquals(Role.UNKNOWN, catalog.roleOf("Deadpool"));   // no label: the row's role icon decides
         assertTrue(HeroRoleCatalog.isDeadpool("Deadpool (Duelist)"));
         assertFalse(HeroRoleCatalog.isDeadpool("Daredevil"));
     }

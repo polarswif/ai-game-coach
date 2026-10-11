@@ -6,7 +6,7 @@ import com.gamecoach.model.MatchDetails;
 
 /**
  * Turns a match and one player's analysis into coaching feedback.
- * Today: a fake implementation. Build step 2 adds one that calls the Claude API.
+ * Today: a fake implementation. Build step 3 adds one that calls the Claude API.
  */
 public interface CoachingService {
 

@@ -9,6 +9,7 @@ public enum Stat {
     KILLS(PlayerLine::kills, true),
     DEATHS(PlayerLine::deaths, false),   // fewer is better
     ASSISTS(PlayerLine::assists, true),
+    FINAL_HITS(PlayerLine::finalHits, true),
     DAMAGE(PlayerLine::damage, true),
     BLOCKED(PlayerLine::blocked, true),
     HEALING(PlayerLine::healing, true);

@@ -47,17 +47,20 @@ public class RivalsController {
         return matches.getMatchDetails(matchId);
     }
 
-    /** The computed comparisons for the player named in ?username= within that match. */
+    /**
+     * The computed comparisons for the player named in ?username= within that match.
+     * Leave ?username= out to analyze the uploader (the highlighted row).
+     */
     @GetMapping("/matches/{matchId}/analysis")
     public PlayerAnalysis analysis(@PathVariable("matchId") String matchId,
-                                   @RequestParam("username") String username) {
+                                   @RequestParam(name = "username", required = false) String username) {
         return analyzer.analyze(matches.getMatchDetails(matchId), username);
     }
 
-    /** Coaching feedback for the player named in ?username= within that match. */
+    /** Coaching feedback for the player named in ?username=, or the uploader when it's left out. */
     @PostMapping("/matches/{matchId}/feedback")
     public Feedback feedback(@PathVariable("matchId") String matchId,
-                             @RequestParam("username") String username) {
+                             @RequestParam(name = "username", required = false) String username) {
         MatchDetails match = matches.getMatchDetails(matchId);
         return coach.coach(match, analyzer.analyze(match, username));
     }

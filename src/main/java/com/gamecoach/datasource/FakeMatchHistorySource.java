@@ -2,8 +2,10 @@ package com.gamecoach.datasource;
 
 import com.gamecoach.model.HeroStats;
 import com.gamecoach.model.MatchDetails;
+import com.gamecoach.model.MatchResult;
 import com.gamecoach.model.MatchSummary;
 import com.gamecoach.model.PlayerLine;
+import com.gamecoach.model.Role;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -11,85 +13,115 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
+import static com.gamecoach.model.Role.DUELIST;
+import static com.gamecoach.model.Role.STRATEGIST;
+import static com.gamecoach.model.Role.VANGUARD;
+
 /**
- * Development stand-in built from a real tracker.gg scoreboard (Oct 3, 2026),
- * including the per-hero K/D/A from the expanded rows.
+ * Development stand-in: two real in-game end-of-match scoreboards (Tokyo 2099: Spider-Islands, Convoy),
+ * typed in by hand from screenshots. Heroes were identified from the portraits; the ones marked
+ * "unconfirmed" are best guesses. No "Heroes Used" hover was captured, so every heroes list is empty.
  * Active when application.properties has gamecoach.matches.source=fake.
  */
 @Component
 @ConditionalOnProperty(name = "gamecoach.matches.source", havingValue = "fake")
 public class FakeMatchHistorySource implements MatchHistorySource {
 
-    private static final String MATCH_ID = "5517881_1791071770_1288027_11001_11";
+    static final String PLAYER29_MATCH = "10378920354";                         // its replay ID
+    static final String DEADPOOL_MATCH = "5518188_1770352206_1245014_11001_11"; // ID printed bottom-left
+
+    private final Map<String, MatchDetails> matches = Map.of(
+            PLAYER29_MATCH, player29Match(),
+            DEADPOOL_MATCH, deadpoolMatch());
 
     @Override
     public List<MatchSummary> getRecentMatches(String username) {
-        // Same list for any username. Add more rows here when you want a longer picker.
-        return List.of(new MatchSummary(
-                MATCH_ID, LocalDate.of(2026, 10, 3), "Competitive Domination", "Hell's Heaven",
-                "Mantis", 24, 9, 30, true));
+        // Same list for any username. Dates are when the screenshots were shared.
+        return List.of(
+                new MatchSummary(PLAYER29_MATCH, LocalDate.of(2026, 10, 11), "Convoy",
+                        "Tokyo 2099: Spider-Islands", "Rocket Raccoon", 7, 7, 33, true),
+                new MatchSummary(DEADPOOL_MATCH, LocalDate.of(2026, 10, 11), "Convoy",
+                        "Tokyo 2099: Spider-Islands", "Cloak & Dagger", 32, 0, 53, true));
     }
 
     @Override
     public MatchDetails getMatchDetails(String matchId) {
-        if (!MATCH_ID.equals(matchId)) {
+        MatchDetails match = matches.get(matchId);
+        if (match == null) {
             throw new NoSuchElementException("No fake match with id " + matchId);
         }
-        return new MatchDetails(
-                MATCH_ID,
-                "Competitive Domination",
-                "Hell's Heaven",
-                Duration.ofMinutes(15).plusSeconds(20),
-                2,
-                1,
-                List.of(
-                        // Team A
-                        new PlayerLine("player41",
-                                List.of(h("Mister Fantastic", 39, 6, 1)),
-                                "A", "G2", 4654, 39, 6, 1, 26330, 27475, 0, 56.1),
-                        new PlayerLine("PlayerOne",
-                                List.of(h("Mantis", 14, 7, 19), h("Cloak & Dagger", 10, 2, 11)),
-                                "A", "G2", 4602, 24, 9, 30, 11737, 13333, 29180, 38.6),
-                        new PlayerLine("Player13",
-                                List.of(h("Emma Frost", 34, 11, 9)),
-                                "A", "G2", 4625, 34, 11, 9, 23672, 37667, 0, 36.3),
-                        new PlayerLine("Player19",
-                                List.of(h("Doctor Strange", 29, 8, 1)),
-                                "A", "G2", 4643, 29, 8, 1, 21537, 43849, 0, 40.1),
-                        new PlayerLine("-Player02-",
-                                List.of(h("Rocket Raccoon", 7, 12, 29), h("Invisible Woman", 2, 0, 1)),
-                                "A", "G3", 4555, 9, 12, 30, 3543, 9952, 33746, 41.3),
-                        new PlayerLine("player33",
-                                List.of(h("Winter Soldier", 29, 11, 6), h("Venom", 0, 0, 0)),
-                                "A", "G2", 4646, 29, 11, 6, 21755, 12973, 0, 43.8),
-                        // Team B
-                        new PlayerLine("Player31",
-                                List.of(h("Cloak & Dagger", 8, 4, 14), h("Rocket Raccoon", 6, 4, 9),
-                                        h("Invisible Woman", 1, 1, 0)),
-                                "B", "G2", 4643, 15, 9, 23, 8632, 11085, 36367, 85.0),
-                        new PlayerLine("player 43",
-                                List.of(h("Spider-Man", 26, 8, 5)),
-                                "B", "G2", 4647, 26, 8, 5, 17269, 8267, 0, 27.0),
-                        new PlayerLine("Player 05",
-                                List.of(h("Jeff the Land Shark", 19, 10, 18), h("Ultron", 4, 3, 8)),
-                                "B", "G2", 4662, 23, 13, 26, 14682, 10911, 28231, 74.1),
-                        new PlayerLine("Player_22",
-                                List.of(h("Emma Frost", 18, 5, 2), h("Winter Soldier", 3, 3, 3),
-                                        h("Doctor Strange", 1, 1, 0)),
-                                "B", "G2", 4606, 22, 9, 5, 25526, 35846, 0, 35.3),
-                        new PlayerLine("player39",
-                                List.of(h("Mister Fantastic", 25, 12, 2)),
-                                "B", "G2", 4640, 25, 12, 2, 27969, 25052, 0, null),  // tracker shows "—"
-                        new PlayerLine("Player17",
-                                List.of(h("Emma Frost", 6, 4, 0), h("The Hood", 5, 3, 0), h("Bruce Banner", 2, 3, 0),
-                                        h("Magneto", 3, 2, 0), h("Doctor Strange", 2, 1, 0), h("Angela", 2, 0, 1),
-                                        h("Jubilee", 0, 0, 0)),
-                                "B", "G2", 4601, 20, 13, 1, 18415, 41829, 90, 24.1)));
+        return match;
     }
 
-    private static HeroStats h(String hero, int kills, int deaths, int assists) {
-        return new HeroStats(hero, kills, deaths, assists);
+    /** Uploader Player29. One name is covered by a "MENU" popup, so it's null. */
+    private static MatchDetails player29Match() {
+        return new MatchDetails(PLAYER29_MATCH, "Convoy", "Tokyo 2099: Spider-Islands",
+                Duration.ofMinutes(16).plusSeconds(7), MatchResult.VICTORY, "10378920354", List.of(),
+                List.of(
+                        //   name             team role        last hero                K   D   A  FH  damage blocked healing acc
+                        row("Plàyer12",         "A", VANGUARD,   "Hulk",                 19, 10,  6,  7, 11418, 42180,     0, 33.0),
+                        row(null,             "A", VANGUARD,   "Doctor Strange",       30,  9,  0,  9, 17697, 49185,     0, 42.0),
+                        row("Player09",   "A", DUELIST,    "Squirrel Girl",        22, 10,  1, 13, 21532,  9073,     0, 33.0),
+                        mvp(row("player44", "A", DUELIST, "Scarlet Witch",       43, 11,  0, 26, 26376, 15842,     0, 55.0)),
+                        uploader(row("Player29", "A", STRATEGIST, "Rocket Raccoon",      7,  7, 33,  1,  1718,  6066, 31613, 20.0)),
+                        row("player34",           "A", STRATEGIST, "Jubilee",              18, 13, 20,  4,  6005, 13062, 40886, 50.0), // unconfirmed
+                        row("Player15",       "B", VANGUARD,   "Groot",                22, 10,  0,  7, 21497, 42886,     0, 55.0),
+                        svp(row("player32",    "B", DUELIST,    "Moon Knight",          35,  8,  1, 24, 31663,  7651,     0, 34.0)),
+                        row("Player06",      "B", DUELIST,    "Star-Lord",            33, 12,  0, 16, 26521, 11791,     0, 31.0), // unconfirmed
+                        row("Player11",     "B", STRATEGIST, "Cloak & Dagger",       24,  8, 14,  5, 14079, 12215, 26594, 86.0),
+                        row("Player30",  "B", STRATEGIST, "Jubilee",               5, 11, 16,  1,  5018, 10123, 14531, 33.0), // unconfirmed
+                        row("player38-",          "B", STRATEGIST, "Jeff the Land Shark",  19, 12, 13,  7, 12921, 10194, 16311, 51.0)));
+    }
+
+    /**
+     * Uploader Player08; every other name was blacked out. The MVP is a Deadpool whose row has the
+     * Strategist icon. His stats look like a Duelist's, which is why the icon beats the stats guess.
+     */
+    private static MatchDetails deadpoolMatch() {
+        return new MatchDetails(DEADPOOL_MATCH, "Convoy", "Tokyo 2099: Spider-Islands",
+                Duration.ofMinutes(17).plusSeconds(50), MatchResult.VICTORY, null, List.of(),
+                List.of(
+                        //   name         team role        last hero          K   D   A  FH  damage blocked healing acc
+                        row(null,         "A", VANGUARD,   "Magneto",        34,  7,  5, 12, 28387, 55292,     0, 58.0), // unconfirmed
+                        row(null,         "A", VANGUARD,   "Thor",           31,  9,  4, 14, 27365, 52370,  2422, 45.0),
+                        row(null,         "A", DUELIST,    "Iron Fist",      34,  6,  0, 19, 30315,  8048,     0,  0.0), // unconfirmed
+                        uploader(row("Player08", "A", STRATEGIST, "Cloak & Dagger", 32, 0, 53, 5, 17085, 7622, 50176, 90.0)),
+                        row(null,         "A", STRATEGIST, "Luna Snow",      25,  2, 37,  4, 14064, 15855, 39086, 49.0), // unconfirmed
+                        mvp(row(null,     "A", STRATEGIST, "Deadpool",       35,  7,  8, 16, 36204, 14732,  8208, 51.0)),
+                        row(null,         "B", VANGUARD,   "The Hood",       17, 12, 18,  2, 16499, 23086, 28697,  0.0), // unconfirmed
+                        svp(row(null,     "B", VANGUARD,   "Rogue",          21,  7, 16,  8, 27144, 49370,  5888, 26.0)), // unconfirmed
+                        row(null,         "B", VANGUARD,   "Emma Frost",     18, 14,  3,  8, 31139, 44340,     0, 53.0),
+                        row(null,         "B", DUELIST,    "Phoenix",        17, 14,  1,  8, 25219, 18115,  1535, 36.0),
+                        row(null,         "B", STRATEGIST, "Mantis",          8, 13, 15,  1, 17375, 18208, 24720, 38.0), // unconfirmed
+                        row(null,         "B", STRATEGIST, "Luna Snow",      13, 10, 23,  4, 14342, 26851, 35392, 51.0))); // unconfirmed
+    }
+
+    /** A plain row: no hover list, not the uploader, no MVP/SVP, no rank (the game doesn't show one). */
+    private static PlayerLine row(String name, String team, Role role, String lastHero,
+                                  int kills, int deaths, int assists, int finalHits,
+                                  int damage, int blocked, int healing, Double accuracy) {
+        return new PlayerLine(name, team, role, lastHero, List.<HeroStats>of(), kills, deaths, assists,
+                finalHits, damage, blocked, healing, accuracy, false, false, false, null, null);
+    }
+
+    private static PlayerLine uploader(PlayerLine p) {
+        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.kills(), p.deaths(),
+                p.assists(), p.finalHits(), p.damage(), p.blocked(), p.healing(), p.accuracyPercent(),
+                true, p.mvp(), p.svp(), p.rank(), p.rankScore());
+    }
+
+    private static PlayerLine mvp(PlayerLine p) {
+        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.kills(), p.deaths(),
+                p.assists(), p.finalHits(), p.damage(), p.blocked(), p.healing(), p.accuracyPercent(),
+                p.uploader(), true, p.svp(), p.rank(), p.rankScore());
+    }
+
+    private static PlayerLine svp(PlayerLine p) {
+        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.kills(), p.deaths(),
+                p.assists(), p.finalHits(), p.damage(), p.blocked(), p.healing(), p.accuracyPercent(),
+                p.uploader(), p.mvp(), true, p.rank(), p.rankScore());
     }
 }

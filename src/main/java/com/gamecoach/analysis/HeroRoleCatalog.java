@@ -15,8 +15,9 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Looks up a Marvel Rivals hero's role. The scoreboard never shows roles,
- * so they come from the table in resources/heroes/marvel-rivals-roles.csv.
+ * Looks up a Marvel Rivals hero's role from the table in resources/heroes/marvel-rivals-roles.csv.
+ * The scoreboard's role icon only covers each player's last hero; this table covers every hero,
+ * including the others in a player's "Heroes Used" list.
  */
 @Component
 public class HeroRoleCatalog {
@@ -47,6 +48,11 @@ public class HeroRoleCatalog {
     /** True for "Deadpool" and the labeled forms like "Deadpool (Strategist)". */
     public static boolean isDeadpool(String hero) {
         return hero != null && normalize(hero).startsWith("deadpool");
+    }
+
+    /** True when two hero names are the same, ignoring case and extra spaces. */
+    public static boolean sameHero(String a, String b) {
+        return a != null && b != null && normalize(a).equals(normalize(b));
     }
 
     private void load(InputStream in) throws IOException {
