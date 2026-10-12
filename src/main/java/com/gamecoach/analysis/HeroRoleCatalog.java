@@ -50,9 +50,17 @@ public class HeroRoleCatalog {
         return hero != null && normalize(hero).startsWith("deadpool");
     }
 
-    /** True when two hero names are the same, ignoring case and extra spaces. */
+    /**
+     * True when two hero names are the same hero, ignoring case and extra spaces.
+     * All Deadpool labels count as the same hero: "Deadpool (Duelist)" matches "Deadpool".
+     */
     public static boolean sameHero(String a, String b) {
-        return a != null && b != null && normalize(a).equals(normalize(b));
+        return a != null && b != null && baseName(a).equals(baseName(b));
+    }
+
+    /** The normalized name with any Deadpool role label removed, e.g. "deadpool". */
+    static String baseName(String hero) {
+        return isDeadpool(hero) ? "deadpool" : normalize(hero);
     }
 
     private void load(InputStream in) throws IOException {
@@ -70,7 +78,7 @@ public class HeroRoleCatalog {
         }
     }
 
-    private static String normalize(String hero) {
+    static String normalize(String hero) {
         return hero.strip().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT);
     }
 }

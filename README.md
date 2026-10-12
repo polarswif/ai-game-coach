@@ -11,8 +11,8 @@ An AI coaching app for competitive games. Players upload a screenshot of the end
 - **AI:** Claude API (planned)
 
 ## How it works
-1. **Match data** comes from a `MatchHistorySource`. Today that's two built-in matches typed in from real Marvel Rivals in-game scoreboards: role icon, last hero played, K/D/A, final hits, damage, blocked, healing, accuracy, and MVP/SVP for every row.
-2. **`MatchAnalyzer`** computes the numbers in Java: KDA, per-minute stats, each player's share of their team's totals, and their rank on their team and in the lobby. Each hero's role comes from a table in `src/main/resources/heroes/`, with the row's role icon filling the gaps (such as Deadpool, who can play any role).
+1. **Match data** comes from a `MatchHistorySource`. Today that's three built-in matches typed in from real Marvel Rivals in-game scoreboards: role icon, last hero played, equipped team-up, K/D/A, final hits, damage, blocked, healing, accuracy, and MVP/SVP for every row.
+2. **`MatchAnalyzer`** computes the numbers in Java: KDA, per-minute stats, each player's share of their team's totals, and their rank on their team and in the lobby. Each hero's role comes from a table in `src/main/resources/heroes/`, with the row's role icon filling the gaps (such as Deadpool, who can play any role). It also reports both teams' compositions, and works out each equipped team-up from a table of all 108 team-ups: whether it was enhanced, and whether the hero's other team-up would have been enhanced instead.
 3. **A `CoachingService`** turns the match and that analysis into strengths, weaknesses, and advice. Today it returns canned text; next it will call Claude.
 
 Doing the math in Java means the coaching model reads finished comparisons instead of calculating them, and the logic is covered by unit tests.
@@ -33,6 +33,7 @@ Run the tests with `./mvnw test` (or `mvnw.cmd test` on Windows).
 - [x] Spring Boot API with fake match data and feedback
 - [x] Match analysis (team share, ranks, per-minute stats, hero roles)
 - [x] Model matches the in-game scoreboard (role icons, final hits, MVP/SVP, hidden names)
+- [x] Team compositions and Season 9 team-ups in the analysis
 - [ ] Claude-backed coaching feedback
 - [ ] Scoreboard screenshot upload and parsing (in-game first, tracker.gg as an optional extra)
 - [ ] Overwatch career stats (OverFast)

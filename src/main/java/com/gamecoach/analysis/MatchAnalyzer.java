@@ -20,9 +20,11 @@ import java.util.function.ToIntFunction;
 public class MatchAnalyzer {
 
     private final HeroRoleCatalog roles;
+    private final TeamUpCatalog teamUps;
 
-    public MatchAnalyzer(HeroRoleCatalog roles) {
+    public MatchAnalyzer(HeroRoleCatalog roles, TeamUpCatalog teamUps) {
         this.roles = roles;
+        this.teamUps = teamUps;
     }
 
     /**
@@ -76,6 +78,8 @@ public class MatchAnalyzer {
                 composition(enemies),
                 round((player.kills() + player.assists()) / (double) Math.max(player.deaths(), 1), 2),
                 heroes,
+                teamUp(player, team),
+                teammateTeamUpsYouEnhance(player, team),
                 stats,
                 player.accuracyPercent(),
                 accuracyRank(player, lobby));
@@ -101,6 +105,65 @@ public class MatchAnalyzer {
             return guessRoleFromStats(player, team);   // only safe when the row's totals are all Deadpool's
         }
         return Role.UNKNOWN;
+    }
+
+    /**
+     * Looks up the equipped team-up from (last hero, partner in the box), checks whether a teammate
+     * really played the partner, and spots a better choice: the hero's other team-up when its
+     * partner is on the team but the equipped one isn't enhanced.
+     */
+    private TeamUpAnalysis teamUp(PlayerLine player, List<PlayerLine> team) {
+        if (player.teamUp() == null) {
+            return null;
+        }
+        String partner = player.teamUp().partner();
+        TeamUp equipped = teamUps.find(player.lastHero(), partner).orElse(null);
+        boolean partnerOnTeam = onTeam(partner, player, team);
+
+        String betterOption = null;
+        if (!partnerOnTeam) {
+            for (TeamUp other : teamUps.forHero(player.lastHero())) {
+                if (!HeroRoleCatalog.sameHero(other.partner(), partner) && onTeam(other.partner(), player, team)) {
+                    betterOption = other.name() + " (" + other.partner() + ")";
+                }
+            }
+        }
+        return new TeamUpAnalysis(
+                equipped == null ? null : equipped.name(),
+                partner,
+                player.teamUp().enhanced(),
+                partnerOnTeam,
+                equipped == null ? null : equipped.baseEffect(),
+                equipped == null ? null : equipped.enhancedEffect(),
+                betterOption);
+    }
+
+    /** Teammates' equipped team-ups whose partner is this player's hero, as "Team-up (player)". */
+    private List<String> teammateTeamUpsYouEnhance(PlayerLine player, List<PlayerLine> team) {
+        List<String> result = new ArrayList<>();
+        for (PlayerLine mate : team) {
+            if (mate == player || mate.teamUp() == null
+                    || !HeroRoleCatalog.sameHero(mate.teamUp().partner(), player.lastHero())) {
+                continue;
+            }
+            teamUps.find(mate.lastHero(), mate.teamUp().partner()).ifPresent(t ->
+                    result.add(t.name() + " (" + (mate.name() == null ? mate.lastHero() : mate.name()) + ")"));
+        }
+        return result;
+    }
+
+    /** True when a teammate (not the player) played this hero, as their last hero or in their hero list. */
+    private static boolean onTeam(String hero, PlayerLine player, List<PlayerLine> team) {
+        for (PlayerLine mate : team) {
+            if (mate == player) {
+                continue;
+            }
+            if (HeroRoleCatalog.sameHero(mate.lastHero(), hero)
+                    || mate.heroes().stream().anyMatch(h -> HeroRoleCatalog.sameHero(h.hero(), hero))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static PlayerLine findPlayer(MatchDetails match, String name) {

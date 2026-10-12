@@ -1,0 +1,124 @@
+# Marvel Rivals team-ups after the Season 9 rework (data as of Season 10.5, Oct 2026).
+# Every hero has two team-ups and equips one. The base effect always works; the enhanced effect
+# switches on when the partner hero is on the same team.
+# Columns, separated by | because the effect text contains commas:
+#   hero | team-up | partner | base effect | enhanced effect
+# Effects are short summaries for the coach, not exact numbers. Deadpool is listed once as "Deadpool"
+# and applies to all three of his roles.
+# Source: rivalsdex.com/team-ups (Season 10.5), cross-checked with expcarry.com's team-ups guide.
+
+# Vanguards
+Angela|Asgardians of the Galaxy|Star-Lord|Reveal area and a grounding slam|Gains Bonus Health per enemy slammed
+Angela|Odin's Unacknowledged|Loki|Illusion thrust that launches enemies|Two charges
+Captain America|Stars Aligned|Winter Soldier|Leap to a teammate with Bonus Health|Mutual rally with Bonus Health and Speed
+Captain America|Voltaic Union|Thor|Lightning Shield projectile with four launches|Extra burst damage per hit
+Devil Dinosaur|Primal Punishment|The Punisher|Magnetic cannons apply Bleed|Punisher rides Devil Dinosaur, which absorbs damage
+Devil Dinosaur|Surf & Turf|Jeff the Land Shark|Water spray damages enemies and heals allies|Jeff rides Devil Dinosaur with Damage Reduction and healing
+Doctor Strange|Gamma Maelstrom|Hulk|Faster Maelstrom charge, removes Anti-Heal|Keeps energy with no decay
+Doctor Strange|Psionic Vortex|Invisible Woman|Maelstrom launches enemies; bigger shield|Damage grants Bonus Health
+Emma Frost|Iced Out Diamond|Luna Snow|Ice projection and diamond barrier|Diamond Form adds Slow to damage abilities
+Emma Frost|Spirit Breaker|Mantis|Sentience damage becomes Bonus Health|One-time Bonus Health; Psychic Spear cooldown reduced
+Groot|Bubble Buddies|Jeff the Land Shark|Bubble Shield gives invincibility and healing|Stronger healing; excess becomes Bonus Health
+Groot|Wild Wall|Mantis|Wild Wall heals and grants Bonus Health|Wall evolves after a healing threshold
+Hulk|Gamma Fastball|Wolverine|Furious state and Unstoppable at low Health|Fastball Special hurls Wolverine
+Hulk|Savage Slam|Captain America|Slam reduces cooldowns based on Health|Slam applies Vulnerability
+Magneto|Magnetic Resonance|Emma Frost|Magnetic projection that mimics Magneto|Projection has massive Health and lasts until destroyed or recalled
+Magneto|Metallic Chaos|Scarlet Witch|Chaos Greatsword swing|Mag-Cannon fires greatswords that launch
+Peni Parker|Rocket Network|Rocket Raccoon|Spider-Nest drops drones and armor|Nest regenerates; B.R.B. spawns webs and mines
+Peni Parker|Vibranium Mech|Black Panther|Frontal Vibranium Shield and attack speed boost|Bigger, longer shield
+Rogue|Explosive Entanglement|Magneto|Defensive Stance absorbs damage into Southern Brawl|Southern Brawl knocks back with extra wall damage
+Rogue|Mr. & Mrs. X|Gambit|Attacks cause kinetic explosions that heal allies|Rogue stays in Hearts as One
+The Hood|Chaos Collision|Scarlet Witch|Arcane zone with teleport to its center|Shockwave after teleport launches enemies toward The Hood
+The Hood|New Moon's Shadow|Moon Knight|Lunar Barrier detonates and Blinds|Bigger shield; Hood's attacks bounce
+The Thing|Two-in-One|Human Torch|Flaming fists with splash and explosions|Torch lifts and slams Thing to Stun; Thing's fists auto-flame
+The Thing|Unbreakable Forces|Invisible Woman|Psionic Armor gives Bonus Health from missing Health|Area healing pulses and higher conversion
+Thor|Divine Armory|Angela|Thunder Spear with a second leap wave|Leap grants Bonus Health
+Thor|Ragnarok Rebirth|Hela|Fatal damage is prevented; a KO resurrects|Instant revive with Continuous Healing
+Venom|Abyssal Flames|Phoenix|Phoenix Flames swap in an Avian Claw slash|Claw hits apply Sparks that detonate at 3
+Venom|Blood Leech|Blade|Tethers siphon enemy health|One-time healing from certain abilities
+
+# Duelists
+Black Cat|Binding Ties|Spider-Man|Web Grapple steals Fortune and tags enemies|Grappling a tagged enemy briefly Immobilizes
+Black Cat|Feline Alliance|Black Panther|Vibranium explosion with knockback and Fortune gain|Explosion no longer limited by the threshold
+Black Panther|Damisa-Yao|Storm|Elemental blast with Slow and Vibranium Marks|Enemies in range are pulled toward Black Panther
+Black Panther|Dimensional Shortcut|Magik|Rewind to an earlier position with Bonus Health|Teleport can be canceled mid-transit
+Black Widow|Allied Agents|Hawkeye|Rifle hits build Focus for an enhanced bullet|Crits keep Focus from expiring
+Black Widow|Burning Bullets|Phoenix|Fire Rate Boost; Plasma Cannon becomes instant hitscan|Plasma Cannon gains a second charge
+Blade|Blade of Khonshu|Moon Knight|Dash into bouncing Darkmoon Blades|Each Whirlwind Slash makes one extra blade
+Blade|Bleed for Battle|Captain America|Damage builds Bloodline Awakening stacks|Critical damage triggers the state instantly with bonus stacks
+Cyclops|Kinetic Kin|Gambit|Speed and jump boost state|Faster Optic Blast and Concussive Beam
+Cyclops|Slim and Red|Phoenix|Burn on hit with a burst on Optic Blast|Sparks reduce Ricochet Force cooldown
+Daredevil|Comprehensive Defense|Iron Fist|Objection! hits all enemies and recovers Fury|Passive healing for the whole duration
+Daredevil|Devilish Affair|Black Widow|Devil's Chain criss-cross with Slow|Wider radius; hits recover Fury
+Elsa Bloodstone|Loudmouth Mercs|Deadpool|Taunting, slowing special rounds|Deadpool boosts Instinct gain
+Elsa Bloodstone|Prehistoric Trap|Devil Dinosaur|Smoky Snare immobilizes and gasses enemies|Two Smoky Snares
+Gorr|Hive Mind|Venom|Symbiote Claw launches enemies back|Black Berserkers gain Damage Boost and Slow
+Gorr|Ragnarök|Hela|Scythe sweep that Grounds|Longer range; Bonus Health per hit
+Hawkeye|Moonlit Slash|Cloak & Dagger|Heals allies and damages enemies|Three-hit combo
+Hawkeye|Senbonzakura Strike|Psylocke|Banks and fires Psionic Arrows together|Faster nocking; arrows explode
+Hela|Deep Wrath|Namor|KOs spawn Undead Monstros|Each Goddess of Death attack spawns one
+Hela|Hel Tendrils|Venom|Tendrils pull and Slow enemies|Symbiote volley; direct hits heal Hela
+Human Torch|Fiery Sparks|Jubilee|Tracking firework sparks damage enemies|Landed sparks grant Bonus Health
+Human Torch|Storming Ignition|Storm|Fire Vortex pulls enemies|Burning Hurricane and extra Flame Tornados
+Iron Fist|Iron & Stone|The Thing|Launching uppercut with a kick follow-up|Uppercut chains straight into the kick for more damage
+Iron Fist|Kumiho Palm|White Fox|Yat Jee Chung Kuen hits heal nearby allies|Much longer lock-on range
+Iron Man|Gamma Charge|Hulk|Gamma Overdrive with a Gamma Shield|Gamma Pulse Cannon with Damage Boost
+Iron Man|Thunder Overdrive|Thor|Armor Overdrive boosts damage and Bonus Health|Not listed in current game data
+Magik|Chain of Cyttorak|Doctor Strange|Tethers two enemies together|Tethers many enemies and pulls them to one point
+Magik|Void Pentagram|The Hood|Stepping Discs refund energy and summon Limbo Demons|Demons get much more Health and reach
+Mister Fantastic|Clobberin' Research Dept.|The Thing|Charged brawling punch grants Bonus Health|Distended Grip becomes a charged, launching hammer
+Mister Fantastic|Fantastic Amplifier|Rocket Raccoon|Higher Elasticity and Inflation State|Brainiac Bounce launches enemies
+Moon Knight|Blood Moon|Elsa Bloodstone|Ankh Trap summons one Talon|Multiple Talons bombard the area
+Moon Knight|Luminous Moon|Cloak & Dagger|Phased dash with a healing wave|Longer phase, Continuous Healing, bigger wave
+Namor|Chilling Charisma|Luna Snow|Frost Tide slows enemies; Frozen Spawns|Frost Tide gains a charge and crashes with an area Slow
+Namor|Gamma Monstro|Hulk|Extra Gamma Monstro with beams|Gamma water barrier speeds cooldowns and adds Damage Boost
+Phoenix|Circle of Life|Hela|Netherfire stuns, then explodes with Sparks|Each blast applies multiple Sparks
+Phoenix|Telekinetic Beatdown|Rogue|Phoenix Force punches and blinks between targets|Extra Spark, healing, and strikes
+Psylocke|Light & Dark Darts|Cloak & Dagger|Dart ring damages and heals; Shadow Domain stealth|Larger domain; darts refire on re-entering stealth
+Psylocke|Mental Projection|Emma Frost|Illusion dashes and mimics strikes|Can swap places with the illusion
+Scarlet Witch|Hex Fireworks|Jubilee|Plasmoid Seal detonates for damage and Vulnerability|Constant healing during Mystic Projection
+Scarlet Witch|Sorcerers Supreme|Doctor Strange|Mystic Burst replaces Chthonian Burst|Toggleable
+Spider-Man|Parker Power-Up|Peni Parker|Sticky Spider-Bomb applies Spider-Tracer|Upgraded tracers grant Bonus Health
+Spider-Man|Symbiote Bond|Venom|Symbiote spikes explode and push enemies back|Extra tendrils tether and damage
+Squirrel Girl|ESU Alumnus|Spider-Man|Web bomb explosion with Slow and Grounded|Sticky web Slow and Grounded that scales to Stun
+Squirrel Girl|Squirrel Missile|Iron Man|Homing squirrel missile|Squirrel Blockade also fires a missile
+Star-Lord|Flora Munitions|Groot|Thorn Snares damage and Root|More snares with higher damage
+Star-Lord|Star-Soul|Adam Warlock|Telekinetic Beacon teleport and respawn|KOs reduce beacon cooldown
+Storm|Gods of Thunder|Thor|Detonating lightning beam|Bolt Rush becomes bouncing Chain Lightning
+Storm|Jaws of Fate|Jeff the Land Shark|Downpour heals allies|Jeff swims in the cyclone (Jeff-nado)
+The Punisher|Ammo Overload|Rocket Raccoon|Ammo device grants Faster Firing|Device also grants Infinite Ammo
+The Punisher|Bestial Hunt|Daredevil|Piercing Damage Boost bullets|Bullets break walls and shields faster
+Winter Soldier|Expert Instinct|Elsa Bloodstone|KOs grant Culling Instinct stacks|More Bonus Health from Ceaseless Charge
+Winter Soldier|Timeless Veterans|The Punisher|Burst Spike damages and knocks back|Grounded and stronger knockback
+Wolverine|Blast Slash|Cyclops|Extended claw range; Kinetic Claws lunge|Blast Slash is always active
+Wolverine|Pair of Threes|Gambit|Speed and jump with bonus damage particles|Continuous Healing for the duration
+
+# Strategists
+Adam Warlock|Cosmic Cyclone|Storm|Soul Bond grants Speed Boost|Soul Bond also grants Damage Boost
+Adam Warlock|Flawless Design|Ultron|Cosmic Cluster heals allies|Cosmic Cluster explodes on impact
+Cloak & Dagger|Frozen Haven|Luna Snow|Ice shell with a weak healing aura|Much stronger healing aura
+Cloak & Dagger|Oblivion Shroud|The Hood|Veils weaken enemy damage and healing|Wider veils; Damage Boost for allies
+Gambit|Favorable Odds|Magneto|Cards heal allies and launch enemies|Poles reverse and explode for extra healing and damage
+Gambit|Sparkling Staff|Jubilee|Staff heals and blocks projectiles|Extra Continuous Healing aura
+Invisible Woman|First Family|Mister Fantastic|Invisible state with healing and speed|Stronger effects, longer duration
+Invisible Woman|United Siblings|Human Torch|Flame Shield with a healing aura and Slow|Larger radius and shield
+Jeff the Land Shark|Guardian of the Deep|Venom|Healing tendrils with Bonus Health|Tendrils also damage enemies
+Jeff the Land Shark|Mr. Pool's Interdimensional Toy Box|Deadpool|Plushie taunts and heals|Stronger taunt that damages enemies
+Jubilee|Hellfire Sparks|The Hood|Hitscan form with self-healing|Void Magic Mark never clears
+Jubilee|Vampiric Kin|Blade|Vampiric Field heals and grants Life Steal|Extra Continuous Healing
+Loki|Vibrant Vitality|Mantis|Regeneration Domain grants Damage Boost|Shockwave damages and launches
+Loki|Villain's Illusion|Hela|Loki takes fallen heroes' forms|Longer form; prevents a KO on lethal damage
+Luna Snow|Atlas Bond|White Fox|Spirit fox charms enemies and heals allies|Fox auto-returns at max range
+Luna Snow|Duality Dance|Adam Warlock|Soul Bond tether restores your Health|Critical Light & Dark Ice cuts Absolute Zero and Ice Arts cooldowns
+Mantis|Star Blossom|Star-Lord|Recasting Healing Flower spreads the aura|Instantly triggers the enhanced field
+Mantis|Vitality Pact|Adam Warlock|Soul state heals allies; Nature's Favor enhanced|Soul forges a Soul Bond with Healing Over Time
+Rocket Raccoon|Mammalian Bond|Squirrel Girl|Acorns heal teammates and cut cooldowns|Higher max charges
+Rocket Raccoon|Planet X Pals|Groot|Thorny Spores damage and heal|Rocket rides Groot; longer field
+Ultron|SP//DR Sync|Peni Parker|Imperative: Patch on allies|Firewall applies to all drones, multiple triggers
+Ultron|Stark Protocol|Iron Man|Nano-Ray damages enemies and heals allies|Firewall fires homing missiles
+White Fox|Lucky Loan|Black Cat|Nine-Tailed Aura buffs allies and damages enemies|No Spirit Tail cost for a duration
+White Fox|Psionic Fox|Psylocke|Fox Form costs no energy and starts at max duration|Much shorter cooldown
+
+# Any role
+Deadpool|Gumbo Chimichangas|Gambit|Chimichanga ring damages enemies|Landing Stuns enemies in the blast
+Deadpool|Hel-Yeah, Honey|Hela|Extra weapon upgrade; Katanas build undead energy for true damage|Both weapons get one more upgrade

@@ -2,6 +2,7 @@ package com.gamecoach.controller;
 
 import com.gamecoach.analysis.HeroRoleCatalog;
 import com.gamecoach.analysis.MatchAnalyzer;
+import com.gamecoach.analysis.TeamUpCatalog;
 import com.gamecoach.datasource.FakeMatchHistorySource;
 import com.gamecoach.model.Feedback;
 import com.gamecoach.model.MatchDetails;
@@ -28,12 +29,12 @@ class RivalsControllerTest {
     private static final String DEADPOOL_MATCH = "5518188_1770352206_1245014_11001_11";
 
     private final FakeMatchHistorySource source = new FakeMatchHistorySource();
-    private final MatchAnalyzer analyzer = new MatchAnalyzer(new HeroRoleCatalog());
+    private final MatchAnalyzer analyzer = new MatchAnalyzer(new HeroRoleCatalog(), new TeamUpCatalog());
     private final RivalsController controller = new RivalsController(source, analyzer, new FakeCoachingService());
 
     @Test
-    void pickerListsBothMatches() {
-        assertEquals(2, controller.recentMatches("anyone").size());
+    void pickerListsAllMatches() {
+        assertEquals(3, controller.recentMatches("anyone").size());
     }
 
     @Test

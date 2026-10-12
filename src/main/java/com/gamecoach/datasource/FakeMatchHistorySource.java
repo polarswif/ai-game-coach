@@ -1,5 +1,6 @@
 package com.gamecoach.datasource;
 
+import com.gamecoach.model.EquippedTeamUp;
 import com.gamecoach.model.HeroStats;
 import com.gamecoach.model.MatchDetails;
 import com.gamecoach.model.MatchResult;
@@ -21,11 +22,12 @@ import static com.gamecoach.model.Role.STRATEGIST;
 import static com.gamecoach.model.Role.VANGUARD;
 
 /**
- * Development stand-in: two real in-game end-of-match scoreboards (Tokyo 2099: Spider-Islands, Convoy),
+ * Development stand-in: three real in-game end-of-match scoreboards (Tokyo 2099: Spider-Islands, Convoy),
  * typed in by hand from screenshots. Heroes were identified from the portraits and confirmed by the
  * uploader, except where marked "unconfirmed". Some portraits are Lord variants (alternate art for
  * high-proficiency players), which look different from the default portrait.
- * No "Heroes Used" hover was captured, so every heroes list is empty.
+ * No "Heroes Used" hover was captured, so every heroes list is empty. Only the third match's
+ * scoreboard has the team-up boxes, so the other two have no team-ups.
  * Active when application.properties has gamecoach.matches.source=fake.
  */
 @Component
@@ -34,10 +36,12 @@ public class FakeMatchHistorySource implements MatchHistorySource {
 
     static final String PLAYER29_MATCH = "10378920354";                         // its replay ID
     static final String DEADPOOL_MATCH = "5518188_1770352206_1245014_11001_11"; // ID printed bottom-left
+    static final String TEAM_UP_MATCH = "player10-convoy-2823";                  // no ID visible; made up
 
     private final Map<String, MatchDetails> matches = Map.of(
             PLAYER29_MATCH, player29Match(),
-            DEADPOOL_MATCH, deadpoolMatch());
+            DEADPOOL_MATCH, deadpoolMatch(),
+            TEAM_UP_MATCH, teamUpMatch());
 
     @Override
     public List<MatchSummary> getRecentMatches(String username) {
@@ -46,7 +50,9 @@ public class FakeMatchHistorySource implements MatchHistorySource {
                 new MatchSummary(PLAYER29_MATCH, LocalDate.of(2026, 10, 11), "Convoy",
                         "Tokyo 2099: Spider-Islands", "Rocket Raccoon", 7, 7, 33, true),
                 new MatchSummary(DEADPOOL_MATCH, LocalDate.of(2026, 10, 11), "Convoy",
-                        "Tokyo 2099: Spider-Islands", "Cloak & Dagger", 32, 0, 53, true));
+                        "Tokyo 2099: Spider-Islands", "Cloak & Dagger", 32, 0, 53, true),
+                new MatchSummary(TEAM_UP_MATCH, LocalDate.of(2026, 10, 11), "Convoy",
+                        "Tokyo 2099: Spider-Islands", "The Thing", 38, 19, 3, false));
     }
 
     @Override
@@ -87,7 +93,7 @@ public class FakeMatchHistorySource implements MatchHistorySource {
                 Duration.ofMinutes(17).plusSeconds(50), MatchResult.VICTORY, null, List.of(),
                 List.of(
                         //   name         team role        last hero          K   D   A  FH  damage blocked healing acc
-                        row(null,         "A", VANGUARD,   "Magneto",        34,  7,  5, 12, 28387, 55292,     0, 58.0), // unconfirmed
+                        row(null,         "A", VANGUARD,   "Magneto",        34,  7,  5, 12, 28387, 55292,     0, 58.0),
                         row(null,         "A", VANGUARD,   "Thor",           31,  9,  4, 14, 27365, 52370,  2422, 45.0),
                         row(null,         "A", DUELIST,    "Namor",          34,  6,  0, 19, 30315,  8048,     0,  0.0),
                         uploader(row("Player08", "A", STRATEGIST, "Cloak & Dagger", 32, 0, 53, 5, 17085, 7622, 50176, 90.0)),
@@ -101,28 +107,60 @@ public class FakeMatchHistorySource implements MatchHistorySource {
                         row(null,         "B", STRATEGIST, "Invisible Woman",13, 10, 23,  4, 14342, 26851, 35392, 51.0)));
     }
 
-    /** A plain row: no hover list, not the uploader, no MVP/SVP, no rank (the game doesn't show one). */
+    /**
+     * Uploader Player10<3, a 28-minute defeat. This scoreboard has the Season 9 team-up box beside each
+     * portrait. Two boxes are in full color: Cloak & Dagger's Frozen Haven (Luna Snow is on the team) and
+     * Luna Snow's Atlas Bond (White Fox is on the team). Six heroes were banned; the bans aren't entered.
+     */
+    private static MatchDetails teamUpMatch() {
+        return new MatchDetails(TEAM_UP_MATCH, "Convoy", "Tokyo 2099: Spider-Islands",
+                Duration.ofMinutes(28).plusSeconds(23), MatchResult.DEFEAT, null, List.of(),
+                List.of(
+                        //          name           team role        last hero                K   D   A  FH  damage  blocked healing acc        team-up partner, enhanced
+                        teamUp(row("Player 21",     "A", VANGUARD,   "Venom",               30, 21, 11, 10,  57303, 103742,   2792, 39.0), "Phoenix", false),
+                        svp(uploader(teamUp(row("Player10<3", "A", VANGUARD, "The Thing",   38, 19,  3, 21, 126909, 146368,     65, 36.0), "Human Torch", false))), // team-up unconfirmed
+                        teamUp(row("player__37",       "A", DUELIST,    "The Punisher",        30, 18,  8, 18,  71089,  35522,  11213, 54.0), "Daredevil", false),
+                        teamUp(row("Player20",  "A", STRATEGIST, "Cloak & Dagger",      34, 23, 17,  4,  42263,  65477,  14633, 92.0), "Luna Snow", true),
+                        teamUp(row("Player 14",   "A", STRATEGIST, "Luna Snow",           36, 23, 40, 13,  42653,  23813,  76918, 63.0), "White Fox", true),
+                        teamUp(row("player42",      "A", STRATEGIST, "White Fox",           23, 14, 38,  5,  29549,  38781, 102910, 82.0), "Black Cat", false),
+                        teamUp(row("Player27",   "B", VANGUARD,   "The Thing",           68, 13, 15, 25,  91277, 111167,     84, 57.0), "Human Torch", false), // team-up unconfirmed
+                        teamUp(row("Player_16","B", VANGUARD,   "Devil Dinosaur",      69, 13, 35, 35,  84859, 173521,     75, 68.0), "The Punisher", false),
+                        teamUp(row("Player24",     "B", DUELIST,    "Winter Soldier",      56, 14, 10, 17,  64395,  50162,     29, 55.0), "The Punisher", false), // unconfirmed
+                        teamUp(row("player40",     "B", STRATEGIST, "Jeff the Land Shark", 58, 11, 63, 11,  44627,  21585,  63069, 84.0), "Venom", false), // team-up unconfirmed
+                        mvp(teamUp(row("player36", "B", STRATEGIST, "White Fox",           68, 12, 68, 15,  54892,  42519,  63014, 76.0), "Black Cat", false)),
+                        teamUp(row("player35",     "B", STRATEGIST, "Jubilee",             55,  9, 66,  9,  39136,  16777,  94365, 43.0), "The Hood", false))); // team-up unconfirmed
+    }
+
+    /**
+     * A plain row: no hover list, no team-up box, not the uploader, no MVP/SVP,
+     * no rank (the game doesn't show one).
+     */
     private static PlayerLine row(String name, String team, Role role, String lastHero,
                                   int kills, int deaths, int assists, int finalHits,
                                   int damage, int blocked, int healing, Double accuracy) {
-        return new PlayerLine(name, team, role, lastHero, List.<HeroStats>of(), kills, deaths, assists,
+        return new PlayerLine(name, team, role, lastHero, List.<HeroStats>of(), null, kills, deaths, assists,
                 finalHits, damage, blocked, healing, accuracy, false, false, false, null, null);
     }
 
+    /** Adds the team-up box: the partner pictured in it, and whether it was in full color (enhanced). */
+    private static PlayerLine teamUp(PlayerLine p, String partner, boolean enhanced) {
+        return p.withTeamUp(new EquippedTeamUp(partner, enhanced));
+    }
+
     private static PlayerLine uploader(PlayerLine p) {
-        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.kills(), p.deaths(),
+        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.teamUp(), p.kills(), p.deaths(),
                 p.assists(), p.finalHits(), p.damage(), p.blocked(), p.healing(), p.accuracyPercent(),
                 true, p.mvp(), p.svp(), p.rank(), p.rankScore());
     }
 
     private static PlayerLine mvp(PlayerLine p) {
-        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.kills(), p.deaths(),
+        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.teamUp(), p.kills(), p.deaths(),
                 p.assists(), p.finalHits(), p.damage(), p.blocked(), p.healing(), p.accuracyPercent(),
                 p.uploader(), true, p.svp(), p.rank(), p.rankScore());
     }
 
     private static PlayerLine svp(PlayerLine p) {
-        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.kills(), p.deaths(),
+        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.teamUp(), p.kills(), p.deaths(),
                 p.assists(), p.finalHits(), p.damage(), p.blocked(), p.healing(), p.accuracyPercent(),
                 p.uploader(), p.mvp(), true, p.rank(), p.rankScore());
     }

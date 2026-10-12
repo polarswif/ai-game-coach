@@ -1,6 +1,7 @@
 package com.gamecoach.datasource;
 
 import com.gamecoach.analysis.HeroRoleCatalog;
+import com.gamecoach.analysis.TeamUpCatalog;
 import com.gamecoach.model.MatchDetails;
 import com.gamecoach.model.MatchSummary;
 import com.gamecoach.model.PlayerLine;
@@ -15,12 +16,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Sanity checks on the hand-typed screenshot data, to catch typos. */
 class FakeMatchHistorySourceTest {
 
     private final FakeMatchHistorySource source = new FakeMatchHistorySource();
     private final HeroRoleCatalog roles = new HeroRoleCatalog();
+    private final TeamUpCatalog teamUps = new TeamUpCatalog();
 
     private List<MatchDetails> allMatches() {
         return source.getRecentMatches("anyone").stream()
@@ -60,6 +63,26 @@ class FakeMatchHistorySourceTest {
                 if (fromTable != Role.UNKNOWN) {   // plain "Deadpool" isn't in the table; his icon decides
                     assertEquals(fromTable, p.role(), p.lastHero() + " in match " + match.matchId());
                 }
+            }
+        }
+    }
+
+    /**
+     * Another check the screenshot reader will run: a team-up box is in full color exactly when its
+     * partner is on the same team, and every (hero, partner) pair exists in the team-up table.
+     */
+    @Test
+    void everyTeamUpBoxAgreesWithTheTeamAndTheTable() {
+        for (MatchDetails match : allMatches()) {
+            for (PlayerLine p : match.players()) {
+                if (p.teamUp() == null) {
+                    continue;
+                }
+                String partner = p.teamUp().partner();
+                assertTrue(teamUps.find(p.lastHero(), partner).isPresent(), p.lastHero() + " + " + partner);
+                boolean partnerOnTeam = match.players().stream()
+                        .anyMatch(o -> o != p && o.team().equals(p.team()) && HeroRoleCatalog.sameHero(o.lastHero(), partner));
+                assertEquals(partnerOnTeam, p.teamUp().enhanced(), p.lastHero() + " + " + partner);
             }
         }
     }

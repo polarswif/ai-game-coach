@@ -1,6 +1,7 @@
 package com.gamecoach.analysis;
 
 import com.gamecoach.datasource.FakeMatchHistorySource;
+import com.gamecoach.model.EquippedTeamUp;
 import com.gamecoach.model.HeroStats;
 import com.gamecoach.model.MatchDetails;
 import com.gamecoach.model.PlayerLine;
@@ -21,10 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /** Expected values are worked out by hand from the two in-game scoreboards in FakeMatchHistorySource. */
 class MatchAnalyzerTest {
 
-    private final MatchAnalyzer analyzer = new MatchAnalyzer(new HeroRoleCatalog());
+    private final MatchAnalyzer analyzer = new MatchAnalyzer(new HeroRoleCatalog(), new TeamUpCatalog());
     private final FakeMatchHistorySource source = new FakeMatchHistorySource();
     private final MatchDetails player29Match = source.getMatchDetails("10378920354");
     private final MatchDetails deadpoolMatch = source.getMatchDetails("5518188_1770352206_1245014_11001_11");
+    private final MatchDetails teamUpMatch = source.getMatchDetails("player10-convoy-2823");
 
     /** A copy of the match with one row replaced. */
     private static MatchDetails replaceRow(MatchDetails match, int index, PlayerLine row) {
@@ -66,7 +68,7 @@ class MatchAnalyzerTest {
         assertThrows(NoSuchElementException.class, () -> analyzer.analyze(player29Match, "someone-else"));
         PlayerLine player29 = player29Match.players().get(4);
         PlayerLine notUploader = new PlayerLine(player29.name(), player29.team(), player29.role(), player29.lastHero(),
-                player29.heroes(), player29.kills(), player29.deaths(), player29.assists(), player29.finalHits(),
+                player29.heroes(), player29.teamUp(), player29.kills(), player29.deaths(), player29.assists(), player29.finalHits(),
                 player29.damage(), player29.blocked(), player29.healing(), player29.accuracyPercent(),
                 false, false, false, null, null);
         MatchDetails noUploader = replaceRow(player29Match, 4, notUploader);
@@ -187,7 +189,8 @@ class MatchAnalyzerTest {
 
     @Test
     void guessComparesWithTeammatesOfEachRoleInsteadOfAssuming222() {
-        // A 1-2-3 team where a Vanguard out-heals a teammate Strategist (team-up healing happens).
+        // A 1-2-3 team where a Vanguard row out-heals a teammate Strategist. That happens when the
+        // Vanguard played a Strategist earlier in the match: a row's totals cover every hero they used.
         // Deadpool is only 3rd in team healing, but he out-heals one real Strategist, so: Strategist.
         PlayerLine deadpool = line(Role.UNKNOWN, 5000, 9000);
         List<PlayerLine> team = List.of(deadpool,
@@ -219,6 +222,59 @@ class MatchAnalyzerTest {
         assertEquals(Role.DUELIST, MatchAnalyzer.guessRoleFromStats(dps, withDps));
     }
 
+    // ---- Team-ups (Season 9 rework): the box beside the portrait ----
+
+    @Test
+    void equippedTeamUpIsLookedUpFromHeroAndPartner() {
+        TeamUpAnalysis t = analyzer.analyze(teamUpMatch, "Player20").teamUp();
+        assertEquals("Frozen Haven", t.name());          // Cloak & Dagger + Luna Snow
+        assertEquals("Luna Snow", t.partner());
+        assertTrue(t.enhancedOnScoreboard());            // full-color box
+        assertTrue(t.partnerOnTeam());                   // Player 14 played Luna Snow
+        assertEquals("Much stronger healing aura", t.enhancedEffect());
+        assertNull(t.betterOption());
+    }
+
+    @Test
+    void baseOnlyTeamUpWhenThePartnerIsMissing() {
+        TeamUpAnalysis t = analyzer.analyze(teamUpMatch, "Player 21").teamUp();
+        assertEquals("Abyssal Flames", t.name());        // Venom + Phoenix; no Phoenix on the team
+        assertFalse(t.enhancedOnScoreboard());
+        assertFalse(t.partnerOnTeam());
+        assertNull(t.betterOption());                    // his other partner (Blade) isn't there either
+    }
+
+    @Test
+    void betterOptionWhenTheOtherTeamUpsPartnerIsOnTheTeam() {
+        // Devil Dinosaur equipped Primal Punishment (The Punisher, not on his team), but
+        // Jeff the Land Shark was on his team, which would have enhanced Surf & Turf.
+        TeamUpAnalysis t = analyzer.analyze(teamUpMatch, "Player_16").teamUp();
+        assertEquals("Primal Punishment", t.name());
+        assertEquals("Surf & Turf (Jeff the Land Shark)", t.betterOption());
+    }
+
+    @Test
+    void listsTeammatesTeamUpsThePlayersHeroEnhances() {
+        assertEquals(List.of("Frozen Haven (Player20)"),
+                analyzer.analyze(teamUpMatch, "Player 14").teammateTeamUpsYouEnhance());   // Luna Snow
+        assertEquals(List.of("Atlas Bond (Player 14)"),
+                analyzer.analyze(teamUpMatch, "player42").teammateTeamUpsYouEnhance());      // White Fox
+        assertEquals(List.of(), analyzer.analyze(teamUpMatch, (String) null).teammateTeamUpsYouEnhance());
+    }
+
+    @Test
+    void noTeamUpBoxMeansNoTeamUpAnalysis() {
+        assertNull(analyzer.analyze(player29Match, (String) null).teamUp());   // older scoreboard layout
+    }
+
+    @Test
+    void unknownPartnerKeepsTheBoxButHasNoName() {
+        PlayerLine misread = teamUpMatch.players().get(0).withTeamUp(new EquippedTeamUp("Not A Hero", false));
+        TeamUpAnalysis t = analyzer.analyze(teamUpMatch, misread).teamUp();
+        assertNull(t.name());
+        assertEquals("Not A Hero", t.partner());
+    }
+
     // ---- Team compositions, read from the role icons ----
 
     @Test
@@ -239,7 +295,7 @@ class MatchAnalyzerTest {
 
     /** A bare row for the guess tests: only the role icon, blocked and healing matter. */
     private static PlayerLine line(Role role, int blocked, int healing) {
-        return new PlayerLine(null, "A", role, "Someone", List.of(), 0, 0, 0, 0, 0, blocked, healing,
+        return new PlayerLine(null, "A", role, "Someone", List.of(), null, 0, 0, 0, 0, 0, blocked, healing,
                 null, false, false, false, null, null);
     }
 }
