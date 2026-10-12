@@ -4,6 +4,8 @@ import com.gamecoach.model.HeroStats;
 import com.gamecoach.model.MatchDetails;
 import com.gamecoach.model.MatchResult;
 import com.gamecoach.model.PlayerLine;
+import com.gamecoach.model.PortraitStyle;
+import com.gamecoach.model.ProficiencyShown;
 import com.gamecoach.model.Role;
 
 import org.springframework.stereotype.Service;
@@ -79,6 +81,7 @@ public class MatchAnalyzer {
                 round((player.kills() + player.assists()) / (double) Math.max(player.deaths(), 1), 2),
                 heroes,
                 teamUp(player, team),
+                proficiency(player),
                 teammateTeamUpsYouEnhance(player, team),
                 stats,
                 player.accuracyPercent(),
@@ -134,6 +137,28 @@ public class MatchAnalyzer {
                 player.teamUp().enhanced(),
                 partnerOnTeam,
                 betterOption);
+    }
+
+    /**
+     * The minimum proficiency the row proves on its last hero: the higher of the portrait's and the
+     * badge's levels. Null when nothing is shown, because players can leave both unequipped.
+     */
+    static ProficiencyAnalysis proficiency(PlayerLine player) {
+        ProficiencyShown shown = player.proficiency();
+        if (shown == null) {
+            return null;
+        }
+        PortraitStyle portrait = shown.portrait() == null ? PortraitStyle.DEFAULT : shown.portrait();
+        int level = portrait.minimumLevel();
+        String rank = portrait.rankName();
+        if (shown.badge() != null && shown.badge().minimumLevel() > level) {
+            level = shown.badge().minimumLevel();
+            rank = shown.badge().rankName();
+        }
+        if (rank == null) {
+            return null;   // default portrait and no badge: nothing proven
+        }
+        return new ProficiencyAnalysis(player.lastHero(), portrait, shown.badge(), level, rank);
     }
 
     /** Teammates' equipped team-ups whose partner is this player's hero, as "Team-up (player)". */

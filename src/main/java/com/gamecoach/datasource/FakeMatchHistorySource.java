@@ -24,8 +24,8 @@ import static com.gamecoach.model.Role.VANGUARD;
 /**
  * Development stand-in: three real in-game end-of-match scoreboards (Tokyo 2099: Spider-Islands, Convoy),
  * typed in by hand from screenshots. Heroes were identified from the portraits and confirmed by the
- * uploader, except where marked "unconfirmed". Some portraits are Lord variants (alternate art for
- * high-proficiency players), which look different from the default portrait.
+ * uploader, including every team-up box. Some portraits are Lord variants (alternate art for
+ * high-proficiency players); which rows wasn't recorded, so proficiency is null on every row.
  * No "Heroes Used" hover was captured, so every heroes list is empty. Only the third match's
  * scoreboard has the team-up boxes, so the other two have no team-ups.
  * Active when application.properties has gamecoach.matches.source=fake.
@@ -118,17 +118,17 @@ public class FakeMatchHistorySource implements MatchHistorySource {
                 List.of(
                         //          name           team role        last hero                K   D   A  FH  damage  blocked healing acc        team-up partner, enhanced
                         teamUp(row("Player 21",     "A", VANGUARD,   "Venom",               30, 21, 11, 10,  57303, 103742,   2792, 39.0), "Phoenix", false),
-                        svp(uploader(teamUp(row("Player10<3", "A", VANGUARD, "The Thing",   38, 19,  3, 21, 126909, 146368,     65, 36.0), "Human Torch", false))), // team-up unconfirmed
+                        svp(uploader(teamUp(row("Player10<3", "A", VANGUARD, "The Thing",   38, 19,  3, 21, 126909, 146368,     65, 36.0), "Human Torch", false))),
                         teamUp(row("player__37",       "A", DUELIST,    "The Punisher",        30, 18,  8, 18,  71089,  35522,  11213, 54.0), "Daredevil", false),
                         teamUp(row("Player20",  "A", STRATEGIST, "Cloak & Dagger",      34, 23, 17,  4,  42263,  65477,  14633, 92.0), "Luna Snow", true),
                         teamUp(row("Player 14",   "A", STRATEGIST, "Luna Snow",           36, 23, 40, 13,  42653,  23813,  76918, 63.0), "White Fox", true),
                         teamUp(row("player42",      "A", STRATEGIST, "White Fox",           23, 14, 38,  5,  29549,  38781, 102910, 82.0), "Black Cat", false),
-                        teamUp(row("Player27",   "B", VANGUARD,   "The Thing",           68, 13, 15, 25,  91277, 111167,     84, 57.0), "Human Torch", false), // team-up unconfirmed
+                        teamUp(row("Player27",   "B", VANGUARD,   "The Thing",           68, 13, 15, 25,  91277, 111167,     84, 57.0), "Human Torch", false),
                         teamUp(row("Player_16","B", VANGUARD,   "Devil Dinosaur",      69, 13, 35, 35,  84859, 173521,     75, 68.0), "The Punisher", false),
-                        teamUp(row("Player24",     "B", DUELIST,    "Winter Soldier",      56, 14, 10, 17,  64395,  50162,     29, 55.0), "The Punisher", false), // unconfirmed
-                        teamUp(row("player40",     "B", STRATEGIST, "Jeff the Land Shark", 58, 11, 63, 11,  44627,  21585,  63069, 84.0), "Venom", false), // team-up unconfirmed
+                        teamUp(row("Player24",     "B", DUELIST,    "Winter Soldier",      56, 14, 10, 17,  64395,  50162,     29, 55.0), "The Punisher", false),
+                        teamUp(row("player40",     "B", STRATEGIST, "Jeff the Land Shark", 58, 11, 63, 11,  44627,  21585,  63069, 84.0), "Venom", false),
                         mvp(teamUp(row("player36", "B", STRATEGIST, "White Fox",           68, 12, 68, 15,  54892,  42519,  63014, 76.0), "Black Cat", false)),
-                        teamUp(row("player35",     "B", STRATEGIST, "Jubilee",             55,  9, 66,  9,  39136,  16777,  94365, 43.0), "The Hood", false))); // team-up unconfirmed
+                        teamUp(row("player35",     "B", STRATEGIST, "Jubilee",             55,  9, 66,  9,  39136,  16777,  94365, 43.0), "The Hood", false)));
     }
 
     /**
@@ -138,7 +138,7 @@ public class FakeMatchHistorySource implements MatchHistorySource {
     private static PlayerLine row(String name, String team, Role role, String lastHero,
                                   int kills, int deaths, int assists, int finalHits,
                                   int damage, int blocked, int healing, Double accuracy) {
-        return new PlayerLine(name, team, role, lastHero, List.<HeroStats>of(), null, kills, deaths, assists,
+        return new PlayerLine(name, team, role, lastHero, List.<HeroStats>of(), null, null, kills, deaths, assists,
                 finalHits, damage, blocked, healing, accuracy, false, false, false, null, null);
     }
 
@@ -148,19 +148,19 @@ public class FakeMatchHistorySource implements MatchHistorySource {
     }
 
     private static PlayerLine uploader(PlayerLine p) {
-        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.teamUp(), p.kills(), p.deaths(),
+        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.teamUp(), p.proficiency(), p.kills(), p.deaths(),
                 p.assists(), p.finalHits(), p.damage(), p.blocked(), p.healing(), p.accuracyPercent(),
                 true, p.mvp(), p.svp(), p.rank(), p.rankScore());
     }
 
     private static PlayerLine mvp(PlayerLine p) {
-        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.teamUp(), p.kills(), p.deaths(),
+        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.teamUp(), p.proficiency(), p.kills(), p.deaths(),
                 p.assists(), p.finalHits(), p.damage(), p.blocked(), p.healing(), p.accuracyPercent(),
                 p.uploader(), true, p.svp(), p.rank(), p.rankScore());
     }
 
     private static PlayerLine svp(PlayerLine p) {
-        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.teamUp(), p.kills(), p.deaths(),
+        return new PlayerLine(p.name(), p.team(), p.role(), p.lastHero(), p.heroes(), p.teamUp(), p.proficiency(), p.kills(), p.deaths(),
                 p.assists(), p.finalHits(), p.damage(), p.blocked(), p.healing(), p.accuracyPercent(),
                 p.uploader(), p.mvp(), true, p.rank(), p.rankScore());
     }

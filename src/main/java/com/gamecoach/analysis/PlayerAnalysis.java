@@ -15,6 +15,8 @@ import java.util.Map;
  * @param enemyComposition the other team, same format, e.g. "1-2-3"
  * @param kda               (kills + assists) / deaths, with deaths counted as at least 1
  * @param teamUp            the player's equipped team-up; null when the scoreboard had no team-up box
+ * @param proficiency       what the Lord portrait and Proficiency Badge prove about experience on the
+ *                          last hero; null when neither is shown (which says nothing about experience)
  * @param teammateTeamUpsYouEnhance teammates' equipped team-ups that this player's hero enhances,
  *                          e.g. "Frozen Haven (Player20)"
  * @param accuracyPercent   null when the scoreboard shows no accuracy
@@ -34,6 +36,7 @@ public record PlayerAnalysis(
         double kda,
         List<HeroPlayed> heroes,
         TeamUpAnalysis teamUp,
+        ProficiencyAnalysis proficiency,
         List<String> teammateTeamUpsYouEnhance,
         Map<Stat, StatComparison> stats,
         Double accuracyPercent,

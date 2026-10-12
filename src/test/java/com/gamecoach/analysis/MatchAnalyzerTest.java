@@ -5,6 +5,9 @@ import com.gamecoach.model.EquippedTeamUp;
 import com.gamecoach.model.HeroStats;
 import com.gamecoach.model.MatchDetails;
 import com.gamecoach.model.PlayerLine;
+import com.gamecoach.model.PortraitStyle;
+import com.gamecoach.model.ProficiencyBadge;
+import com.gamecoach.model.ProficiencyShown;
 import com.gamecoach.model.Role;
 
 import org.junit.jupiter.api.Test;
@@ -19,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Expected values are worked out by hand from the two in-game scoreboards in FakeMatchHistorySource. */
+/** Expected values are worked out by hand from the three in-game scoreboards in FakeMatchHistorySource. */
 class MatchAnalyzerTest {
 
     private final MatchAnalyzer analyzer = new MatchAnalyzer(new HeroRoleCatalog(), new TeamUpCatalog());
@@ -68,7 +71,7 @@ class MatchAnalyzerTest {
         assertThrows(NoSuchElementException.class, () -> analyzer.analyze(player29Match, "someone-else"));
         PlayerLine player29 = player29Match.players().get(4);
         PlayerLine notUploader = new PlayerLine(player29.name(), player29.team(), player29.role(), player29.lastHero(),
-                player29.heroes(), player29.teamUp(), player29.kills(), player29.deaths(), player29.assists(), player29.finalHits(),
+                player29.heroes(), player29.teamUp(), player29.proficiency(), player29.kills(), player29.deaths(), player29.assists(), player29.finalHits(),
                 player29.damage(), player29.blocked(), player29.healing(), player29.accuracyPercent(),
                 false, false, false, null, null);
         MatchDetails noUploader = replaceRow(player29Match, 4, notUploader);
@@ -292,9 +295,51 @@ class MatchAnalyzerTest {
         assertEquals("2-1-2 (+1 unknown)", analyzer.analyze(m, (String) null).teamComposition());
     }
 
+    // ---- Proficiency: Lord portraits and Proficiency Badges ----
+
+    /** The Player29 row (Rocket Raccoon) with these cosmetics. */
+    private ProficiencyAnalysis proficiencyWith(PortraitStyle portrait, ProficiencyBadge badge) {
+        PlayerLine row = player29Match.players().get(4).withProficiency(new ProficiencyShown(portrait, badge));
+        return analyzer.analyze(replaceRow(player29Match, 4, row), (String) null).proficiency();
+    }
+
+    @Test
+    void nothingShownMeansNoProficiencyClaim() {
+        assertNull(analyzer.analyze(player29Match, (String) null).proficiency());   // not read
+        assertNull(proficiencyWith(PortraitStyle.DEFAULT, null));                  // nothing equipped
+    }
+
+    @Test
+    void lordPortraitAloneProvesLevel20() {
+        ProficiencyAnalysis p = proficiencyWith(PortraitStyle.LORD, null);
+        assertEquals("Rocket Raccoon", p.hero());
+        assertEquals(20, p.minimumLevel());
+        assertEquals("Lord", p.minimumRank());
+    }
+
+    @Test
+    void theHigherOfPortraitAndBadgeWins() {
+        ProficiencyAnalysis warrior = proficiencyWith(PortraitStyle.LORD, ProficiencyBadge.WARRIOR);
+        assertEquals(35, warrior.minimumLevel());
+        assertEquals("Warrior", warrior.minimumRank());
+
+        ProficiencyAnalysis animated = proficiencyWith(PortraitStyle.ANIMATED_LORD, ProficiencyBadge.COUNT);
+        assertEquals(50, animated.minimumLevel());       // animated Lord (50) beats a Count badge (25)
+        assertEquals("Champion", animated.minimumRank());
+
+        assertEquals(55, proficiencyWith(PortraitStyle.ANIMATED_LORD, ProficiencyBadge.CHAMPION).minimumLevel());
+    }
+
+    @Test
+    void aBadgeWithTheDefaultPortraitStillCounts() {
+        ProficiencyAnalysis p = proficiencyWith(PortraitStyle.DEFAULT, ProficiencyBadge.GUARDIAN);
+        assertEquals(45, p.minimumLevel());
+        assertEquals(PortraitStyle.DEFAULT, p.portrait());
+    }
+
     /** A bare row for the guess tests: only the role icon, blocked and healing matter. */
     private static PlayerLine line(Role role, int blocked, int healing) {
-        return new PlayerLine(null, "A", role, "Someone", List.of(), null, 0, 0, 0, 0, 0, blocked, healing,
+        return new PlayerLine(null, "A", role, "Someone", List.of(), null, null, 0, 0, 0, 0, 0, blocked, healing,
                 null, false, false, false, null, null);
     }
 }

@@ -13,6 +13,8 @@ import java.util.List;
  *                        empty when neither was captured
  * @param teamUp          the team-up box beside the portrait; null when the screenshot has none
  *                        (older scoreboards) or it couldn't be read
+ * @param proficiency     Lord portrait and Proficiency Badge, for the last hero; null when not read.
+ *                        Both are optional to equip, so a plain row doesn't mean low proficiency
  * @param accuracyPercent null when the scoreboard shows no accuracy ("—"); 0% is a real 0.0
  * @param uploader        true for the highlighted row: the person who took the screenshot
  * @param rank            null unless a tracker screenshot supplied it (the game doesn't show ranks)
@@ -25,6 +27,7 @@ public record PlayerLine(
         String lastHero,
         List<HeroStats> heroes,
         EquippedTeamUp teamUp,
+        ProficiencyShown proficiency,
         int kills,
         int deaths,
         int assists,
@@ -43,22 +46,27 @@ public record PlayerLine(
     // replaced. The review step (correcting a misread row) will use them too.
 
     public PlayerLine withRole(Role newRole) {
-        return new PlayerLine(name, team, newRole, lastHero, heroes, teamUp, kills, deaths, assists, finalHits,
+        return new PlayerLine(name, team, newRole, lastHero, heroes, teamUp, proficiency, kills, deaths, assists, finalHits,
                 damage, blocked, healing, accuracyPercent, uploader, mvp, svp, rank, rankScore);
     }
 
     public PlayerLine withHeroes(List<HeroStats> newHeroes) {
-        return new PlayerLine(name, team, role, lastHero, newHeroes, teamUp, kills, deaths, assists, finalHits,
+        return new PlayerLine(name, team, role, lastHero, newHeroes, teamUp, proficiency, kills, deaths, assists, finalHits,
                 damage, blocked, healing, accuracyPercent, uploader, mvp, svp, rank, rankScore);
     }
 
     public PlayerLine withTeamUp(EquippedTeamUp newTeamUp) {
-        return new PlayerLine(name, team, role, lastHero, heroes, newTeamUp, kills, deaths, assists, finalHits,
+        return new PlayerLine(name, team, role, lastHero, heroes, newTeamUp, proficiency, kills, deaths, assists, finalHits,
+                damage, blocked, healing, accuracyPercent, uploader, mvp, svp, rank, rankScore);
+    }
+
+    public PlayerLine withProficiency(ProficiencyShown newProficiency) {
+        return new PlayerLine(name, team, role, lastHero, heroes, teamUp, newProficiency, kills, deaths, assists, finalHits,
                 damage, blocked, healing, accuracyPercent, uploader, mvp, svp, rank, rankScore);
     }
 
     public PlayerLine withAccuracy(Double newAccuracy) {
-        return new PlayerLine(name, team, role, lastHero, heroes, teamUp, kills, deaths, assists, finalHits,
+        return new PlayerLine(name, team, role, lastHero, heroes, teamUp, proficiency, kills, deaths, assists, finalHits,
                 damage, blocked, healing, newAccuracy, uploader, mvp, svp, rank, rankScore);
     }
 }
