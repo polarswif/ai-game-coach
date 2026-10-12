@@ -133,8 +133,6 @@ public class MatchAnalyzer {
                 partner,
                 player.teamUp().enhanced(),
                 partnerOnTeam,
-                equipped == null ? null : equipped.baseEffect(),
-                equipped == null ? null : equipped.enhancedEffect(),
                 betterOption);
     }
 

@@ -61,10 +61,10 @@ public class TeamUpCatalog {
             }
             // split("\\|") because "|" alone is a regex meaning "or"; the backslashes make it a plain bar.
             String[] cols = line.split("\\|");
-            if (cols.length != 5) {
-                throw new IllegalStateException("Team-up row needs 5 columns: " + line);
+            if (cols.length != 3) {
+                throw new IllegalStateException("Team-up row needs 3 columns (hero|team-up|partner): " + line);
             }
-            TeamUp teamUp = new TeamUp(cols[0].strip(), cols[1].strip(), cols[2].strip(), cols[3].strip(), cols[4].strip());
+            TeamUp teamUp = new TeamUp(cols[0].strip(), cols[1].strip(), cols[2].strip());
             teamUpsByHero.computeIfAbsent(HeroRoleCatalog.baseName(teamUp.hero()), k -> new ArrayList<>()).add(teamUp);
         }
     }

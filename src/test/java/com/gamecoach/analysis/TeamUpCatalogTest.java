@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TeamUpCatalogTest {
@@ -24,8 +23,7 @@ class TeamUpCatalogTest {
     void findsATeamUpFromHeroAndPartner() {
         TeamUp t = catalog.find("Devil Dinosaur", "Jeff the Land Shark").orElseThrow();
         assertEquals("Surf & Turf", t.name());
-        assertFalse(t.baseEffect().isBlank());
-        assertFalse(t.enhancedEffect().isBlank());
+        assertEquals("Devil Dinosaur", t.hero());
     }
 
     @Test

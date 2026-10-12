@@ -16,7 +16,5 @@ public record TeamUpAnalysis(
         String partner,
         boolean enhancedOnScoreboard,
         boolean partnerOnTeam,
-        String baseEffect,
-        String enhancedEffect,
         String betterOption) {
 }

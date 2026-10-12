@@ -231,7 +231,6 @@ class MatchAnalyzerTest {
         assertEquals("Luna Snow", t.partner());
         assertTrue(t.enhancedOnScoreboard());            // full-color box
         assertTrue(t.partnerOnTeam());                   // Player 14 played Luna Snow
-        assertEquals("Much stronger healing aura", t.enhancedEffect());
         assertNull(t.betterOption());
     }
 
