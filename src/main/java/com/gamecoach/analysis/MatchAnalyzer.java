@@ -83,6 +83,8 @@ public class MatchAnalyzer {
                 teamUp(player, team),
                 proficiency(player),
                 teammateTeamUpsYouEnhance(player, team),
+                player.medals(),
+                player.multiKill(),
                 stats,
                 player.accuracyPercent(),
                 accuracyRank(player, lobby));

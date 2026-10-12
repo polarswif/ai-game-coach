@@ -4,12 +4,15 @@ import com.gamecoach.analysis.HeroRoleCatalog;
 import com.gamecoach.analysis.TeamUpCatalog;
 import com.gamecoach.model.MatchDetails;
 import com.gamecoach.model.MatchSummary;
+import com.gamecoach.model.Medal;
 import com.gamecoach.model.PlayerLine;
 import com.gamecoach.model.Role;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.ToIntFunction;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -83,6 +86,34 @@ class FakeMatchHistorySourceTest {
                 boolean partnerOnTeam = match.players().stream()
                         .anyMatch(o -> o != p && o.team().equals(p.team()) && HeroRoleCatalog.sameHero(o.lastHero(), partner));
                 assertEquals(partnerOnTeam, p.teamUp().enhanced(), p.lastHero() + " + " + partner);
+            }
+        }
+    }
+
+    /**
+     * Another reader check: each lobby medal is awarded exactly once per match, to the player with the
+     * lobby's highest number for that stat (either team). Multi-kill numbers run from 3 to 6.
+     */
+    @Test
+    void eachMedalGoesToTheLobbyLeaderForItsStat() {
+        Map<Medal, ToIntFunction<PlayerLine>> statOf = Map.of(
+                Medal.MOST_KOS, PlayerLine::kills,
+                Medal.MOST_DAMAGE, PlayerLine::damage,
+                Medal.MOST_BLOCKED, PlayerLine::blocked,
+                Medal.MOST_HEALING, PlayerLine::healing,
+                Medal.MOST_ASSISTS, PlayerLine::assists);
+        for (MatchDetails match : allMatches()) {
+            for (Medal medal : Medal.values()) {
+                List<PlayerLine> holders = match.players().stream().filter(p -> p.medals().contains(medal)).toList();
+                assertEquals(1, holders.size(), medal + " in match " + match.matchId());
+                ToIntFunction<PlayerLine> stat = statOf.get(medal);
+                int best = match.players().stream().mapToInt(stat).max().getAsInt();
+                assertEquals(best, stat.applyAsInt(holders.get(0)), medal + " in match " + match.matchId());
+            }
+            for (PlayerLine p : match.players()) {
+                if (p.multiKill() != null) {
+                    assertTrue(p.multiKill() >= 3 && p.multiKill() <= 6, p.lastHero() + " " + p.multiKill());
+                }
             }
         }
     }

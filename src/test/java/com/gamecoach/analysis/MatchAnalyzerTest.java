@@ -4,6 +4,7 @@ import com.gamecoach.datasource.FakeMatchHistorySource;
 import com.gamecoach.model.EquippedTeamUp;
 import com.gamecoach.model.HeroStats;
 import com.gamecoach.model.MatchDetails;
+import com.gamecoach.model.Medal;
 import com.gamecoach.model.PlayerLine;
 import com.gamecoach.model.PortraitStyle;
 import com.gamecoach.model.ProficiencyBadge;
@@ -73,7 +74,7 @@ class MatchAnalyzerTest {
         PlayerLine notUploader = new PlayerLine(player29.name(), player29.team(), player29.role(), player29.lastHero(),
                 player29.heroes(), player29.teamUp(), player29.proficiency(), player29.kills(), player29.deaths(), player29.assists(), player29.finalHits(),
                 player29.damage(), player29.blocked(), player29.healing(), player29.accuracyPercent(),
-                false, false, false, null, null);
+                false, false, false, List.of(), null, null, null);
         MatchDetails noUploader = replaceRow(player29Match, 4, notUploader);
         assertThrows(NoSuchElementException.class, () -> analyzer.analyze(noUploader, (String) null));
     }
@@ -295,6 +296,27 @@ class MatchAnalyzerTest {
         assertEquals("2-1-2 (+1 unknown)", analyzer.analyze(m, (String) null).teamComposition());
     }
 
+    // ---- Medals ----
+
+    @Test
+    void medalsAndMultiKillsCarryIntoTheAnalysis() {
+        PlayerAnalysis player44 = analyzer.analyze(player29Match, "player44");
+        assertEquals(List.of(Medal.MOST_KOS), player44.medals());
+        assertEquals(Integer.valueOf(5), player44.multiKill());   // a Penta
+        PlayerAnalysis dizzle = analyzer.analyze(player29Match, "Plàyer12");
+        assertTrue(dizzle.medals().isEmpty());
+        assertNull(dizzle.multiKill());
+    }
+
+    @Test
+    void anUnreadableBadgeStillProvesCount() {
+        PlayerAnalysis player08 = analyzer.analyze(deadpoolMatch, (String) null);
+        assertEquals(25, player08.proficiency().minimumLevel());
+        assertEquals("Count", player08.proficiency().minimumRank());
+        PlayerLine invisibleWoman = deadpoolMatch.players().get(4);
+        assertEquals(50, analyzer.analyze(deadpoolMatch, invisibleWoman).proficiency().minimumLevel());  // animated Lord
+    }
+
     // ---- Proficiency: Lord portraits and Proficiency Badges ----
 
     /** The Player29 row (Rocket Raccoon) with these cosmetics. */
@@ -340,6 +362,6 @@ class MatchAnalyzerTest {
     /** A bare row for the guess tests: only the role icon, blocked and healing matter. */
     private static PlayerLine line(Role role, int blocked, int healing) {
         return new PlayerLine(null, "A", role, "Someone", List.of(), null, null, 0, 0, 0, 0, 0, blocked, healing,
-                null, false, false, false, null, null);
+                null, false, false, false, List.of(), null, null, null);
     }
 }

@@ -1,5 +1,6 @@
 package com.gamecoach.analysis;
 
+import com.gamecoach.model.Medal;
 import com.gamecoach.model.Role;
 
 import java.util.List;
@@ -19,6 +20,8 @@ import java.util.Map;
  *                          last hero; null when neither is shown (which says nothing about experience)
  * @param teammateTeamUpsYouEnhance teammates' equipped team-ups that this player's hero enhances,
  *                          e.g. "Frozen Haven (Player20)"
+ * @param medals            per-match medals won (most KOs, damage, blocked, healing or assists in the lobby)
+ * @param multiKill          best multi-kill shown on the scoreboard (5 = a Penta); null when none
  * @param accuracyPercent   null when the scoreboard shows no accuracy
  * @param accuracyLobbyRank rank among players with an accuracy value; null when accuracyPercent is null
  */
@@ -38,6 +41,8 @@ public record PlayerAnalysis(
         TeamUpAnalysis teamUp,
         ProficiencyAnalysis proficiency,
         List<String> teammateTeamUpsYouEnhance,
+        List<Medal> medals,
+        Integer multiKill,
         Map<Stat, StatComparison> stats,
         Double accuracyPercent,
         Integer accuracyLobbyRank) {
