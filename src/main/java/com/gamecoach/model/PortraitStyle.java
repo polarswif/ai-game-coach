@@ -10,7 +10,10 @@ public enum PortraitStyle {
     DEFAULT(0, null),
     /** The Lord portrait (alternate art), unlocked at Lord, level 20. */
     LORD(20, "Lord"),
-    /** The animated Lord portrait, unlocked at Champion, level 50. It has a moving effect on top. */
+    /**
+     * The animated Lord portrait, unlocked at Champion, level 50. It has a moving effect on top, which
+     * a still screenshot shows as extra glow (Invisible Woman's has glowing blue hands and eyes).
+     */
     ANIMATED_LORD(50, "Champion");
 
     private final int minimumLevel;

@@ -309,12 +309,22 @@ class MatchAnalyzerTest {
     }
 
     @Test
-    void anUnreadableBadgeStillProvesCount() {
+    void badgesAndAnimatedLordsFromThePlayer08Match() {
         PlayerAnalysis player08 = analyzer.analyze(deadpoolMatch, (String) null);
-        assertEquals(25, player08.proficiency().minimumLevel());
-        assertEquals("Count", player08.proficiency().minimumRank());
-        PlayerLine invisibleWoman = deadpoolMatch.players().get(4);
-        assertEquals(50, analyzer.analyze(deadpoolMatch, invisibleWoman).proficiency().minimumLevel());  // animated Lord
+        assertEquals(35, player08.proficiency().minimumLevel());          // Warrior badge
+        assertEquals("Warrior", player08.proficiency().minimumRank());
+        PlayerLine invisibleWoman = deadpoolMatch.players().get(4);       // animated Lord (50) + Count badge (25)
+        ProficiencyAnalysis iw = analyzer.analyze(deadpoolMatch, invisibleWoman).proficiency();
+        assertEquals(50, iw.minimumLevel());
+        assertEquals("Champion", iw.minimumRank());
+        assertNull(analyzer.analyze(deadpoolMatch, deadpoolMatch.players().get(0)).proficiency());  // Magneto: unread
+    }
+
+    @Test
+    void anUnreadableBadgeStillProvesCount() {
+        ProficiencyAnalysis p = proficiencyWith(PortraitStyle.DEFAULT, ProficiencyBadge.UNREADABLE);
+        assertEquals(25, p.minimumLevel());
+        assertEquals("Count", p.minimumRank());
     }
 
     // ---- Proficiency: Lord portraits and Proficiency Badges ----

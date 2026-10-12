@@ -5,6 +5,9 @@ package com.gamecoach.model;
  * one hero's proficiency track (Season 6 and later), so a badge means the player has at least that
  * level on the hero they're playing. Players choose whether to equip one, so no badge tells us nothing.
  * The badge is the small emblem on the bottom-left corner of the portrait (not the "Medals" column).
+ * Each tier is a crest with a star in the middle, told apart by color and wings:
+ * Count is cyan/blue with no wings, Warrior lavender with small wings, Guardian bright pink with
+ * large wings, Champion red and gold with flames.
  */
 public enum ProficiencyBadge {
     COUNT(25, "Count"),
@@ -12,8 +15,9 @@ public enum ProficiencyBadge {
     GUARDIAN(45, "Guardian"),
     CHAMPION(55, "Champion"),
     /**
-     * A badge is there but its tier can't be told apart (the emblems are tiny). Any badge proves at
-     * least Count, so it counts as level 25. Like Role.UNKNOWN, it keeps the row honest.
+     * A badge is there but its tier can't be told apart (the emblems are tiny, and a blurry Warrior and
+     * Guardian look alike). Any badge proves at least Count, so it counts as level 25. When unsure
+     * between two tiers, the reader should record the lower one, which is still true.
      */
     UNREADABLE(25, "Count");
 
