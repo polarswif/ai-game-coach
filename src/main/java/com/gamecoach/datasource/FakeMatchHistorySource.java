@@ -26,7 +26,7 @@ import static com.gamecoach.model.Medal.MOST_BLOCKED;
 import static com.gamecoach.model.Medal.MOST_DAMAGE;
 import static com.gamecoach.model.Medal.MOST_HEALING;
 import static com.gamecoach.model.Medal.MOST_KOS;
-import static com.gamecoach.model.PortraitStyle.ANIMATED_LORD;
+import static com.gamecoach.model.PortraitStyle.LORD;
 import static com.gamecoach.model.ProficiencyBadge.COUNT;
 import static com.gamecoach.model.ProficiencyBadge.WARRIOR;
 import static com.gamecoach.model.Role.DUELIST;
@@ -100,8 +100,8 @@ public class FakeMatchHistorySource implements MatchHistorySource {
      * Uploader Player08; every other name was blacked out. The MVP is a Deadpool whose row has the
      * Strategist icon. His stats look like a Duelist's, which is why the icon beats the stats guess.
      * Six rows show a Proficiency Badge on the portrait's corner: four Count (cyan) and two Warrior
-     * (lavender, small wings). Both Invisible Women have the animated Lord portrait (glowing blue
-     * hands), confirmed by the uploader. Rows without a badge are left unread.
+     * (lavender, small wings). Both Invisible Women have the static Lord portrait (normal eyes, ice on
+     * one hand), not the animated one, confirmed by the uploader. Rows without a badge are left unread.
      */
     private static MatchDetails deadpoolMatch() {
         return new MatchDetails(DEADPOOL_MATCH, "Convoy", "Tokyo 2099: Spider-Islands",
@@ -112,14 +112,14 @@ public class FakeMatchHistorySource implements MatchHistorySource {
                         medals(row(null,         "A", VANGUARD,   "Thor",           31,  9,  4, 14, 27365, 52370,  2422, 45.0), 3),
                         badge(medals(row(null,   "A", DUELIST,    "Namor",          34,  6,  0, 19, 30315,  8048,     0,  0.0), 4), null, COUNT),
                         badge(medals(uploader(row("Player08", "A", STRATEGIST, "Cloak & Dagger", 32, 0, 53, 5, 17085, 7622, 50176, 90.0)), null, MOST_HEALING, MOST_ASSISTS), null, WARRIOR),
-                        badge(row(null,   "A", STRATEGIST, "Invisible Woman",25,  2, 37,  4, 14064, 15855, 39086, 49.0), ANIMATED_LORD, COUNT),
+                        badge(row(null,   "A", STRATEGIST, "Invisible Woman",25,  2, 37,  4, 14064, 15855, 39086, 49.0), LORD, COUNT),
                         badge(medals(mvp(row(null, "A", STRATEGIST, "Deadpool",     35,  7,  8, 16, 36204, 14732,  8208, 51.0)), null, MOST_KOS, MOST_DAMAGE), null, COUNT),
                         row(null,         "B", VANGUARD,   "Doctor Strange", 17, 12, 18,  2, 16499, 23086, 28697,  0.0),
                         badge(svp(row(null, "B", VANGUARD,   "Peni Parker",    21,  7, 16,  8, 27144, 49370,  5888, 26.0)), null, WARRIOR),
                         row(null,         "B", VANGUARD,   "Emma Frost",     18, 14,  3,  8, 31139, 44340,     0, 53.0),
                         medals(row(null,         "B", DUELIST,    "Phoenix",        17, 14,  1,  8, 25219, 18115,  1535, 36.0), 3),
                         row(null,         "B", STRATEGIST, "Mantis",          8, 13, 15,  1, 17375, 18208, 24720, 38.0),
-                        badge(row(null,   "B", STRATEGIST, "Invisible Woman",13, 10, 23,  4, 14342, 26851, 35392, 51.0), ANIMATED_LORD, COUNT)));
+                        badge(row(null,   "B", STRATEGIST, "Invisible Woman",13, 10, 23,  4, 14342, 26851, 35392, 51.0), LORD, COUNT)));
     }
 
     /**

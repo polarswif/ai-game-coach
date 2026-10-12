@@ -11,8 +11,10 @@ public enum PortraitStyle {
     /** The Lord portrait (alternate art), unlocked at Lord, level 20. */
     LORD(20, "Lord"),
     /**
-     * The animated Lord portrait, unlocked at Champion, level 50. It has a moving effect on top, which
-     * a still screenshot shows as extra glow (Invisible Woman's has glowing blue hands and eyes).
+     * The animated Lord portrait, unlocked at Champion, level 50. It's the Lord art with a moving effect
+     * layered on top, which a still screenshot shows as extra glow. Compare carefully with LORD: for
+     * Invisible Woman, the Lord has normal eyes and ice on one hand; the animated one has glowing eyes,
+     * blue energy around both hands and a darker layer behind her.
      */
     ANIMATED_LORD(50, "Champion");
 

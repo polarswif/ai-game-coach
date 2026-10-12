@@ -309,14 +309,15 @@ class MatchAnalyzerTest {
     }
 
     @Test
-    void badgesAndAnimatedLordsFromThePlayer08Match() {
+    void badgesAndLordPortraitsFromThePlayer08Match() {
         PlayerAnalysis player08 = analyzer.analyze(deadpoolMatch, (String) null);
         assertEquals(35, player08.proficiency().minimumLevel());          // Warrior badge
         assertEquals("Warrior", player08.proficiency().minimumRank());
-        PlayerLine invisibleWoman = deadpoolMatch.players().get(4);       // animated Lord (50) + Count badge (25)
+        PlayerLine invisibleWoman = deadpoolMatch.players().get(4);       // static Lord (20) + Count badge (25)
         ProficiencyAnalysis iw = analyzer.analyze(deadpoolMatch, invisibleWoman).proficiency();
-        assertEquals(50, iw.minimumLevel());
-        assertEquals("Champion", iw.minimumRank());
+        assertEquals(25, iw.minimumLevel());
+        assertEquals("Count", iw.minimumRank());
+        assertEquals(PortraitStyle.LORD, iw.portrait());
         assertNull(analyzer.analyze(deadpoolMatch, deadpoolMatch.players().get(0)).proficiency());  // Magneto: unread
     }
 
