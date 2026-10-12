@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -187,17 +186,60 @@ class MatchAnalyzerTest {
     }
 
     @Test
-    void guessRulesInOrder() {
-        assertEquals(Role.STRATEGIST, MatchAnalyzer.guessRoleFromStats(ranks(5000, 1, 0, 6)));
-        assertEquals(Role.VANGUARD, MatchAnalyzer.guessRoleFromStats(ranks(0, 6, 20000, 1)));
-        assertEquals(Role.DUELIST, MatchAnalyzer.guessRoleFromStats(ranks(0, 6, 0, 6)));
-        assertEquals(Role.DUELIST, MatchAnalyzer.guessRoleFromStats(ranks(800, 3, 900, 4)));
+    void guessComparesWithTeammatesOfEachRoleInsteadOfAssuming222() {
+        // A 1-2-3 team where a Vanguard out-heals a teammate Strategist (team-up healing happens).
+        // Deadpool is only 3rd in team healing, but he out-heals one real Strategist, so: Strategist.
+        PlayerLine deadpool = line(Role.UNKNOWN, 5000, 9000);
+        List<PlayerLine> team = List.of(deadpool,
+                line(Role.VANGUARD, 40000, 13000), line(Role.DUELIST, 8000, 0), line(Role.DUELIST, 9000, 0),
+                line(Role.STRATEGIST, 7000, 20000), line(Role.STRATEGIST, 6000, 6000));
+        assertEquals(Role.STRATEGIST, MatchAnalyzer.guessRoleFromStats(deadpool, team));
     }
 
-    /** Builds just the healing and blocked comparisons the guess reads. */
-    private static Map<Stat, StatComparison> ranks(int healing, int healRank, int blocked, int blockRank) {
-        return Map.of(
-                Stat.HEALING, new StatComparison(healing, 0, 0, healRank, healRank),
-                Stat.BLOCKED, new StatComparison(blocked, 0, 0, blockRank, blockRank));
+    @Test
+    void guessWithNoTeammateStrategistsNeedsTheMostHealing() {
+        PlayerLine deadpool = line(Role.UNKNOWN, 5000, 5000);
+        List<PlayerLine> team = List.of(deadpool,
+                line(Role.VANGUARD, 40000, 2000), line(Role.VANGUARD, 30000, 0), line(Role.DUELIST, 8000, 0),
+                line(Role.DUELIST, 9000, 0), line(Role.DUELIST, 7000, 1500));
+        assertEquals(Role.STRATEGIST, MatchAnalyzer.guessRoleFromStats(deadpool, team));
+    }
+
+    @Test
+    void guessFallsThroughToVanguardThenDuelist() {
+        PlayerLine tank = line(Role.UNKNOWN, 35000, 0);
+        PlayerLine dps = line(Role.UNKNOWN, 9000, 0);
+        List<PlayerLine> mates = List.of(line(Role.VANGUARD, 30000, 0), line(Role.DUELIST, 8000, 0),
+                line(Role.DUELIST, 9000, 0), line(Role.STRATEGIST, 7000, 20000), line(Role.STRATEGIST, 6000, 18000));
+        List<PlayerLine> withTank = new ArrayList<>(mates);
+        withTank.add(tank);
+        List<PlayerLine> withDps = new ArrayList<>(mates);
+        withDps.add(dps);
+        assertEquals(Role.VANGUARD, MatchAnalyzer.guessRoleFromStats(tank, withTank));
+        assertEquals(Role.DUELIST, MatchAnalyzer.guessRoleFromStats(dps, withDps));
+    }
+
+    // ---- Team compositions, read from the role icons ----
+
+    @Test
+    void compositionsComeFromTheRoleIcons() {
+        PlayerAnalysis player29 = analyzer.analyze(player29Match, (String) null);
+        assertEquals("2-2-2", player29.teamComposition());
+        assertEquals("1-2-3", player29.enemyComposition());
+        PlayerAnalysis player08 = analyzer.analyze(deadpoolMatch, (String) null);
+        assertEquals("2-1-3", player08.teamComposition());    // the Strategist Deadpool counts as a Strategist
+        assertEquals("3-1-2", player08.enemyComposition());
+    }
+
+    @Test
+    void unreadableIconsShowUpInTheComposition() {
+        MatchDetails m = replaceRow(deadpoolMatch, 5, deadpoolMatch.players().get(5).withRole(Role.UNKNOWN));
+        assertEquals("2-1-2 (+1 unknown)", analyzer.analyze(m, (String) null).teamComposition());
+    }
+
+    /** A bare row for the guess tests: only the role icon, blocked and healing matter. */
+    private static PlayerLine line(Role role, int blocked, int healing) {
+        return new PlayerLine(null, "A", role, "Someone", List.of(), 0, 0, 0, 0, 0, blocked, healing,
+                null, false, false, false, null, null);
     }
 }

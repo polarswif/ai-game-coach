@@ -22,8 +22,10 @@ import static com.gamecoach.model.Role.VANGUARD;
 
 /**
  * Development stand-in: two real in-game end-of-match scoreboards (Tokyo 2099: Spider-Islands, Convoy),
- * typed in by hand from screenshots. Heroes were identified from the portraits; the ones marked
- * "unconfirmed" are best guesses. No "Heroes Used" hover was captured, so every heroes list is empty.
+ * typed in by hand from screenshots. Heroes were identified from the portraits and confirmed by the
+ * uploader, except where marked "unconfirmed". Some portraits are Lord variants (alternate art for
+ * high-proficiency players), which look different from the default portrait.
+ * No "Heroes Used" hover was captured, so every heroes list is empty.
  * Active when application.properties has gamecoach.matches.source=fake.
  */
 @Component
@@ -67,12 +69,12 @@ public class FakeMatchHistorySource implements MatchHistorySource {
                         row("Player09",   "A", DUELIST,    "Squirrel Girl",        22, 10,  1, 13, 21532,  9073,     0, 33.0),
                         mvp(row("player44", "A", DUELIST, "Scarlet Witch",       43, 11,  0, 26, 26376, 15842,     0, 55.0)),
                         uploader(row("Player29", "A", STRATEGIST, "Rocket Raccoon",      7,  7, 33,  1,  1718,  6066, 31613, 20.0)),
-                        row("player34",           "A", STRATEGIST, "Jubilee",              18, 13, 20,  4,  6005, 13062, 40886, 50.0), // unconfirmed
+                        row("player34",           "A", STRATEGIST, "Luna Snow",            18, 13, 20,  4,  6005, 13062, 40886, 50.0),
                         row("Player15",       "B", VANGUARD,   "Groot",                22, 10,  0,  7, 21497, 42886,     0, 55.0),
                         svp(row("player32",    "B", DUELIST,    "Moon Knight",          35,  8,  1, 24, 31663,  7651,     0, 34.0)),
-                        row("Player06",      "B", DUELIST,    "Star-Lord",            33, 12,  0, 16, 26521, 11791,     0, 31.0), // unconfirmed
+                        row("Player06",      "B", DUELIST,    "Star-Lord",            33, 12,  0, 16, 26521, 11791,     0, 31.0),
                         row("Player11",     "B", STRATEGIST, "Cloak & Dagger",       24,  8, 14,  5, 14079, 12215, 26594, 86.0),
-                        row("Player30",  "B", STRATEGIST, "Jubilee",               5, 11, 16,  1,  5018, 10123, 14531, 33.0), // unconfirmed
+                        row("Player30",  "B", STRATEGIST, "Luna Snow",             5, 11, 16,  1,  5018, 10123, 14531, 33.0),
                         row("player38-",          "B", STRATEGIST, "Jeff the Land Shark",  19, 12, 13,  7, 12921, 10194, 16311, 51.0)));
     }
 
@@ -87,16 +89,16 @@ public class FakeMatchHistorySource implements MatchHistorySource {
                         //   name         team role        last hero          K   D   A  FH  damage blocked healing acc
                         row(null,         "A", VANGUARD,   "Magneto",        34,  7,  5, 12, 28387, 55292,     0, 58.0), // unconfirmed
                         row(null,         "A", VANGUARD,   "Thor",           31,  9,  4, 14, 27365, 52370,  2422, 45.0),
-                        row(null,         "A", DUELIST,    "Iron Fist",      34,  6,  0, 19, 30315,  8048,     0,  0.0), // unconfirmed
+                        row(null,         "A", DUELIST,    "Namor",          34,  6,  0, 19, 30315,  8048,     0,  0.0),
                         uploader(row("Player08", "A", STRATEGIST, "Cloak & Dagger", 32, 0, 53, 5, 17085, 7622, 50176, 90.0)),
-                        row(null,         "A", STRATEGIST, "Luna Snow",      25,  2, 37,  4, 14064, 15855, 39086, 49.0), // unconfirmed
+                        row(null,         "A", STRATEGIST, "Invisible Woman",25,  2, 37,  4, 14064, 15855, 39086, 49.0),
                         mvp(row(null,     "A", STRATEGIST, "Deadpool",       35,  7,  8, 16, 36204, 14732,  8208, 51.0)),
-                        row(null,         "B", VANGUARD,   "The Hood",       17, 12, 18,  2, 16499, 23086, 28697,  0.0), // unconfirmed
-                        svp(row(null,     "B", VANGUARD,   "Rogue",          21,  7, 16,  8, 27144, 49370,  5888, 26.0)), // unconfirmed
+                        row(null,         "B", VANGUARD,   "Doctor Strange", 17, 12, 18,  2, 16499, 23086, 28697,  0.0),
+                        svp(row(null,     "B", VANGUARD,   "Peni Parker",    21,  7, 16,  8, 27144, 49370,  5888, 26.0)),
                         row(null,         "B", VANGUARD,   "Emma Frost",     18, 14,  3,  8, 31139, 44340,     0, 53.0),
                         row(null,         "B", DUELIST,    "Phoenix",        17, 14,  1,  8, 25219, 18115,  1535, 36.0),
-                        row(null,         "B", STRATEGIST, "Mantis",          8, 13, 15,  1, 17375, 18208, 24720, 38.0), // unconfirmed
-                        row(null,         "B", STRATEGIST, "Luna Snow",      13, 10, 23,  4, 14342, 26851, 35392, 51.0))); // unconfirmed
+                        row(null,         "B", STRATEGIST, "Mantis",          8, 13, 15,  1, 17375, 18208, 24720, 38.0),
+                        row(null,         "B", STRATEGIST, "Invisible Woman",13, 10, 23,  4, 14342, 26851, 35392, 51.0)));
     }
 
     /** A plain row: no hover list, not the uploader, no MVP/SVP, no rank (the game doesn't show one). */

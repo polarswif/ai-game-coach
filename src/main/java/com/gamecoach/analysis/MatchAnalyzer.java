@@ -13,6 +13,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.function.ToIntFunction;
 
 /** Computes the comparisons the coach needs: KDA, per-minute stats, team share, ranks, and hero roles. */
 @Service
@@ -36,6 +37,7 @@ public class MatchAnalyzer {
     public PlayerAnalysis analyze(MatchDetails match, PlayerLine player) {
         List<PlayerLine> lobby = match.players();
         List<PlayerLine> team = lobby.stream().filter(p -> p.team().equals(player.team())).toList();
+        List<PlayerLine> enemies = lobby.stream().filter(p -> !p.team().equals(player.team())).toList();
         double minutes = Math.max(match.duration().toSeconds() / 60.0, 1.0 / 60);
 
         Map<Stat, StatComparison> stats = new EnumMap<>(Stat.class);
@@ -57,7 +59,7 @@ public class MatchAnalyzer {
         List<HeroPlayed> heroes = new ArrayList<>();
         for (HeroStats hero : used) {
             boolean last = HeroRoleCatalog.sameHero(hero.hero(), player.lastHero());
-            Role role = roleOf(hero.hero(), last, player, used.size(), stats);
+            Role role = roleOf(hero.hero(), last, player, used.size(), team);
             heroes.add(new HeroPlayed(hero.hero(), role, last, hero.kills(), hero.deaths(), hero.assists()));
         }
 
@@ -70,6 +72,8 @@ public class MatchAnalyzer {
                 player.svp(),
                 team.size(),
                 lobby.size(),
+                composition(team),
+                composition(enemies),
                 round((player.kills() + player.assists()) / (double) Math.max(player.deaths(), 1), 2),
                 heroes,
                 stats,
@@ -82,11 +86,10 @@ public class MatchAnalyzer {
      * 1. The role table. Most heroes have one fixed role, and "Deadpool (Strategist)" is listed too.
      * 2. The row's role icon, but only for the last hero played, since that's the hero it belongs to.
      *    This covers a plain "Deadpool" and heroes newer than the table.
-     * 3. For a Deadpool row with no readable icon, a guess from the stats. It's last because it can
-     *    be wrong: a damage-heavy Strategist Deadpool looks like a Duelist on paper.
+     * 3. For a Deadpool row with no readable icon, a guess from the stats compared with his
+     *    teammates. It's last because it can be wrong (see guessRoleFromStats).
      */
-    private Role roleOf(String hero, boolean last, PlayerLine player, int heroCount,
-                        Map<Stat, StatComparison> stats) {
+    private Role roleOf(String hero, boolean last, PlayerLine player, int heroCount, List<PlayerLine> team) {
         Role fromTable = roles.roleOf(hero);
         if (fromTable != Role.UNKNOWN) {
             return fromTable;
@@ -95,7 +98,7 @@ public class MatchAnalyzer {
             return player.role();
         }
         if (HeroRoleCatalog.isDeadpool(hero) && heroCount == 1) {
-            return guessRoleFromStats(stats);   // only safe when the row's totals are all Deadpool's
+            return guessRoleFromStats(player, team);   // only safe when the row's totals are all Deadpool's
         }
         return Role.UNKNOWN;
     }
@@ -126,20 +129,44 @@ public class MatchAnalyzer {
     }
 
     /**
-     * Last-resort guess at a Deadpool player's role from how their stats rank on their own team.
-     * Teams usually run 2 Vanguards, 2 Duelists and 2 Strategists, so a top-2 healer on the team
-     * was probably a Strategist, and a top-2 blocker probably a Vanguard. Otherwise: Duelist.
+     * Last-resort guess at a Deadpool player's role, used only when his row's icon couldn't be read.
+     * Team compositions vary (2-2-2, 1-3-2, 1-2-3, 2-1-3...), so instead of assuming two of each role,
+     * it compares him with the teammates whose icons show each role:
+     * - Strategist if he healed at least as much as the lowest-healing teammate Strategist
+     *   (or, with no teammate Strategists, more than every teammate).
+     * - Otherwise Vanguard, by the same test on damage blocked against teammate Vanguards.
+     * - Otherwise Duelist.
+     * It can still be wrong: a damage-heavy Strategist Deadpool heals less than other Strategists.
      */
-    static Role guessRoleFromStats(Map<Stat, StatComparison> stats) {
-        StatComparison healing = stats.get(Stat.HEALING);
-        if (healing.value() > 0 && healing.teamRank() <= 2) {
+    static Role guessRoleFromStats(PlayerLine player, List<PlayerLine> team) {
+        List<PlayerLine> mates = team.stream().filter(p -> p != player).toList();
+        if (player.healing() > 0 && keepsUpWith(player.healing(), mates, Role.STRATEGIST, PlayerLine::healing)) {
             return Role.STRATEGIST;
         }
-        StatComparison blocked = stats.get(Stat.BLOCKED);
-        if (blocked.value() > 0 && blocked.teamRank() <= 2) {
+        if (player.blocked() > 0 && keepsUpWith(player.blocked(), mates, Role.VANGUARD, PlayerLine::blocked)) {
             return Role.VANGUARD;
         }
         return Role.DUELIST;
+    }
+
+    private static boolean keepsUpWith(int value, List<PlayerLine> mates, Role role, ToIntFunction<PlayerLine> stat) {
+        List<PlayerLine> sameRole = mates.stream().filter(p -> p.role() == role).toList();
+        if (sameRole.isEmpty()) {
+            return mates.stream().allMatch(p -> value > stat.applyAsInt(p));
+        }
+        return value >= sameRole.stream().mapToInt(stat).min().getAsInt();
+    }
+
+    /**
+     * A team's composition from its role icons, written Vanguards-Duelists-Strategists, e.g. "1-2-3".
+     * Rows whose icon couldn't be read are added as "+N unknown".
+     */
+    static String composition(List<PlayerLine> team) {
+        long v = team.stream().filter(p -> p.role() == Role.VANGUARD).count();
+        long d = team.stream().filter(p -> p.role() == Role.DUELIST).count();
+        long s = team.stream().filter(p -> p.role() == Role.STRATEGIST).count();
+        long unknown = team.size() - v - d - s;
+        return v + "-" + d + "-" + s + (unknown > 0 ? " (+" + unknown + " unknown)" : "");
     }
 
     private static Integer accuracyRank(PlayerLine player, List<PlayerLine> lobby) {
