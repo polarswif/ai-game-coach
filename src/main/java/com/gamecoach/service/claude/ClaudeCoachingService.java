@@ -1,5 +1,6 @@
 package com.gamecoach.service.claude;
 
+import com.gamecoach.analysis.HeroNotesCatalog;
 import com.gamecoach.analysis.HeroPlayed;
 import com.gamecoach.analysis.PlayerAnalysis;
 import com.gamecoach.model.Feedback;
@@ -37,6 +38,7 @@ public class ClaudeCoachingService implements CoachingService {
 
     private final ClaudeClient client;
     private final ClaudeProperties properties;
+    private final HeroNotesCatalog heroNotes;
 
     /**
      * A LinkedHashMap in "access order" with removeEldestEntry overridden is a simple LRU cache: when
@@ -51,9 +53,10 @@ public class ClaudeCoachingService implements CoachingService {
                 }
             });
 
-    public ClaudeCoachingService(ClaudeClient client, ClaudeProperties properties) {
+    public ClaudeCoachingService(ClaudeClient client, ClaudeProperties properties, HeroNotesCatalog heroNotes) {
         this.client = client;
         this.properties = properties;
+        this.heroNotes = heroNotes;
     }
 
     @Override
@@ -74,9 +77,24 @@ public class ClaudeCoachingService implements CoachingService {
                 properties.model(),
                 properties.maxTokens(),
                 CoachingPrompt.systemPrompt(),
-                List.of(Message.user(CoachingPrompt.userMessage(match, analysis))),
+                List.of(Message.user(CoachingPrompt.userMessage(match, analysis, notesFor(analysis)))),
                 List.of(CoachingPrompt.tool()),
                 ToolChoice.auto());
+    }
+
+    /**
+     * Notes for every hero the player played, keyed by hero. LinkedHashMap keeps the order the heroes
+     * were played in; heroes without notes are left out.
+     */
+    private Map<String, List<String>> notesFor(PlayerAnalysis analysis) {
+        Map<String, List<String>> notes = new LinkedHashMap<>();
+        for (HeroPlayed h : analysis.heroes()) {
+            List<String> forHero = heroNotes.forHero(h.hero());
+            if (!forHero.isEmpty()) {
+                notes.putIfAbsent(h.hero(), forHero);
+            }
+        }
+        return notes;
     }
 
     private Feedback askClaude(MatchDetails match, PlayerAnalysis analysis) {

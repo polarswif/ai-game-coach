@@ -44,16 +44,26 @@ final class CoachingPrompt {
                 staying alive, Vanguards by damage blocked and creating space, Duelists by KOs, final hits \
                 and damage. Low damage blocked is not a weakness for a Strategist, for example.
                 - Ranks: 1 is best. For deaths, fewer is better, so rank 1 means the fewest deaths.
-                - Compare with teammates and opponents in the same role when it helps.
+                - Compare with teammates and opponents in the same role when it helps, and name the heroes \
+                involved. Heroes in the same role have very different typical numbers (some Strategists \
+                heal far more than others), so a gap with a player on a different hero is not a weakness \
+                by itself.
+                - HERO NOTES, when given, are game knowledge confirmed by players. Trust them over general \
+                assumptions and use them to read the stats.
                 - Proficiency only proves a minimum level. Never call a player inexperienced because \
                 no badge or Lord portrait is shown.
                 - Team-ups: if a better option is listed, recommend it. Don't describe what team-ups do; \
                 their effects change every season.
-                - Mention a hero ability only if you're sure it exists in the current game. Otherwise give \
-                role-level advice.
+                - Mention a hero ability only if it is in the HERO NOTES or you're sure it exists in the \
+                current game. Otherwise give role-level advice.
+                - The match result is context, never a strength or weakness: the player can't win or lose \
+                alone.
+                - Each stat or point goes in only one place. Don't praise something as a strength and then \
+                list it as a weakness, and don't repeat a strength in the advice.
+                - Advice gives new, concrete actions for next match. Don't just restate a weakness.
                 - One match is a small sample. Present weaknesses as things to watch, not verdicts.
-                - List as many strengths and weaknesses as the data supports (usually 2 to 5 each), most \
-                important first. Give 2 to 4 concrete things to try next match.
+                - List as many strengths and weaknesses as the data supports (usually 2 to 4 each), most \
+                important first. Give 2 to 4 things to try next match.
                 - Write in plain language, in the second person, one or two sentences per item.
                 - Always answer by calling the submit_coaching tool exactly once, with no text before \
                 or after it.
@@ -80,7 +90,10 @@ final class CoachingPrompt {
         return copy;
     }
 
-    static String userMessage(MatchDetails match, PlayerAnalysis a) {
+    /**
+     * @param heroNotes notes for the heroes the coached player played, hero name to notes; may be empty
+     */
+    static String userMessage(MatchDetails match, PlayerAnalysis a, Map<String, List<String>> heroNotes) {
         StringBuilder s = new StringBuilder();
 
         s.append("MATCH\n");
@@ -109,6 +122,13 @@ final class CoachingPrompt {
         s.append("Accuracy: ").append(a.accuracyPercent() == null ? "not shown"
                 : String.format(Locale.ROOT, "%.0f%% (rank %d among players with accuracy shown)",
                         a.accuracyPercent(), a.accuracyLobbyRank())).append("\n\n");
+
+        if (!heroNotes.isEmpty()) {
+            s.append("HERO NOTES (confirmed by players)\n");
+            heroNotes.forEach((hero, notes) -> notes.forEach(note ->
+                    s.append("- ").append(hero).append(": ").append(note).append('\n')));
+            s.append('\n');
+        }
 
         s.append("STATS (rank 1 = best; for deaths, fewer is better)\n");
         s.append("Stat | Value | Per minute | Share of team | Team rank of ").append(a.teamSize())

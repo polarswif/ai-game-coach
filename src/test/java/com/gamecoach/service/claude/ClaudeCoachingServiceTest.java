@@ -1,5 +1,6 @@
 package com.gamecoach.service.claude;
 
+import com.gamecoach.analysis.HeroNotesCatalog;
 import com.gamecoach.analysis.HeroRoleCatalog;
 import com.gamecoach.analysis.MatchAnalyzer;
 import com.gamecoach.analysis.PlayerAnalysis;
@@ -64,7 +65,7 @@ class ClaudeCoachingServiceTest {
     }
 
     private final FakeClient client = new FakeClient();
-    private final ClaudeCoachingService coach = new ClaudeCoachingService(client, properties);
+    private final ClaudeCoachingService coach = new ClaudeCoachingService(client, properties, new HeroNotesCatalog());
 
     private String promptFor(MatchDetails match, PlayerAnalysis analysis) {
         return coach.buildRequest(match, analysis).messages().get(0).content();
@@ -82,6 +83,21 @@ class ClaudeCoachingServiceTest {
         assertEquals(CoachingPrompt.TOOL_NAME, request.tools().get(0).name());
         assertEquals("user", request.messages().get(0).role());
         assertTrue(request.system().contains("Ranks: 1 is best"));
+        assertTrue(request.system().contains("The match result is context, never a strength or weakness"));
+        assertTrue(request.system().contains("Each stat or point goes in only one place"));
+    }
+
+    @Test
+    void promptIncludesNotesForTheHeroesPlayed() {
+        String prompt = promptFor(player29Match, analyzer.analyze(player29Match, (String) null));
+        assertTrue(prompt.contains("HERO NOTES (confirmed by players)"));
+        assertTrue(prompt.contains("- Rocket Raccoon: His gun is much more effective at short range"));
+    }
+
+    @Test
+    void promptLeavesOutTheNotesSectionWhenThereAreNone() {
+        PlayerAnalysis deadpool = analyzer.analyze(deadpoolMatch, deadpoolMatch.players().get(5));
+        assertFalse(promptFor(deadpoolMatch, deadpool).contains("HERO NOTES"));
     }
 
     @Test

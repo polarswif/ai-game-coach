@@ -1,0 +1,6 @@
+# Hero notes for the coach: game knowledge confirmed by players, sent to Claude when the coached
+# player played that hero. Format: hero|note. A hero can have several lines.
+# Keep notes about how a hero plays and how to read their stats. Avoid exact numbers and ability
+# effects that change with balance patches.
+Rocket Raccoon|His gun is much more effective at short range than at medium or long range, so shooting from a distance lowers both his accuracy and his damage.
+Rocket Raccoon|Many Rocket players stand farther from their team than other Strategists because his healing orb reaches a long way. Low accuracy and low damage on Rocket usually reflect that distance, not poor aim, so coach it as a positioning trade-off (when it's safe to move closer and add damage) rather than as an aim problem.
