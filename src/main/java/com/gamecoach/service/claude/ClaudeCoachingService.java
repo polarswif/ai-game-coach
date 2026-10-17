@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Coaching written by Claude. Sends the match and the Java-computed analysis, forces Claude to answer
+ * Coaching written by Claude. Sends the match and the Java-computed analysis, asks Claude to answer
  * through the submit_coaching tool, and turns that into Feedback.
  * Results are cached per match and player, so asking twice doesn't pay twice.
  * Active when application.properties has gamecoach.coach.provider=claude.
@@ -76,7 +76,7 @@ public class ClaudeCoachingService implements CoachingService {
                 CoachingPrompt.systemPrompt(),
                 List.of(Message.user(CoachingPrompt.userMessage(match, analysis))),
                 List.of(CoachingPrompt.tool()),
-                ToolChoice.force(CoachingPrompt.TOOL_NAME));
+                ToolChoice.auto());
     }
 
     private Feedback askClaude(MatchDetails match, PlayerAnalysis analysis) {

@@ -40,7 +40,7 @@ class RestClientClaudeClientTest {
     private static MessagesRequest request() {
         return new MessagesRequest("claude-sonnet-5-5", 2000, "system prompt",
                 List.of(Message.user("match data")), List.of(CoachingPrompt.tool()),
-                ToolChoice.force(CoachingPrompt.TOOL_NAME));
+                ToolChoice.auto());
     }
 
     @Test
@@ -51,8 +51,8 @@ class RestClientClaudeClientTest {
                 .andExpect(header("anthropic-version", "2023-06-01"))
                 .andExpect(jsonPath("$.model").value("claude-sonnet-5-5"))
                 .andExpect(jsonPath("$.max_tokens").value(2000))                 // snake_case names on the wire
-                .andExpect(jsonPath("$.tool_choice.type").value("tool"))
-                .andExpect(jsonPath("$.tool_choice.name").value("submit_coaching"))
+                .andExpect(jsonPath("$.tool_choice.type").value("auto"))
+                .andExpect(jsonPath("$.tool_choice.name").doesNotExist())       // null name left out
                 .andExpect(jsonPath("$.tools[0].input_schema.type").value("object"))
                 .andExpect(jsonPath("$.messages[0].role").value("user"))
                 .andRespond(withSuccess("""

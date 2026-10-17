@@ -55,7 +55,8 @@ final class CoachingPrompt {
                 - List as many strengths and weaknesses as the data supports (usually 2 to 5 each), most \
                 important first. Give 2 to 4 concrete things to try next match.
                 - Write in plain language, in the second person, one or two sentences per item.
-                - Answer only by calling the submit_coaching tool.
+                - Always answer by calling the submit_coaching tool exactly once, with no text before \
+                or after it.
                 """;
     }
 

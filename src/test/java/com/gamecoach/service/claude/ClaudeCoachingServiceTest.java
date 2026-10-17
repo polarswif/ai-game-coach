@@ -73,12 +73,12 @@ class ClaudeCoachingServiceTest {
     // ---- The request ----
 
     @Test
-    void requestUsesTheSettingsAndForcesTheTool() {
+    void requestUsesTheSettingsAndOffersTheTool() {
         MessagesRequest request = coach.buildRequest(player29Match, analyzer.analyze(player29Match, (String) null));
         assertEquals(ClaudeProperties.DEFAULT_MODEL, request.model());
         assertEquals(2000, request.maxTokens());
-        assertEquals("tool", request.toolChoice().type());
-        assertEquals(CoachingPrompt.TOOL_NAME, request.toolChoice().name());
+        assertEquals("auto", request.toolChoice().type());      // newer models reject a forced tool
+        assertEquals(null, request.toolChoice().name());
         assertEquals(CoachingPrompt.TOOL_NAME, request.tools().get(0).name());
         assertEquals("user", request.messages().get(0).role());
         assertTrue(request.system().contains("Ranks: 1 is best"));

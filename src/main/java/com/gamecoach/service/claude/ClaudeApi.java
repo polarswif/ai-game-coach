@@ -1,6 +1,7 @@
 package com.gamecoach.service.claude;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gamecoach.model.Feedback;
 
@@ -24,7 +25,7 @@ public final class ClaudeApi {
     /**
      * @param maxTokens  the API calls it "max_tokens"; @JsonProperty sets the JSON name, so the
      *                   Java name can follow Java's camelCase style
-     * @param toolChoice forcing a specific tool makes Claude always answer through it
+     * @param toolChoice how Claude may use the tools (see ToolChoice)
      */
     public record MessagesRequest(
             String model,
@@ -53,8 +54,19 @@ public final class ClaudeApi {
             @JsonProperty("input_schema") Map<String, Object> inputSchema) {
     }
 
-    /** {"type": "tool", "name": "..."} forces Claude to call that tool instead of replying in prose. */
+    /**
+     * How Claude may use the tools. {"type": "auto"} lets Claude decide; the system prompt tells it to
+     * always answer through submit_coaching, and ClaudeCoachingService rejects a reply that doesn't.
+     * Forcing a tool ({"type": "tool", "name": "..."}) would be stricter, but newer models such as
+     * claude-sonnet-5-5 reject it with a 400 error, so it is kept only for models that allow it.
+     * NON_NULL leaves "name" out of the JSON when it's null, since "auto" takes no name.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public record ToolChoice(String type, String name) {
+
+        public static ToolChoice auto() {
+            return new ToolChoice("auto", null);
+        }
 
         public static ToolChoice force(String toolName) {
             return new ToolChoice("tool", toolName);
