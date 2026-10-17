@@ -6,7 +6,8 @@ import com.gamecoach.model.MatchDetails;
 
 /**
  * Turns a match and one player's analysis into coaching feedback.
- * Today: a fake implementation. Build step 3 adds one that calls the Claude API.
+ * FakeCoachingService gives canned feedback; ClaudeCoachingService asks Claude. The
+ * gamecoach.coach.provider setting picks which one Spring creates.
  */
 public interface CoachingService {
 

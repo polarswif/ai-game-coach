@@ -1,0 +1,141 @@
+package com.gamecoach.service.claude;
+
+import com.gamecoach.analysis.HeroPlayed;
+import com.gamecoach.analysis.PlayerAnalysis;
+import com.gamecoach.model.Feedback;
+import com.gamecoach.model.MatchDetails;
+import com.gamecoach.service.CoachingService;
+import com.gamecoach.service.CoachingUnavailableException;
+import com.gamecoach.service.claude.ClaudeApi.ContentBlock;
+import com.gamecoach.service.claude.ClaudeApi.Message;
+import com.gamecoach.service.claude.ClaudeApi.MessagesRequest;
+import com.gamecoach.service.claude.ClaudeApi.MessagesResponse;
+import com.gamecoach.service.claude.ClaudeApi.ToolChoice;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Coaching written by Claude. Sends the match and the Java-computed analysis, forces Claude to answer
+ * through the submit_coaching tool, and turns that into Feedback.
+ * Results are cached per match and player, so asking twice doesn't pay twice.
+ * Active when application.properties has gamecoach.coach.provider=claude.
+ */
+@Service
+@ConditionalOnProperty(name = "gamecoach.coach.provider", havingValue = "claude")
+public class ClaudeCoachingService implements CoachingService {
+
+    private static final Logger log = LoggerFactory.getLogger(ClaudeCoachingService.class);
+    private static final int CACHE_SIZE = 500;
+
+    private final ClaudeClient client;
+    private final ClaudeProperties properties;
+
+    /**
+     * A LinkedHashMap in "access order" with removeEldestEntry overridden is a simple LRU cache: when
+     * it's full, the entry used longest ago is dropped. synchronizedMap makes it safe when several
+     * requests arrive at once (Spring handles each request on its own thread).
+     */
+    private final Map<String, Feedback> cache = Collections.synchronizedMap(
+            new LinkedHashMap<>(16, 0.75f, true) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<String, Feedback> eldest) {
+                    return size() > CACHE_SIZE;
+                }
+            });
+
+    public ClaudeCoachingService(ClaudeClient client, ClaudeProperties properties) {
+        this.client = client;
+        this.properties = properties;
+    }
+
+    @Override
+    public Feedback coach(MatchDetails match, PlayerAnalysis analysis) {
+        String key = cacheKey(match, analysis);
+        Feedback cached = cache.get(key);
+        if (cached != null) {
+            return cached;
+        }
+        Feedback feedback = askClaude(match, analysis);
+        cache.put(key, feedback);
+        return feedback;
+    }
+
+    /** Package-private so tests can check the exact request without sending it. */
+    MessagesRequest buildRequest(MatchDetails match, PlayerAnalysis analysis) {
+        return new MessagesRequest(
+                properties.model(),
+                properties.maxTokens(),
+                CoachingPrompt.systemPrompt(),
+                List.of(Message.user(CoachingPrompt.userMessage(match, analysis))),
+                List.of(CoachingPrompt.tool()),
+                ToolChoice.force(CoachingPrompt.TOOL_NAME));
+    }
+
+    private Feedback askClaude(MatchDetails match, PlayerAnalysis analysis) {
+        MessagesResponse response;
+        try {
+            response = client.send(buildRequest(match, analysis));
+        } catch (ClaudeApiException e) {
+            throw new CoachingUnavailableException(explain(e), e);
+        }
+        if (response.usage() != null) {
+            log.info("Coached match {} with {}: {} input + {} output tokens", match.matchId(), response.model(),
+                    response.usage().inputTokens(), response.usage().outputTokens());
+        }
+        return readFeedback(response);
+    }
+
+    /** Finds the submit_coaching call in the reply and checks it's usable. */
+    private Feedback readFeedback(MessagesResponse response) {
+        if ("max_tokens".equals(response.stopReason())) {
+            throw new CoachingUnavailableException("The coaching reply was cut off. Raise "
+                    + "gamecoach.claude.max-tokens (now " + properties.maxTokens() + ").", null);
+        }
+        Feedback feedback = response.content() == null ? null : response.content().stream()
+                .filter(block -> "tool_use".equals(block.type()) && CoachingPrompt.TOOL_NAME.equals(block.name()))
+                .map(ContentBlock::input)
+                .findFirst()
+                .orElse(null);
+        if (feedback == null || isEmpty(feedback.strengths()) || isEmpty(feedback.weaknesses())
+                || isEmpty(feedback.advice())) {
+            throw new CoachingUnavailableException("Claude's reply didn't contain usable coaching "
+                    + "(stop reason: " + response.stopReason() + ").", null);
+        }
+        return feedback;
+    }
+
+    private static boolean isEmpty(List<String> items) {
+        return items == null || items.stream().allMatch(s -> s == null || s.isBlank());
+    }
+
+    /** A message the user can act on, by HTTP status. Never includes the key itself. */
+    private static String explain(ClaudeApiException e) {
+        return switch (e.status()) {
+            case 0 -> "Couldn't reach the Claude API. Check the internet connection and try again.";
+            case 401 -> "The Claude API rejected the API key. Check ANTHROPIC_API_KEY.";
+            case 403 -> "The API key isn't allowed to use this model: " + e.getMessage();
+            case 429 -> "Too many requests to the Claude API (rate or spend limit). Wait a bit and try again.";
+            case 529 -> "The Claude API is overloaded right now. Try again shortly.";
+            default -> "The Claude API returned an error (" + e.status() + " " + e.errorType() + "): " + e.getMessage();
+        };
+    }
+
+    /**
+     * One coaching per match per player. Hidden names fall back to team plus last hero, which is
+     * unique enough within one match.
+     */
+    private static String cacheKey(MatchDetails match, PlayerAnalysis a) {
+        String who = a.player() != null ? "name:" + a.player().toLowerCase()
+                : "row:" + a.team() + ":" + a.heroes().stream().filter(HeroPlayed::lastPlayed)
+                        .map(HeroPlayed::hero).findFirst().orElse("?");
+        return match.matchId() + "|" + who;
+    }
+}
