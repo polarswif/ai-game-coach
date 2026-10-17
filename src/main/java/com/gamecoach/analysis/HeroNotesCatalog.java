@@ -58,8 +58,13 @@ public class HeroNotesCatalog {
             if (cols.length != 2 || cols[0].isBlank() || cols[1].isBlank()) {
                 throw new IllegalStateException("Hero note needs 2 columns (hero|note): " + line);
             }
-            notesByHero.computeIfAbsent(HeroRoleCatalog.baseName(cols[0].strip()), k -> new ArrayList<>())
-                    .add(cols[1].strip());
+            // "Hulk/Bruce Banner": the same note under every name the scoreboard can show.
+            for (String name : cols[0].split("/")) {
+                if (!name.isBlank()) {
+                    notesByHero.computeIfAbsent(HeroRoleCatalog.baseName(name.strip()), k -> new ArrayList<>())
+                            .add(cols[1].strip());
+                }
+            }
         }
     }
 }

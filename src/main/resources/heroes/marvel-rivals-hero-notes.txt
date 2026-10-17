@@ -1,6 +1,45 @@
 # Hero notes for the coach: game knowledge confirmed by players, sent to Claude when the coached
-# player played that hero. Format: hero|note. A hero can have several lines.
+# player played that hero. Format: hero|note. A hero can have several lines. Names that the
+# scoreboard can show for the same hero are separated by "/" (for example Hulk/Bruce Banner).
 # Keep notes about how a hero plays and how to read their stats. Avoid exact numbers and ability
 # effects that change with balance patches.
+# Drafted from community guides (Mobalytics, Aim Lab) and corrected by the user.
+# Last checked: Season 10 (October 2026).
+
+# ---- Vanguards ----
+Magneto|A main shield tank who also brawls. He's strongest at mid range; his slow projectiles miss fast or small targets, so low accuracy often means shooting at mobile targets or from the wrong range.
+Magneto|His damage blocked comes from his self-bubble, the bubble he puts on an ally, and Metallic Curtain. Good players save the ally bubble for divers and key moments, and don't hold the curtain up when nothing is hitting it, because it drains anyway.
+Magneto|A fully charged Mag-Cannon knocks enemies back, which is his answer to melee divers. Deaths to divers often mean the knockback or self-bubble was already spent.
+Magneto|His ultimate, Meteor M, absorbs enemy projectiles, so it's best timed to eat an enemy ultimate or heavy projectile fire.
+
+Doctor Strange|A main shield tank; damage blocked is his key stat. When the shield breaks it has to recharge from empty, so good players drop it between hits and save it for stuns and ultimates.
+Doctor Strange|He's weak against brawlers such as The Thing, Hulk and Wolverine, who bypass his shield, and dive heroes can simply go around him. High deaths often mean he was caught up close with a low shield or with levitation already used. Check the enemy team for these heroes.
+Doctor Strange|Maelstrom of Madness charges from his hits, so low damage can mean he isn't attacking between shield uses.
+Doctor Strange|His ultimate, Eye of Agamotto, stuns a group but has a slow startup, so it's best from a flank, from high ground or after levitating in.
+
+Hulk/Bruce Banner|A brawl tank who can dive, not a pure dive tank like Venom. His three forms (Bruce, Hero Hulk, Monster Hulk from the ultimate) are combined on the scoreboard.
+Hulk/Bruce Banner|Indestructible Guard shields him and nearby allies; good players save it for enemy ultimates and to save teammates, not for small damage. Gamma Burst (the clap) adds ranged damage and recharges the guard.
+Hulk/Bruce Banner|Radioactive Lockdown is used to stun out-of-position targets and to cancel enemy ultimates. Incredible Leap also stuns flying enemies it hits. Neither shows on the scoreboard.
+Hulk/Bruce Banner|Common mistake: staying too long in fights he can't win, which soaks up healing and builds the enemy's ultimates; dying as Hulk sends him back to Bruce. He's weak against chained crowd control, and transforming at low health is risky.
+
+Thor|A brawler like Hulk, but more of a diver because of his high burst damage. He's also a strong protector of his backline, because he's consistently one of the best 1v1 heroes. KOs, final hits and damage matter more for him than for shield tanks; low damage blocked is expected.
+Thor|Every ability spends Thorforce, which refills when his attacks land. Diving with no Thorforce leaves him no escape, so high deaths often come from diving on empty.
+Thor|Awakening Rune is his burst for finishing low-health targets. It can be cancelled, refunding 1 Thorforce, which good players use to get out.
+Thor|He's weak against heavy crowd control. He can't be stunned while casting his ultimate, so it can counter enemy stun ultimates.
+
+# ---- Strategists ----
+Rocket Raccoon|His main value is healing and staying alive: he can run up walls and has dashes to escape. His healing orbs bounce and pass through allies, so good players aim at teammates' feet and heal around corners.
 Rocket Raccoon|His gun is much more effective at short range than at medium or long range, so shooting from a distance lowers both his accuracy and his damage.
-Rocket Raccoon|Many Rocket players stand farther from their team than other Strategists because his healing orb reaches a long way. Low accuracy and low damage on Rocket usually reflect that distance, not poor aim, so coach it as a positioning trade-off (when it's safe to move closer and add damage) rather than as an aim problem.
+Rocket Raccoon|Many Rocket players stand farther from their team than other Strategists because his healing orb reaches a long way. Low accuracy and low damage on Rocket usually reflect that distance, not poor aim, so coach it as a positioning trade-off (when it's safe to move closer and add damage) rather than as an aim problem. Damage matters most when the team is healthy and for breaking deployables.
+Rocket Raccoon|His Battle Rebirth Beacon (revives the next nearby teammate who dies) and his ultimate (an amplifier that boosts damage and heals) don't show on the scoreboard. Common mistake: using both dashes early and getting caught with no escape.
+
+Luna Snow|Her value is both healing and damage. High damage with low healing can mean a flanking Luna, a high-risk, high-reward playstyle; judge it by whether her team still had enough healing and by her deaths.
+Luna Snow|She has little mobility and usually plays behind cover; deaths often mean she was too exposed. Absolute Zero and Ice Arts heal her, and Number One Idol puts Share the Stage's snowflake on herself so she heals while dealing damage.
+Luna Snow|Good players save Absolute Zero's freeze to cancel an enemy ultimate or stop a diver.
+Luna Snow|Her ultimate switches between a healing aura and a damage boost. The worst mistake is letting an ally die while in damage mode. Share the Stage is best on Duelists and divers.
+
+Invisible Woman|Her healing and damage come from the same piercing orbs that fly back to her. Lining up allies and enemies gives both, so she can post good healing and damage at once; if both are low, she probably wasn't getting good lines.
+Invisible Woman|Her healing range is shorter than most Strategists', so she plays close behind the frontline. She's decent against dive but bad against Daredevil, who can see her through invisibility. Check the enemy team for him.
+Invisible Woman|Invisibility heals her but stops her attacking, so time spent invisible lowers her output: a survival-versus-output trade-off.
+Invisible Woman|Good players put Guardian Shield on the most threatened ally and recall it before it breaks, use Force Physics to peel divers or pull in enemies who push too far, and time Psionic Vortex with a teammate's area-damage ultimate.
+Invisible Woman|Her ultimate makes allies invisible and heals them, but it's vulnerable to lots of burst at once: melee teams can focus her down, and so can splash-damage teams.
