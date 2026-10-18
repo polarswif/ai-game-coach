@@ -11,9 +11,10 @@ An AI coaching app for competitive games. Players upload a screenshot of the end
 - **AI:** Claude API (Messages API over Spring's `RestClient`)
 
 ## How it works
-1. **Match data** comes from a `MatchHistorySource`. Today that's three built-in matches typed in from real Marvel Rivals in-game scoreboards: role icon, last hero played, equipped team-up, Proficiency Badge, medals, K/D/A, final hits, damage, blocked, healing, accuracy, and MVP/SVP for every row.
+1. **Match data** comes from an uploaded scoreboard screenshot, read by Claude's vision (`ClaudeScoreboardParser`) and checked by `ScoreboardValidator`, or from a `MatchHistorySource`. The built-in source has three matches typed in from real Marvel Rivals in-game scoreboards: role icon, last hero played, equipped team-up, Proficiency Badge, medals, K/D/A, final hits, damage, blocked, healing, accuracy, and MVP/SVP for every row.
 2. **`MatchAnalyzer`** computes the numbers in Java: KDA, per-minute stats, each player's share of their team's totals, and their rank on their team and in the lobby. Each hero's role comes from a table in `src/main/resources/heroes/`, with the row's role icon filling the gaps (such as Deadpool, who can play any role). It also reports both teams' compositions, and works out each equipped team-up from a table of all 108 team-ups: whether it was enhanced, and whether the hero's other team-up would have been enhanced instead. It carries each player's medals (most KOs, damage, blocked, healing or assists in the lobby) and best multi-kill. When a row shows a Lord or animated Lord portrait or a Proficiency Badge (the emblem on the portrait's corner), it records the minimum proficiency level that proves on the hero (players can leave these unequipped, so a plain row proves nothing).
-3. **A `CoachingService`** turns the match and that analysis into strengths, weaknesses, and advice. `ClaudeCoachingService` sends the analysis and scoreboard to Claude as labeled text and makes Claude answer through a `submit_coaching` tool whose input matches the `Feedback` record, so the reply always has the same shape. Results are cached per match and player. `FakeCoachingService` returns canned text for free.
+   It also rates how close the match was (from the round score when known, otherwise from each team's deaths), because a stomp says less about a player than a hard-fought match.
+3. **A `CoachingService`** turns the match and that analysis into strengths, weaknesses, advice, and a note on how much weight the coaching deserves. `ClaudeCoachingService` sends the analysis, the scoreboard, and player-checked hero notes (`src/main/resources/heroes/marvel-rivals-hero-notes.txt`) to Claude as labeled text, and Claude answers through a `submit_coaching` tool whose input matches the `Feedback` record, so the reply always has the same shape. Results are cached per match and player. `FakeCoachingService` returns canned text for free.
 
 Doing the math in Java means the coaching model reads finished comparisons instead of calculating them, and the logic is covered by unit tests.
 
@@ -37,6 +38,15 @@ Run the tests with `./mvnw test` (or `mvnw.cmd test` on Windows). The tests neve
 3. Change `gamecoach.coach.provider=fake` to `gamecoach.coach.provider=claude` in `application.properties`.
 4. Run the app and send the feedback request from step 4 above.
 
+### Read a screenshot
+With the Claude provider on, upload an end-of-match scoreboard (PNG, JPEG, WebP or GIF, up to 5 MB). In PowerShell:
+
+```powershell
+curl.exe -s -F "screenshot=@C:\path\to\scoreboard.png" -F "score=3-2" http://localhost:8080/api/rivals/matches
+```
+
+`score` is optional: the round score from the match history screen, your team's rounds first. The reply holds the match as read (with a `matchId` like `upload-1a2b3c4d`) and a list of `warnings`, things to check such as a medal that doesn't match the lobby leader or a team-up that doesn't exist. Fix mistakes by sending the corrected match back with `PUT /api/rivals/matches/{matchId}`, then ask for feedback with that id as usual. Uploaded matches live in memory until the app restarts.
+
 The model (`gamecoach.claude.model`, default `claude-sonnet-5-5`) and the reply length cap (`gamecoach.claude.max-tokens`) are in the same file. The app logs the tokens each coaching request used. If the provider is `claude` and the key is missing, the app stops at startup with a message saying so.
 
 ## Roadmap
@@ -45,7 +55,8 @@ The model (`gamecoach.claude.model`, default `claude-sonnet-5-5`) and the reply 
 - [x] Model matches the in-game scoreboard (role icons, final hits, MVP/SVP, hidden names)
 - [x] Team compositions, Season 9 team-ups, medals and proficiency in the analysis
 - [x] Claude-backed coaching feedback
-- [ ] Scoreboard screenshot upload and parsing (in-game first, tracker.gg as an optional extra)
+- [x] Scoreboard screenshot upload and parsing, with consistency checks and a review step
+- [ ] Match history screenshot (round score) and tracker.gg as optional extras
 - [ ] Overwatch career stats (OverFast)
 - [ ] React frontend
 - [ ] Saved match history (database)
