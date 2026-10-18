@@ -97,8 +97,8 @@ public class MatchAnalyzer {
     static final double ONE_SIDED_RATIO = 2.0;
 
     /**
-     * How close the match was, from the death totals. Deaths are the cleanest measure: one team's
-     * final hits always equal the other team's deaths, and they don't depend on hero choice the way
+     * How close the match was, from the death totals. Deaths are the cleanest measure: they track the
+     * other team's final hits closely (within a few percent), and they don't depend on hero choice the way
      * damage and healing do. Damage and healing shares are passed along as extra context.
      */
     static MatchCloseness closeness(List<PlayerLine> team, List<PlayerLine> enemies, boolean won, int[] rounds) {

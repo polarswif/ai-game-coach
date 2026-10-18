@@ -3,7 +3,6 @@ package com.gamecoach.service.claude;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.gamecoach.model.Feedback;
 
 import java.util.List;
 import java.util.Map;
@@ -36,12 +35,60 @@ public final class ClaudeApi {
             @JsonProperty("tool_choice") ToolChoice toolChoice) {
     }
 
-    /** One turn of the conversation. Here there's only one: the user message with the match data. */
-    public record Message(String role, String content) {
+    /**
+     * One turn of the conversation. content is either a plain String (text only) or a list of
+     * content parts (an image followed by text, for reading a screenshot). The API accepts both.
+     */
+    public record Message(String role, Object content) {
 
-        public static Message user(String content) {
-            return new Message("user", content);
+        public static Message user(String text) {
+            return new Message("user", text);
         }
+
+        /** An image and the instructions about it. The image goes first, as Anthropic recommends. */
+        public static Message userWithImage(String mediaType, String base64Data, String text) {
+            return new Message("user", List.of(ImagePart.base64(mediaType, base64Data), TextPart.of(text)));
+        }
+
+        /** The text of this message, joined from its text parts. Handy in tests and logs. */
+        public String text() {
+            if (content instanceof String s) {
+                return s;
+            }
+            StringBuilder b = new StringBuilder();
+            if (content instanceof List<?> parts) {
+                for (Object part : parts) {
+                    if (part instanceof TextPart t) {
+                        b.append(t.text());
+                    }
+                }
+            }
+            return b.toString();
+        }
+    }
+
+    /** {"type": "text", "text": "..."} */
+    public record TextPart(String type, String text) {
+
+        public static TextPart of(String text) {
+            return new TextPart("text", text);
+        }
+    }
+
+    /** {"type": "image", "source": {...}}: an image sent inline. */
+    public record ImagePart(String type, ImageSource source) {
+
+        public static ImagePart base64(String mediaType, String data) {
+            return new ImagePart("image", new ImageSource("base64", mediaType, data));
+        }
+    }
+
+    /**
+     * The image bytes as base64 text (JSON can't hold raw bytes), plus its format.
+     *
+     * @param mediaType image/png, image/jpeg, image/webp or image/gif
+     */
+    public record ImageSource(String type, @JsonProperty("media_type") String mediaType, String data) {
     }
 
     /**
@@ -91,12 +138,12 @@ public final class ClaudeApi {
     }
 
     /**
-     * One block of the reply. A "tool_use" block has the tool's name and its input; since the
-     * submit_coaching tool's input has the same fields as Feedback, Jackson reads it straight into
-     * a Feedback. A "text" block has text instead.
+     * One block of the reply. A "tool_use" block has the tool's name and its input; a "text" block
+     * has text instead. The input is read as a plain Map (JSON objects become Maps, arrays become
+     * Lists) because each tool has a different shape; ToolInput turns it into our own records.
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record ContentBlock(String type, String text, String name, Feedback input) {
+    public record ContentBlock(String type, String text, String name, Map<String, Object> input) {
     }
 
     /** Tokens used, which is what the call costs. Logged so you can watch spending. */

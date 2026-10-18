@@ -102,7 +102,7 @@ public class ClaudeCoachingService implements CoachingService {
         try {
             response = client.send(buildRequest(match, analysis));
         } catch (ClaudeApiException e) {
-            throw new CoachingUnavailableException(explain(e), e);
+            throw new CoachingUnavailableException(ClaudeErrors.explain(e), e);
         }
         if (response.usage() != null) {
             log.info("Coached match {} with {}: {} input + {} output tokens", match.matchId(), response.model(),
@@ -120,6 +120,9 @@ public class ClaudeCoachingService implements CoachingService {
         Feedback feedback = response.content() == null ? null : response.content().stream()
                 .filter(block -> "tool_use".equals(block.type()) && CoachingPrompt.TOOL_NAME.equals(block.name()))
                 .map(ContentBlock::input)
+                .filter(input -> input != null)
+                .map(input -> new Feedback(ToolInput.strings(input, "strengths"), ToolInput.strings(input, "weaknesses"),
+                        ToolInput.strings(input, "advice"), ToolInput.string(input, "matchContext")))
                 .findFirst()
                 .orElse(null);
         if (feedback == null || isEmpty(feedback.strengths()) || isEmpty(feedback.weaknesses())
@@ -134,26 +137,15 @@ public class ClaudeCoachingService implements CoachingService {
         return items == null || items.stream().allMatch(s -> s == null || s.isBlank());
     }
 
-    /** A message the user can act on, by HTTP status. Never includes the key itself. */
-    private static String explain(ClaudeApiException e) {
-        return switch (e.status()) {
-            case 0 -> "Couldn't reach the Claude API. Check the internet connection and try again.";
-            case 401 -> "The Claude API rejected the API key. Check ANTHROPIC_API_KEY.";
-            case 403 -> "The API key isn't allowed to use this model: " + e.getMessage();
-            case 429 -> "Too many requests to the Claude API (rate or spend limit). Wait a bit and try again.";
-            case 529 -> "The Claude API is overloaded right now. Try again shortly.";
-            default -> "The Claude API returned an error (" + e.status() + " " + e.errorType() + "): " + e.getMessage();
-        };
-    }
-
     /**
-     * One coaching per match per player. Hidden names fall back to team plus last hero, which is
-     * unique enough within one match.
+     * One coaching per match version per player. Hidden names fall back to team plus last hero,
+     * which is unique enough within one match.
      */
     private static String cacheKey(MatchDetails match, PlayerAnalysis a) {
         String who = a.player() != null ? "name:" + a.player().toLowerCase()
                 : "row:" + a.team() + ":" + a.heroes().stream().filter(HeroPlayed::lastPlayed)
                         .map(HeroPlayed::hero).findFirst().orElse("?");
-        return match.matchId() + "|" + who;
+        // hashCode covers every field of the match record, so a corrected scoreboard gets fresh coaching.
+        return match.matchId() + "#" + Integer.toHexString(match.hashCode()) + "|" + who;
     }
 }

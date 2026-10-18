@@ -1,6 +1,5 @@
 package com.gamecoach.service.claude;
 
-import com.gamecoach.model.Feedback;
 import com.gamecoach.service.claude.ClaudeApi.Message;
 import com.gamecoach.service.claude.ClaudeApi.MessagesRequest;
 import com.gamecoach.service.claude.ClaudeApi.MessagesResponse;
@@ -14,6 +13,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -68,8 +68,9 @@ class RestClientClaudeClientTest {
 
         server.verify();
         assertEquals("tool_use", response.stopReason());
-        assertEquals(new Feedback(List.of("Good healing"), List.of("Died early"), List.of("Use cover"), "A close match."),
-                response.content().get(0).input());
+        assertEquals(Map.of("strengths", List.of("Good healing"), "weaknesses", List.of("Died early"),
+                        "advice", List.of("Use cover"), "matchContext", "A close match."),
+                response.content().get(0).input());                            // JSON object read as a Map
         assertEquals(1200, response.usage().inputTokens());   // unknown fields like cache_read_input_tokens are ignored
     }
 

@@ -10,7 +10,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -25,6 +27,7 @@ public class HeroRoleCatalog {
     private static final String DEFAULT_TABLE = "/heroes/marvel-rivals-roles.csv";
 
     private final Map<String, Role> rolesByHero = new HashMap<>();
+    private final List<String> names = new ArrayList<>();
 
     public HeroRoleCatalog() {
         try (InputStream in = HeroRoleCatalog.class.getResourceAsStream(DEFAULT_TABLE)) {
@@ -43,6 +46,14 @@ public class HeroRoleCatalog {
             return Role.UNKNOWN;
         }
         return rolesByHero.getOrDefault(normalize(hero), Role.UNKNOWN);
+    }
+
+    /**
+     * Every name in the table, as written there, in file order (alternate spellings included).
+     * The screenshot reader gives this list to Claude so it uses the exact names.
+     */
+    public List<String> heroNames() {
+        return List.copyOf(names);
     }
 
     /** True for "Deadpool" and the labeled forms like "Deadpool (Strategist)". */
@@ -75,6 +86,7 @@ public class HeroRoleCatalog {
             String hero = line.substring(0, comma);
             Role role = Role.valueOf(line.substring(comma + 1).strip());
             rolesByHero.put(normalize(hero), role);
+            names.add(hero.strip());
         }
     }
 

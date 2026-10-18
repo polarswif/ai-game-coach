@@ -1,7 +1,7 @@
 package com.gamecoach.analysis;
 
 /**
- * How close a match was, judged from how many times each team died. A team's final hits always
+ * How close a match was, judged from how many times each team died. A team's final hits roughly
  * equal the other team's deaths, so the death counts show who won the fights.
  */
 public enum Closeness {

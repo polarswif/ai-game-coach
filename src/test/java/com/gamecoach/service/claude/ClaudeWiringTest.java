@@ -30,6 +30,6 @@ class ClaudeWiringTest {
         assertInstanceOf(ClaudeCoachingService.class, coach);
         assertEquals("claude-haiku-5-5", properties.model());
         assertEquals(2000, properties.maxTokens());
-        assertEquals(60, properties.timeout().toSeconds());
+        assertEquals(120, properties.timeout().toSeconds());   // from application.properties
     }
 }

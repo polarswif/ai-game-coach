@@ -17,7 +17,9 @@ import com.gamecoach.service.claude.ClaudeApi.Usage;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -59,7 +61,13 @@ class ClaudeCoachingServiceTest {
         }
     }
 
-    private static MessagesResponse toolReply(Feedback input, String stopReason) {
+    private static MessagesResponse toolReply(Feedback f, String stopReason) {
+        // The tool input arrives as a Map, the way Jackson parses a JSON object.
+        Map<String, Object> input = new HashMap<>();
+        input.put("strengths", f.strengths());
+        input.put("weaknesses", f.weaknesses());
+        input.put("advice", f.advice());
+        input.put("matchContext", f.matchContext());
         return new MessagesResponse("msg_test", "claude-sonnet-5-5",
                 List.of(new ContentBlock("tool_use", null, CoachingPrompt.TOOL_NAME, input)),
                 stopReason, new Usage(1500, 300));
@@ -69,7 +77,7 @@ class ClaudeCoachingServiceTest {
     private final ClaudeCoachingService coach = new ClaudeCoachingService(client, properties, new HeroNotesCatalog());
 
     private String promptFor(MatchDetails match, PlayerAnalysis analysis) {
-        return coach.buildRequest(match, analysis).messages().get(0).content();
+        return coach.buildRequest(match, analysis).messages().get(0).text();
     }
 
     // ---- The request ----
