@@ -7,7 +7,9 @@ package com.gamecoach.analysis;
  * player's own play (a losing player dies more, a winning player farms bigger totals). Hard-fought
  * matches are the ones where coaching is most reliable.
  *
- * @param level               CLOSE, CLEAR_EDGE or ONE_SIDED
+ * @param level               CLOSE, CLEAR_EDGE or ONE_SIDED; from the round score when known, else from deaths
+ * @param roundsWon           rounds won by the coached player's team; null when the score is unknown
+ * @param roundsLost          rounds won by the other team; null when the score is unknown
  * @param teamAheadInFights   true when the coached player's team died less (won more fights).
  *                            This isn't always the team that won: objective play can decide a match.
  * @param teamDeaths          total deaths of the coached player's team
@@ -18,10 +20,17 @@ package com.gamecoach.analysis;
  */
 public record MatchCloseness(
         Closeness level,
+        Integer roundsWon,
+        Integer roundsLost,
         boolean teamAheadInFights,
         int teamDeaths,
         int enemyDeaths,
         double deathRatio,
         double damageSharePercent,
         double healingSharePercent) {
+
+    /** True when the verdict came from the round score rather than the death totals. */
+    public boolean fromRounds() {
+        return roundsWon != null;
+    }
 }

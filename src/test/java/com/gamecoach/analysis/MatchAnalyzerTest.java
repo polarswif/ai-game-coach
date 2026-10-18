@@ -10,6 +10,7 @@ import com.gamecoach.model.PortraitStyle;
 import com.gamecoach.model.ProficiencyBadge;
 import com.gamecoach.model.ProficiencyShown;
 import com.gamecoach.model.Role;
+import com.gamecoach.model.RoundScore;
 
 import org.junit.jupiter.api.Test;
 
@@ -404,5 +405,31 @@ class MatchAnalyzerTest {
         MatchCloseness theirs = analyzer.analyze(teamUpMatch, enemy).closeness();
         assertTrue(theirs.teamAheadInFights());
         assertEquals(118, theirs.enemyDeaths());
+    }
+
+    @Test
+    void theRoundScoreDecidesWhenKnown() {
+        assertEquals(Closeness.ONE_SIDED, MatchAnalyzer.fromRounds(2, 0));   // Domination sweep
+        assertEquals(Closeness.ONE_SIDED, MatchAnalyzer.fromRounds(0, 3));
+        assertEquals(Closeness.CLOSE, MatchAnalyzer.fromRounds(2, 1));
+        assertEquals(Closeness.CLOSE, MatchAnalyzer.fromRounds(3, 2));
+        assertEquals(Closeness.CLEAR_EDGE, MatchAnalyzer.fromRounds(3, 1));
+
+        // Deaths alone say clear edge for this match; a 2-3 score overrides that to close.
+        MatchCloseness c = analyzer.analyze(teamUpMatch.withScore(new RoundScore(2, 3)), "Player10<3").closeness();
+        assertEquals(Closeness.CLOSE, c.level());
+        assertEquals(2, c.roundsWon());
+        assertEquals(3, c.roundsLost());
+        assertTrue(c.fromRounds());
+    }
+
+    @Test
+    void theScoreIsReadFromTheCoachedPlayersSide() {
+        MatchDetails match = player29Match.withScore(new RoundScore(3, 1));
+        PlayerLine enemy = match.players().stream().filter(p -> p.team().equals("B")).findFirst().orElseThrow();
+        MatchCloseness theirs = analyzer.analyze(match, enemy).closeness();
+        assertEquals(1, theirs.roundsWon());
+        assertEquals(3, theirs.roundsLost());
+        assertFalse(analyzer.analyze(player29Match, (String) null).closeness().fromRounds());
     }
 }

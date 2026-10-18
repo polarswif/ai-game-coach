@@ -184,14 +184,20 @@ final class CoachingPrompt {
         String side = c.teamAheadInFights() ? "the coached player's team" : "the enemy team";
         String verdict = switch (c.level()) {
             case CLOSE -> "CLOSE (hard-fought)";
-            case CLEAR_EDGE -> "CLEAR EDGE to " + side + " in fights";
-            case ONE_SIDED -> "ONE-SIDED in " + side + "'s favor" + (c.teamAheadInFights() == won
+            case CLEAR_EDGE -> c.fromRounds() ? "CLEAR EDGE to the " + (won ? "coached player's team" : "enemy team")
+                    : "CLEAR EDGE to " + side + " in fights";
+            case ONE_SIDED -> c.fromRounds() ? "ONE-SIDED: a " + (won ? "sweep win" : "sweep loss")
+                    : "ONE-SIDED in " + side + "'s favor" + (c.teamAheadInFights() == won
                     ? (won ? " (a likely stomp win)" : " (a likely stomp loss)")
                     : "");
         };
         StringBuilder s = new StringBuilder("MATCH CLOSENESS (computed from the scoreboard)\n");
         s.append("Verdict: ").append(verdict).append('\n');
-        if (c.level() != Closeness.CLOSE && c.teamAheadInFights() != won) {
+        s.append("Based on: ").append(c.fromRounds()
+                ? "the round score, " + c.roundsWon() + "-" + c.roundsLost() + " for the coached player's team "
+                        + "(a sweep is one-sided, a one-round margin is close)"
+                : "death totals (the round score wasn't recorded)").append('\n');
+        if (c.teamAheadInFights() != won && (c.fromRounds() || c.level() != Closeness.CLOSE)) {
             s.append("Note: the team that won more fights did not win the match.\n");
         }
         s.append("Deaths: coached player's team ").append(c.teamDeaths()).append(", enemy team ").append(c.enemyDeaths())

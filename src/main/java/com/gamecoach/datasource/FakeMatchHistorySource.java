@@ -93,7 +93,8 @@ public class FakeMatchHistorySource implements MatchHistorySource {
                         medals(row("Player06",      "B", DUELIST,    "Star-Lord",            33, 12,  0, 16, 26521, 11791,     0, 31.0), 4),
                         row("Player11",     "B", STRATEGIST, "Cloak & Dagger",       24,  8, 14,  5, 14079, 12215, 26594, 86.0),
                         row("Player30",  "B", STRATEGIST, "Luna Snow",             5, 11, 16,  1,  5018, 10123, 14531, 33.0),
-                        medals(row("player38-",          "B", STRATEGIST, "Jeff the Land Shark",  19, 12, 13,  7, 12921, 10194, 16311, 51.0), 3)));
+                        medals(row("player38-",          "B", STRATEGIST, "Jeff the Land Shark",  19, 12, 13,  7, 12921, 10194, 16311, 51.0), 3)),
+                null);
     }
 
     /**
@@ -119,7 +120,8 @@ public class FakeMatchHistorySource implements MatchHistorySource {
                         row(null,         "B", VANGUARD,   "Emma Frost",     18, 14,  3,  8, 31139, 44340,     0, 53.0),
                         medals(row(null,         "B", DUELIST,    "Phoenix",        17, 14,  1,  8, 25219, 18115,  1535, 36.0), 3),
                         row(null,         "B", STRATEGIST, "Mantis",          8, 13, 15,  1, 17375, 18208, 24720, 38.0),
-                        badge(row(null,   "B", STRATEGIST, "Invisible Woman",13, 10, 23,  4, 14342, 26851, 35392, 51.0), LORD, COUNT)));
+                        badge(row(null,   "B", STRATEGIST, "Invisible Woman",13, 10, 23,  4, 14342, 26851, 35392, 51.0), LORD, COUNT)),
+                null);
     }
 
     /**
@@ -143,7 +145,8 @@ public class FakeMatchHistorySource implements MatchHistorySource {
                         teamUp(row("Player24",     "B", DUELIST,    "Winter Soldier",      56, 14, 10, 17,  64395,  50162,     29, 55.0), "The Punisher", false),
                         teamUp(row("player40",     "B", STRATEGIST, "Jeff the Land Shark", 58, 11, 63, 11,  44627,  21585,  63069, 84.0), "Venom", false),
                         medals(mvp(teamUp(row("player36", "B", STRATEGIST, "White Fox",           68, 12, 68, 15,  54892,  42519,  63014, 76.0), "Black Cat", false)), null, MOST_ASSISTS),
-                        teamUp(row("player35",     "B", STRATEGIST, "Jubilee",             55,  9, 66,  9,  39136,  16777,  94365, 43.0), "The Hood", false)));
+                        teamUp(row("player35",     "B", STRATEGIST, "Jubilee",             55,  9, 66,  9,  39136,  16777,  94365, 43.0), "The Hood", false)),
+                null);
     }
 
     /**

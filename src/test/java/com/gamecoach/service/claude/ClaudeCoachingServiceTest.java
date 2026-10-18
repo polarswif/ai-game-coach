@@ -97,6 +97,15 @@ class ClaudeCoachingServiceTest {
         String loss = promptFor(teamUpMatch, analyzer.analyze(teamUpMatch, "Player10<3"));
         assertTrue(loss.contains("Verdict: CLEAR EDGE to the enemy team in fights"));
         assertTrue(loss.contains("Deaths: coached player's team 118, enemy team 72 (ratio 1.64"));
+        assertTrue(loss.contains("Based on: death totals (the round score wasn't recorded)"));
+    }
+
+    @Test
+    void aKnownScoreDecidesTheVerdict() {
+        MatchDetails swept = teamUpMatch.withScore(new com.gamecoach.model.RoundScore(0, 2));
+        String prompt = promptFor(swept, analyzer.analyze(swept, "Player10<3"));
+        assertTrue(prompt.contains("Verdict: ONE-SIDED: a sweep loss"));
+        assertTrue(prompt.contains("Based on: the round score, 0-2 for the coached player's team"));
     }
 
     @Test

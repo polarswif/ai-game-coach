@@ -88,7 +88,7 @@ public class MatchAnalyzer {
                 stats,
                 player.accuracyPercent(),
                 accuracyRank(player, lobby),
-                closeness(team, enemies, won(match, player.team())));
+                closeness(team, enemies, won(match, player.team()), roundsFor(match, player.team())));
     }
 
     /** Deaths within this ratio count as a close match. */
@@ -101,16 +101,41 @@ public class MatchAnalyzer {
      * final hits always equal the other team's deaths, and they don't depend on hero choice the way
      * damage and healing do. Damage and healing shares are passed along as extra context.
      */
-    static MatchCloseness closeness(List<PlayerLine> team, List<PlayerLine> enemies, boolean won) {
+    static MatchCloseness closeness(List<PlayerLine> team, List<PlayerLine> enemies, boolean won, int[] rounds) {
         int teamDeaths = team.stream().mapToInt(PlayerLine::deaths).sum();
         int enemyDeaths = enemies.stream().mapToInt(PlayerLine::deaths).sum();
         double ratio = round(Math.max(teamDeaths, enemyDeaths) / (double) Math.max(Math.min(teamDeaths, enemyDeaths), 1), 2);
-        Closeness level = ratio <= CLOSE_RATIO ? Closeness.CLOSE
+        Closeness level = rounds != null ? fromRounds(rounds[0], rounds[1])
+                : ratio <= CLOSE_RATIO ? Closeness.CLOSE
                 : ratio >= ONE_SIDED_RATIO ? Closeness.ONE_SIDED
                 : Closeness.CLEAR_EDGE;
         boolean ahead = teamDeaths == enemyDeaths ? won : teamDeaths < enemyDeaths;
-        return new MatchCloseness(level, ahead, teamDeaths, enemyDeaths, ratio,
+        return new MatchCloseness(level,
+                rounds == null ? null : rounds[0], rounds == null ? null : rounds[1],
+                ahead, teamDeaths, enemyDeaths, ratio,
                 share(team, enemies, PlayerLine::damage), share(team, enemies, PlayerLine::healing));
+    }
+
+    /**
+     * The round score is the most direct sign of closeness, and the same rule works in every mode:
+     * a sweep (the loser won no rounds, e.g. 2-0 or 3-0) is one-sided, a one-round margin
+     * (2-1, 3-2) is close, and anything else (3-1) is a clear edge.
+     */
+    static Closeness fromRounds(int won, int lost) {
+        if (Math.min(won, lost) == 0) {
+            return Closeness.ONE_SIDED;
+        }
+        return Math.abs(won - lost) <= 1 ? Closeness.CLOSE : Closeness.CLEAR_EDGE;
+    }
+
+    /** The score from this team's side, as {rounds won, rounds lost}; null when unknown. */
+    private static int[] roundsFor(MatchDetails match, String team) {
+        if (match.score() == null) {
+            return null;
+        }
+        boolean teamA = "A".equals(team);
+        return teamA ? new int[] {match.score().teamA(), match.score().teamB()}
+                : new int[] {match.score().teamB(), match.score().teamA()};
     }
 
     private static double share(List<PlayerLine> team, List<PlayerLine> enemies, ToIntFunction<PlayerLine> stat) {
