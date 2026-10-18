@@ -4,15 +4,15 @@
 # Keep notes about how a hero plays and how to read their stats. Avoid exact numbers and ability
 # effects that change with balance patches.
 # Drafted from community guides (Mobalytics, Aim Lab) and corrected by the user.
-# Last checked: Season 10 (October 2026).
+# Last checked: Season 10.5 (October 2026).
 
 # ---- Vanguards ----
-Magneto|A main shield tank who also brawls. He's strongest at mid range; his slow projectiles miss fast or small targets, so low accuracy often means shooting at mobile targets or from the wrong range.
+Magneto|A main shield tank, not a brawler. He's strongest at mid range; his slow projectiles miss fast or small targets, so low accuracy often means shooting at mobile targets or from the wrong range.
 Magneto|His damage blocked comes from his self-bubble, the bubble he puts on an ally, and Metallic Curtain. Good players save the ally bubble for divers and key moments, and don't hold the curtain up when nothing is hitting it, because it drains anyway.
 Magneto|A fully charged Mag-Cannon knocks enemies back, which is his answer to melee divers. Deaths to divers often mean the knockback or self-bubble was already spent.
 Magneto|His ultimate, Meteor M, absorbs enemy projectiles, so it's best timed to eat an enemy ultimate or heavy projectile fire.
 
-Doctor Strange|A main shield tank; damage blocked is his key stat. When the shield breaks it has to recharge from empty, so good players drop it between hits and save it for stuns and ultimates.
+Doctor Strange|A main shield tank with brawling abilities; damage blocked is his key stat. When the shield breaks it has to recharge from empty, so good players drop it between hits and save it for stuns and ultimates.
 Doctor Strange|He's weak against brawlers such as The Thing, Hulk and Wolverine, who bypass his shield, and dive heroes can simply go around him. High deaths often mean he was caught up close with a low shield or with levitation already used. Check the enemy team for these heroes.
 Doctor Strange|Maelstrom of Madness charges from his hits, so low damage can mean he isn't attacking between shield uses.
 Doctor Strange|His ultimate, Eye of Agamotto, stuns a group but has a slow startup, so it's best from a flank, from high ground or after levitating in.
@@ -42,4 +42,4 @@ Invisible Woman|Her healing and damage come from the same piercing orbs that fly
 Invisible Woman|Her healing range is shorter than most Strategists', so she plays close behind the frontline. She's decent against dive but bad against Daredevil, who can see her through invisibility. Check the enemy team for him.
 Invisible Woman|Invisibility heals her but stops her attacking, so time spent invisible lowers her output: a survival-versus-output trade-off.
 Invisible Woman|Good players put Guardian Shield on the most threatened ally and recall it before it breaks, use Force Physics to peel divers or pull in enemies who push too far, and time Psionic Vortex with a teammate's area-damage ultimate.
-Invisible Woman|Her ultimate makes allies invisible and heals them, but it's vulnerable to lots of burst at once: melee teams can focus her down, and so can splash-damage teams.
+Invisible Woman|Her ultimate makes allies invisible and heals them, but she is vulnerable to focus fire in general: any team that bursts her down at once can beat it.
