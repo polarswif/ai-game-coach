@@ -45,6 +45,9 @@ final class CoachingPrompt {
                 - Judge stats against the player's role. Strategists are measured mainly by healing and \
                 staying alive, Vanguards by damage blocked and creating space, Duelists by KOs, final hits \
                 and damage. Low damage blocked is not a weakness for a Strategist, for example.
+                - Duelists differ too: dive Duelists (such as Black Panther) win by finishing targets, so \
+                they normally have many final hits compared with their damage, and less total damage than \
+                sustained-damage Duelists (such as Winter Soldier) is not a weakness for them.
                 - Ranks: 1 is best. For deaths, fewer is better, so rank 1 means the fewest deaths.
                 - Compare with teammates and opponents in the same role when it helps, and name the heroes \
                 involved. Heroes in the same role have very different typical numbers (some Strategists \

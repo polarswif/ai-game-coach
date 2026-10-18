@@ -34,6 +34,12 @@ class HeroNotesCatalogTest {
     }
 
     @Test
+    void diveDuelistsAreJudgedByFinalHits() {
+        assertTrue(notes.forHero("Black Panther").get(0).contains("final hits"));
+        assertTrue(notes.forHero("Hulk").stream().anyMatch(n -> n.contains("Monster Hulk") && n.contains("loses the bubble")));
+    }
+
+    @Test
     void heroesWithoutNotesGetAnEmptyList() {
         assertTrue(notes.forHero("Deadpool").isEmpty());
         assertTrue(notes.forHero("Not A Hero").isEmpty());

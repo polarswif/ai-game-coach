@@ -17,15 +17,21 @@ Doctor Strange|He's weak against brawlers such as The Thing, Hulk and Wolverine,
 Doctor Strange|Maelstrom of Madness charges from his hits, so low damage can mean he isn't attacking between shield uses.
 Doctor Strange|His ultimate, Eye of Agamotto, stuns a group but has a slow startup, so it's best from a flank, from high ground or after levitating in.
 
-Hulk/Bruce Banner|A brawl tank who can dive, not a pure dive tank like Venom. His three forms (Bruce, Hero Hulk, Monster Hulk from the ultimate) are combined on the scoreboard.
-Hulk/Bruce Banner|Indestructible Guard shields him and nearby allies; good players save it for enemy ultimates and to save teammates, not for small damage. Gamma Burst (the clap) adds ranged damage and recharges the guard.
+Hulk/Bruce Banner|A brawl tank who can dive, not a pure dive tank like Venom. His forms (Bruce Banner, Hero Hulk, and Monster Hulk from the ultimate) are combined on the scoreboard.
+Hulk/Bruce Banner|When Hulk dies he "de-mechs" into Bruce Banner, and transforms back into Hulk once his ultimate charges enough. As Bruce he has the Gamma Ray Gun and the Gamma Grenade; landing the grenade charges his ultimate, which speeds up getting back into Hulk.
+Hulk/Bruce Banner|Indestructible Guard (the bubble) shields him and nearby allies; good players save it for enemy ultimates and to save teammates, not for small damage. Gamma Burst (the clap) adds ranged damage and recharges the guard.
 Hulk/Bruce Banner|Radioactive Lockdown is used to stun out-of-position targets and to cancel enemy ultimates. Incredible Leap also stuns flying enemies it hits. Neither shows on the scoreboard.
-Hulk/Bruce Banner|Common mistake: staying too long in fights he can't win, which soaks up healing and builds the enemy's ultimates; dying as Hulk sends him back to Bruce. He's weak against chained crowd control, and transforming at low health is risky.
-
+Hulk/Bruce Banner|His ultimate turns him into Monster Hulk: much more health, and the clap does more damage on a shorter cooldown. He keeps his stun but loses the bubble during the ultimate, and gains a grab that smashes an enemy and stuns them so his team can focus them down.
+Hulk/Bruce Banner|Common mistake: staying too long in fights he can't win, which soaks up healing and builds the enemy's ultimates. He's weak against chained crowd control, and transforming at low health is risky.
 Thor|A brawler like Hulk, but more of a diver because of his high burst damage. He's also a strong protector of his backline, because he's consistently one of the best 1v1 heroes. KOs, final hits and damage matter more for him than for shield tanks; low damage blocked is expected.
 Thor|Every ability spends Thorforce, which refills when his attacks land. Diving with no Thorforce leaves him no escape, so high deaths often come from diving on empty.
 Thor|Awakening Rune is his burst for finishing low-health targets. It can be cancelled, refunding 1 Thorforce, which good players use to get out.
 Thor|He's weak against heavy crowd control. He can't be stunned while casting his ultimate, so it can counter enemy stun ultimates.
+
+# ---- Duelists ----
+Black Panther|A dive Duelist: a good Black Panther has a lot of final hits compared with his damage, because he dives in to finish targets rather than dealing steady damage. Less total damage than a sustained-damage Duelist such as Winter Soldier (Bucky) is normal for him; judge him by final hits and KOs.
+
+Winter Soldier|Usually deals more total damage than dive Duelists such as Black Panther, so compare his damage with other sustained-damage Duelists rather than with divers.
 
 # ---- Strategists ----
 Rocket Raccoon|His main value is healing and staying alive: he can run up walls and has dashes to escape. His healing orbs bounce and pass through allies, so good players aim at teammates' feet and heal around corners.
@@ -41,5 +47,6 @@ Luna Snow|Her ultimate switches between a healing aura and a damage boost. The w
 Invisible Woman|Her healing and damage come from the same piercing orbs that fly back to her. Lining up allies and enemies gives both, so she can post good healing and damage at once; if both are low, she probably wasn't getting good lines.
 Invisible Woman|Her healing range is shorter than most Strategists', so she plays close behind the frontline. She's decent against dive but bad against Daredevil, who can see her through invisibility. Check the enemy team for him.
 Invisible Woman|Invisibility heals her but stops her attacking, so time spent invisible lowers her output: a survival-versus-output trade-off.
+Invisible Woman|She can also put Guardian Shield on herself, which helps her heal herself and survive big area ultimates such as Magneto's or Iron Man's.
 Invisible Woman|Good players put Guardian Shield on the most threatened ally and recall it before it breaks, use Force Physics to peel divers or pull in enemies who push too far, and time Psionic Vortex with a teammate's area-damage ultimate.
 Invisible Woman|Her ultimate makes allies invisible and heals them, but she is vulnerable to focus fire in general: any team that bursts her down at once can beat it.
