@@ -1,6 +1,8 @@
 package com.gamecoach.service.claude;
 
+import com.gamecoach.analysis.Closeness;
 import com.gamecoach.analysis.HeroPlayed;
+import com.gamecoach.analysis.MatchCloseness;
 import com.gamecoach.analysis.PlayerAnalysis;
 import com.gamecoach.analysis.ProficiencyAnalysis;
 import com.gamecoach.analysis.Stat;
@@ -61,6 +63,25 @@ final class CoachingPrompt {
                 - Each stat or point goes in only one place. Don't praise something as a strength and then \
                 list it as a weakness, and don't repeat a strength in the advice.
                 - Advice gives new, concrete actions for next match. Don't just restate a weakness.
+                - Match closeness: hard-fought matches are the most useful to coach, because small \
+                decisions decided them. Use the MATCH CLOSENESS section:
+                  - CLOSE: coach normally.
+                  - ONE-SIDED loss: most numbers reflect the mismatch (the team kept losing fights), so \
+                don't pile on totals like deaths. Focus on what the player still controlled: when and \
+                where they died, survival, and their stats relative to their teammates.
+                  - ONE-SIDED win: big totals may be inflated by a weak enemy, so don't over-praise them; \
+                strengths are less proven. Look for habits that would get punished by a stronger team.
+                  - CLEAR EDGE: in between; mention it where it explains a number.
+                  - The team that won more fights isn't always the team that won the match (objective play \
+                can decide it). If they differ, say so.
+                - matchContext: one or two sentences saying how close the match was and how much weight \
+                this coaching deserves.
+                - Compare accuracy only with the same hero or a similar weapon. Different weapons have very \
+                different typical accuracy, so a gap with another hero is not a weakness.
+                - Never list a stat as a weakness when it isn't part of the role's job (damage blocked for \
+                a Strategist, healing for a Vanguard).
+                - Before answering, check that no stat appears in both strengths and weaknesses (for \
+                example, praising few deaths and then criticizing deaths).
                 - One match is a small sample. Present weaknesses as things to watch, not verdicts.
                 - List as many strengths and weaknesses as the data supports (usually 2 to 4 each), most \
                 important first. Give 2 to 4 things to try next match.
@@ -79,8 +100,10 @@ final class CoachingPrompt {
                 "properties", Map.of(
                         "strengths", withDescription(listOfStrings, "What the player did well, most important first."),
                         "weaknesses", withDescription(listOfStrings, "What to improve, most important first."),
-                        "advice", withDescription(listOfStrings, "2 to 4 concrete things to try next match.")),
-                "required", List.of("strengths", "weaknesses", "advice"));
+                        "advice", withDescription(listOfStrings, "2 to 4 concrete things to try next match."),
+                        "matchContext", Map.of("type", "string", "description",
+                                "One or two sentences on how close the match was and how much weight this coaching deserves.")),
+                "required", List.of("strengths", "weaknesses", "advice", "matchContext"));
         return new Tool(TOOL_NAME, "Submit the coaching for this player and match.", schema);
     }
 
@@ -101,6 +124,8 @@ final class CoachingPrompt {
                 .append(" | Length: ").append(minutesAndSeconds(match.duration()))
                 .append(" | Result for the coached player's team: ").append(a.won() ? "WIN" : "LOSS").append('\n');
         s.append("Bans: ").append(match.bans().isEmpty() ? "not recorded" : String.join(", ", match.bans())).append("\n\n");
+
+        s.append(closeness(a.closeness(), a.won())).append('\n');
 
         s.append("COACHED PLAYER\n");
         s.append("Name: ").append(a.player() == null ? "(hidden)" : a.player())
@@ -151,6 +176,28 @@ final class CoachingPrompt {
                 }
             }
         }
+        return s.toString();
+    }
+
+    /** The MATCH CLOSENESS section: a plain verdict first, then the numbers behind it. */
+    static String closeness(MatchCloseness c, boolean won) {
+        String side = c.teamAheadInFights() ? "the coached player's team" : "the enemy team";
+        String verdict = switch (c.level()) {
+            case CLOSE -> "CLOSE (hard-fought)";
+            case CLEAR_EDGE -> "CLEAR EDGE to " + side + " in fights";
+            case ONE_SIDED -> "ONE-SIDED in " + side + "'s favor" + (c.teamAheadInFights() == won
+                    ? (won ? " (a likely stomp win)" : " (a likely stomp loss)")
+                    : "");
+        };
+        StringBuilder s = new StringBuilder("MATCH CLOSENESS (computed from the scoreboard)\n");
+        s.append("Verdict: ").append(verdict).append('\n');
+        if (c.level() != Closeness.CLOSE && c.teamAheadInFights() != won) {
+            s.append("Note: the team that won more fights did not win the match.\n");
+        }
+        s.append("Deaths: coached player's team ").append(c.teamDeaths()).append(", enemy team ").append(c.enemyDeaths())
+                .append(String.format(Locale.ROOT, " (ratio %.2f; 1.00 is even, 2.00 or more is one-sided)", c.deathRatio())).append('\n');
+        s.append(String.format(Locale.ROOT, "Coached team's share of all damage: %.1f%% | of all healing: %.1f%%",
+                c.damageSharePercent(), c.healingSharePercent())).append('\n');
         return s.toString();
     }
 

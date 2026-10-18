@@ -24,6 +24,7 @@ import java.util.Map;
  * @param multiKill          best multi-kill shown on the scoreboard (5 = a Penta); null when none
  * @param accuracyPercent   null when the scoreboard shows no accuracy
  * @param accuracyLobbyRank rank among players with an accuracy value; null when accuracyPercent is null
+ * @param closeness         how close the match was (close, clear edge or one-sided), from the death totals
  */
 public record PlayerAnalysis(
         String player,
@@ -45,5 +46,6 @@ public record PlayerAnalysis(
         Integer multiKill,
         Map<Stat, StatComparison> stats,
         Double accuracyPercent,
-        Integer accuracyLobbyRank) {
+        Integer accuracyLobbyRank,
+        MatchCloseness closeness) {
 }

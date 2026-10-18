@@ -375,4 +375,34 @@ class MatchAnalyzerTest {
         return new PlayerLine(null, "A", role, "Someone", List.of(), null, null, 0, 0, 0, 0, 0, blocked, healing,
                 null, false, false, false, List.of(), null, null, null);
     }
+
+    // ---- Match closeness ----
+
+    @Test
+    void anEvenMatchIsClose() {
+        MatchCloseness c = analyzer.analyze(player29Match, (String) null).closeness();
+        assertEquals(Closeness.CLOSE, c.level());
+        assertEquals(60, c.teamDeaths());
+        assertEquals(61, c.enemyDeaths());
+        assertEquals(1.02, c.deathRatio());
+        assertTrue(c.teamAheadInFights());
+    }
+
+    @Test
+    void twiceTheDeathsIsOneSided() {
+        MatchCloseness c = analyzer.analyze(deadpoolMatch, deadpoolMatch.players().get(0)).closeness();
+        assertEquals(Closeness.ONE_SIDED, c.level());   // 31 deaths against 70
+        assertTrue(c.teamAheadInFights());
+    }
+
+    @Test
+    void closenessIsFromTheCoachedPlayersSide() {
+        MatchCloseness ours = analyzer.analyze(teamUpMatch, "Player10<3").closeness();
+        assertEquals(Closeness.CLEAR_EDGE, ours.level());   // 118 deaths against 72
+        assertFalse(ours.teamAheadInFights());
+        PlayerLine enemy = teamUpMatch.players().stream().filter(p -> p.team().equals("B")).findFirst().orElseThrow();
+        MatchCloseness theirs = analyzer.analyze(teamUpMatch, enemy).closeness();
+        assertTrue(theirs.teamAheadInFights());
+        assertEquals(118, theirs.enemyDeaths());
+    }
 }

@@ -33,7 +33,8 @@ class ClaudeCoachingServiceTest {
     private static final Feedback CANNED = new Feedback(
             List.of("You led the lobby in assists with 33."),
             List.of("Your 20% accuracy was the lowest on your team."),
-            List.of("Stay closer to your Vanguards between fights."));
+            List.of("Stay closer to your Vanguards between fights."),
+            "A close match, so this coaching carries full weight.");
 
     private final FakeMatchHistorySource source = new FakeMatchHistorySource();
     private final MatchAnalyzer analyzer = new MatchAnalyzer(new HeroRoleCatalog(), new TeamUpCatalog());
@@ -85,6 +86,23 @@ class ClaudeCoachingServiceTest {
         assertTrue(request.system().contains("Ranks: 1 is best"));
         assertTrue(request.system().contains("The match result is context, never a strength or weakness"));
         assertTrue(request.system().contains("Each stat or point goes in only one place"));
+    }
+
+    @Test
+    void promptSaysHowCloseTheMatchWas() {
+        assertTrue(promptFor(player29Match, analyzer.analyze(player29Match, (String) null))
+                .contains("Verdict: CLOSE (hard-fought)"));
+        assertTrue(promptFor(deadpoolMatch, analyzer.analyze(deadpoolMatch, deadpoolMatch.players().get(5)))
+                .contains("Verdict: ONE-SIDED in the coached player's team's favor (a likely stomp win)"));
+        String loss = promptFor(teamUpMatch, analyzer.analyze(teamUpMatch, "Player10<3"));
+        assertTrue(loss.contains("Verdict: CLEAR EDGE to the enemy team in fights"));
+        assertTrue(loss.contains("Deaths: coached player's team 118, enemy team 72 (ratio 1.64"));
+    }
+
+    @Test
+    void theToolAsksForMatchContext() {
+        assertTrue(CoachingPrompt.tool().inputSchema().toString().contains("matchContext"));
+        assertTrue(CoachingPrompt.systemPrompt().contains("ONE-SIDED loss"));
     }
 
     @Test
@@ -171,7 +189,7 @@ class ClaudeCoachingServiceTest {
         PlayerAnalysis analysis = analyzer.analyze(player29Match, (String) null);
         assertThrows(CoachingUnavailableException.class, () -> coach.coach(player29Match, analysis));
 
-        client.reply = toolReply(new Feedback(List.of("x"), List.of(), List.of("y")), "tool_use");  // empty weaknesses
+        client.reply = toolReply(new Feedback(List.of("x"), List.of(), List.of("y"), null), "tool_use");  // empty weaknesses
         assertThrows(CoachingUnavailableException.class, () -> coach.coach(player29Match, analysis));
 
         client.reply = toolReply(CANNED, "tool_use");

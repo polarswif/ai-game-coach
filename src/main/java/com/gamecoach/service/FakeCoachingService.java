@@ -37,6 +37,7 @@ public class FakeCoachingService implements CoachingService {
                 List.of("[fake] You recorded " + assists.value() + " assists, rank " + assists.teamRank()
                         + " of " + analysis.teamSize() + " on your team."),
                 weaknesses,
-                List.of("[fake] Next match, focus on staying alive between fights."));
+                List.of("[fake] Next match, focus on staying alive between fights."),
+                "[fake] Match closeness: " + analysis.closeness().level() + ".");
     }
 }

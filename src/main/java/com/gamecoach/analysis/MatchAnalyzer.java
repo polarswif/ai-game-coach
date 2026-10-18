@@ -87,7 +87,36 @@ public class MatchAnalyzer {
                 player.multiKill(),
                 stats,
                 player.accuracyPercent(),
-                accuracyRank(player, lobby));
+                accuracyRank(player, lobby),
+                closeness(team, enemies, won(match, player.team())));
+    }
+
+    /** Deaths within this ratio count as a close match. */
+    static final double CLOSE_RATIO = 1.3;
+    /** Deaths at or above this ratio count as one-sided. */
+    static final double ONE_SIDED_RATIO = 2.0;
+
+    /**
+     * How close the match was, from the death totals. Deaths are the cleanest measure: one team's
+     * final hits always equal the other team's deaths, and they don't depend on hero choice the way
+     * damage and healing do. Damage and healing shares are passed along as extra context.
+     */
+    static MatchCloseness closeness(List<PlayerLine> team, List<PlayerLine> enemies, boolean won) {
+        int teamDeaths = team.stream().mapToInt(PlayerLine::deaths).sum();
+        int enemyDeaths = enemies.stream().mapToInt(PlayerLine::deaths).sum();
+        double ratio = round(Math.max(teamDeaths, enemyDeaths) / (double) Math.max(Math.min(teamDeaths, enemyDeaths), 1), 2);
+        Closeness level = ratio <= CLOSE_RATIO ? Closeness.CLOSE
+                : ratio >= ONE_SIDED_RATIO ? Closeness.ONE_SIDED
+                : Closeness.CLEAR_EDGE;
+        boolean ahead = teamDeaths == enemyDeaths ? won : teamDeaths < enemyDeaths;
+        return new MatchCloseness(level, ahead, teamDeaths, enemyDeaths, ratio,
+                share(team, enemies, PlayerLine::damage), share(team, enemies, PlayerLine::healing));
+    }
+
+    private static double share(List<PlayerLine> team, List<PlayerLine> enemies, ToIntFunction<PlayerLine> stat) {
+        int ours = team.stream().mapToInt(stat).sum();
+        int total = ours + enemies.stream().mapToInt(stat).sum();
+        return total == 0 ? 50.0 : round(100.0 * ours / total, 1);
     }
 
     /**

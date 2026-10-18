@@ -58,7 +58,8 @@ class RestClientClaudeClientTest {
                 .andRespond(withSuccess("""
                         {"id":"msg_1","type":"message","role":"assistant","model":"claude-sonnet-5-5",
                          "content":[{"type":"tool_use","id":"toolu_1","name":"submit_coaching",
-                           "input":{"strengths":["Good healing"],"weaknesses":["Died early"],"advice":["Use cover"]}}],
+                           "input":{"strengths":["Good healing"],"weaknesses":["Died early"],"advice":["Use cover"],
+                             "matchContext":"A close match."}}],
                          "stop_reason":"tool_use","stop_sequence":null,
                          "usage":{"input_tokens":1200,"output_tokens":150,"cache_read_input_tokens":0}}
                         """, MediaType.APPLICATION_JSON));
@@ -67,7 +68,7 @@ class RestClientClaudeClientTest {
 
         server.verify();
         assertEquals("tool_use", response.stopReason());
-        assertEquals(new Feedback(List.of("Good healing"), List.of("Died early"), List.of("Use cover")),
+        assertEquals(new Feedback(List.of("Good healing"), List.of("Died early"), List.of("Use cover"), "A close match."),
                 response.content().get(0).input());
         assertEquals(1200, response.usage().inputTokens());   // unknown fields like cache_read_input_tokens are ignored
     }
