@@ -18,7 +18,7 @@ Doctor Strange|Maelstrom of Madness charges from his hits, so low damage can mea
 Doctor Strange|His ultimate, Eye of Agamotto, stuns a group but has a slow startup, so it's best from a flank, from high ground or after levitating in.
 
 Hulk/Bruce Banner|A brawl tank who can dive, not a pure dive tank like Venom. His forms (Bruce Banner, Hero Hulk, and Monster Hulk from the ultimate) are combined on the scoreboard.
-Hulk/Bruce Banner|When Hulk dies he "de-mechs" into Bruce Banner, and transforms back into Hulk once his ultimate charges enough. As Bruce he has the Gamma Ray Gun and the Gamma Grenade; landing the grenade charges his ultimate, which speeds up getting back into Hulk.
+Hulk/Bruce Banner|When Hulk dies he "de-mechs" into Bruce Banner, and transforms back into Hulk once his ultimate charges enough. As Bruce he has the Gamma Ray Gun and the Gamma Grenade; landing his shots and the grenade charges his ultimate, which speeds up getting back into Hulk, so accurate play as Bruce matters.
 Hulk/Bruce Banner|Indestructible Guard (the bubble) shields him and nearby allies; good players save it for enemy ultimates and to save teammates, not for small damage. Gamma Burst (the clap) adds ranged damage and recharges the guard.
 Hulk/Bruce Banner|Radioactive Lockdown is used to stun out-of-position targets and to cancel enemy ultimates. Incredible Leap also stuns flying enemies it hits. Neither shows on the scoreboard.
 Hulk/Bruce Banner|His ultimate turns him into Monster Hulk: much more health, and the clap does more damage on a shorter cooldown. He keeps his stun but loses the bubble during the ultimate, and gains a grab that smashes an enemy and stuns them so his team can focus them down.
