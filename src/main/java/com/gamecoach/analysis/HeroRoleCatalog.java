@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Looks up a Marvel Rivals hero's role from the table in resources/heroes/marvel-rivals-roles.csv.
@@ -28,6 +29,7 @@ public class HeroRoleCatalog {
 
     private final Map<String, Role> rolesByHero = new HashMap<>();
     private final List<String> names = new ArrayList<>();
+    private final Map<String, String> namesByKey = new HashMap<>();
 
     public HeroRoleCatalog() {
         try (InputStream in = HeroRoleCatalog.class.getResourceAsStream(DEFAULT_TABLE)) {
@@ -46,6 +48,14 @@ public class HeroRoleCatalog {
             return Role.UNKNOWN;
         }
         return rolesByHero.getOrDefault(normalize(hero), Role.UNKNOWN);
+    }
+
+    /**
+     * The hero's name spelled as in the table ("daredevil " → "Daredevil"), or empty when the hero
+     * isn't listed. Used for names people type, so the rest of the app sees one spelling.
+     */
+    public Optional<String> officialName(String hero) {
+        return hero == null ? Optional.empty() : Optional.ofNullable(namesByKey.get(normalize(hero)));
     }
 
     /**
@@ -87,6 +97,7 @@ public class HeroRoleCatalog {
             Role role = Role.valueOf(line.substring(comma + 1).strip());
             rolesByHero.put(normalize(hero), role);
             names.add(hero.strip());
+            namesByKey.put(normalize(hero), hero.strip());
         }
     }
 

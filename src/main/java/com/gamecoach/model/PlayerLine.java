@@ -54,6 +54,11 @@ public record PlayerLine(
                 damage, blocked, healing, accuracyPercent, uploader, mvp, svp, medals, multiKill, rank, rankScore);
     }
 
+    public PlayerLine withLastHero(String newLastHero) {
+        return new PlayerLine(name, team, role, newLastHero, heroes, teamUp, proficiency, kills, deaths, assists, finalHits,
+                damage, blocked, healing, accuracyPercent, uploader, mvp, svp, medals, multiKill, rank, rankScore);
+    }
+
     public PlayerLine withHeroes(List<HeroStats> newHeroes) {
         return new PlayerLine(name, team, role, lastHero, newHeroes, teamUp, proficiency, kills, deaths, assists, finalHits,
                 damage, blocked, healing, accuracyPercent, uploader, mvp, svp, medals, multiKill, rank, rankScore);

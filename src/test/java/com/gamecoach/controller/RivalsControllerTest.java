@@ -50,7 +50,7 @@ class RivalsControllerTest {
             List.of("Row 2: name hidden."));
 
     private final RivalsController controller = new RivalsController(source, analyzer, new FakeCoachingService(),
-            uploads, validator, Optional.of(fakeReader));
+            uploads, validator, Optional.of(fakeReader), new HeroRoleCatalog());
 
     private static MockMultipartFile png() {
         return new MockMultipartFile("screenshot", "scoreboard.png", "image/png", new byte[] {1, 2, 3});
@@ -58,7 +58,7 @@ class RivalsControllerTest {
 
     @Test
     void anUploadedMatchWorksWithEveryEndpoint() throws Exception {
-        ResponseEntity<ParsedScoreboard> response = controller.upload(png(), "3-2");
+        ResponseEntity<ParsedScoreboard> response = controller.upload(png(), "3-2", null);
         assertEquals(201, response.getStatusCode().value());
         ParsedScoreboard parsed = response.getBody();
         String id = parsed.match().matchId();
@@ -73,7 +73,7 @@ class RivalsControllerTest {
 
     @Test
     void theReviewStepReplacesTheMatchAndChecksItAgain() throws Exception {
-        MatchDetails read = controller.upload(png(), null).getBody().match();
+        MatchDetails read = controller.upload(png(), null, null).getBody().match();
         List<PlayerLine> fixed = new ArrayList<>(read.players());
         fixed.set(0, fixed.get(0).withAccuracy(330.0));                 // a typo the review should flag
         ParsedScoreboard corrected = controller.correct(read.matchId(), read.withPlayers(fixed));
@@ -81,6 +81,33 @@ class RivalsControllerTest {
         assertTrue(corrected.warnings().stream().anyMatch(w -> w.contains("outside 0-100")));
 
         assertThrows(NoSuchElementException.class, () -> controller.correct(PLAYER29_MATCH, read));   // not an upload
+    }
+
+    @Test
+    void theHeroYouTypeReplacesTheReadersGuessForYourRow() throws Exception {
+        ParsedScoreboard parsed = controller.upload(png(), null, " luna   snow ").getBody();
+        PlayerLine you = parsed.match().players().stream().filter(PlayerLine::uploader).findFirst().orElseThrow();
+        assertEquals("Luna Snow", you.lastHero());                                  // the table's spelling
+        assertEquals("Luna Snow", controller.matchDetails(parsed.match().matchId()).players().stream()
+                .filter(PlayerLine::uploader).findFirst().orElseThrow().lastHero());   // saved that way too
+        assertTrue(parsed.warnings().contains("Row 2: name hidden."));               // other doubts stay
+        assertTrue(parsed.warnings().stream().anyMatch(w -> w.contains("set to Luna Snow")
+                && w.contains("Rocket Raccoon")));
+    }
+
+    @Test
+    void theReadersDoubtAboutYourHeroIsDroppedOnceYouAnswerIt() {
+        MatchDetails player29 = source.getMatchDetails(PLAYER29_MATCH);
+        ParsedScoreboard read = new ParsedScoreboard(player29,
+                List.of("Player29 hero: guessed Rocket Raccoon; uncertain.", "Bans: too small to identify."));
+        ParsedScoreboard fixed = controller.withUploaderHero(read, "Rocket Raccoon");
+        assertEquals(List.of("Bans: too small to identify."), fixed.warnings());     // same hero: no change note
+    }
+
+    @Test
+    void anUnknownHeroIsRejectedBeforeTheScreenshotIsRead() {
+        BadUploadException e = assertThrows(BadUploadException.class, () -> controller.upload(png(), null, "Dare Devil Man"));
+        assertTrue(e.getMessage().contains("Dare Devil Man"));
     }
 
     @Test
@@ -93,9 +120,9 @@ class RivalsControllerTest {
     @Test
     void uploadsNeedTheClaudeProvider() {
         RivalsController withoutReader = new RivalsController(source, analyzer, new FakeCoachingService(),
-                uploads, validator, Optional.empty());
+                uploads, validator, Optional.empty(), new HeroRoleCatalog());
         CoachingUnavailableException e = assertThrows(CoachingUnavailableException.class,
-                () -> withoutReader.upload(png(), null));
+                () -> withoutReader.upload(png(), null, null));
         assertTrue(e.getMessage().contains("gamecoach.coach.provider=claude"));
     }
 

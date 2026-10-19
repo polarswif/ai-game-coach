@@ -1,11 +1,13 @@
 package com.gamecoach.controller;
 
+import com.gamecoach.analysis.HeroRoleCatalog;
 import com.gamecoach.analysis.MatchAnalyzer;
 import com.gamecoach.analysis.PlayerAnalysis;
 import com.gamecoach.datasource.MatchHistorySource;
 import com.gamecoach.model.Feedback;
 import com.gamecoach.model.MatchDetails;
 import com.gamecoach.model.MatchSummary;
+import com.gamecoach.model.PlayerLine;
 import com.gamecoach.model.RoundScore;
 import com.gamecoach.parsing.BadUploadException;
 import com.gamecoach.parsing.ParsedScoreboard;
@@ -50,6 +52,7 @@ public class RivalsController {
     private final UploadedMatchStore uploads;
     private final ScoreboardValidator validator;
     private final Optional<ScoreboardParser> parser;
+    private final HeroRoleCatalog heroes;
 
     private static final Pattern SCORE = Pattern.compile("^\\s*(\\d{1,2})\\s*[-:]\\s*(\\d{1,2})\\s*$");
 
@@ -59,29 +62,37 @@ public class RivalsController {
      */
     public RivalsController(MatchHistorySource matches, MatchAnalyzer analyzer, CoachingService coach,
                             UploadedMatchStore uploads, ScoreboardValidator validator,
-                            Optional<ScoreboardParser> parser) {
+                            Optional<ScoreboardParser> parser, HeroRoleCatalog heroes) {
         this.matches = matches;
         this.analyzer = analyzer;
         this.coach = coach;
         this.uploads = uploads;
         this.validator = validator;
         this.parser = parser;
+        this.heroes = heroes;
     }
 
     /**
      * Reads an end-of-match scoreboard screenshot (multipart form field "screenshot"). The optional
      * "score" field is the round score from the match history screen, your team's rounds first,
-     * e.g. "3-2". Returns the match as read plus warnings to review; its matchId works with every
-     * other endpoint.
+     * e.g. "3-2". The optional "hero" field is the hero you played: hero portraits are small and the
+     * reader can mistake one for another, and your own hero is what coaching depends on most.
+     * Returns the match as read plus warnings to review; its matchId works with every other endpoint.
      */
     @PostMapping("/matches")
     public ResponseEntity<ParsedScoreboard> upload(@RequestParam("screenshot") MultipartFile screenshot,
-                                                   @RequestParam(name = "score", required = false) String score)
+                                                   @RequestParam(name = "score", required = false) String score,
+                                                   @RequestParam(name = "hero", required = false) String hero)
             throws IOException {
         ScoreboardParser reader = parser.orElseThrow(() -> new CoachingUnavailableException(
                 "Reading screenshots needs the Claude API: set gamecoach.coach.provider=claude.", null));
+        RoundScore rounds = parseScore(score);
+        String yourHero = officialHero(hero);           // checked before the paid call, so a typo costs nothing
         Screenshot image = new Screenshot(screenshot.getBytes(), screenshot.getContentType());
-        ParsedScoreboard parsed = reader.parse(image, uploads.newId(), parseScore(score));
+        ParsedScoreboard parsed = reader.parse(image, uploads.newId(), rounds);
+        if (yourHero != null) {
+            parsed = withUploaderHero(parsed, yourHero);
+        }
         uploads.save(parsed.match());
         return ResponseEntity.status(HttpStatus.CREATED).body(parsed);
     }
@@ -137,6 +148,49 @@ public class RivalsController {
     /** An uploaded match if there is one with this id, otherwise the match source's. */
     private MatchDetails match(String matchId) {
         return uploads.find(matchId).orElseGet(() -> matches.getMatchDetails(matchId));
+    }
+
+    /** The typed hero in the table's spelling; null when absent; 400 when it isn't a known hero. */
+    private String officialHero(String hero) {
+        if (hero == null || hero.isBlank()) {
+            return null;
+        }
+        return heroes.officialName(hero).orElseThrow(() -> new BadUploadException(
+                "\"" + hero.strip() + "\" isn't a Marvel Rivals hero I know. Use the name as the game shows it, e.g. Daredevil."));
+    }
+
+    /**
+     * Puts the hero you said you played on the highlighted row. The reader's own doubts about that
+     * row's hero are dropped (you've answered them), a note says what changed, and the match is
+     * checked again so a hero that doesn't fit the row's role icon is still flagged.
+     */
+    ParsedScoreboard withUploaderHero(ParsedScoreboard parsed, String hero) {
+        MatchDetails match = parsed.match();
+        PlayerLine you = match.players().stream().filter(PlayerLine::uploader).findFirst().orElse(null);
+        if (you == null) {
+            List<String> warnings = new java.util.ArrayList<>(parsed.warnings());
+            warnings.add("No highlighted row was found, so the hero you gave (" + hero + ") wasn't applied.");
+            return new ParsedScoreboard(match, warnings);
+        }
+        List<PlayerLine> players = match.players().stream()
+                .map(p -> p == you ? p.withLastHero(hero) : p)
+                .toList();
+        MatchDetails fixed = match.withPlayers(players);
+
+        java.util.LinkedHashSet<String> warnings = new java.util.LinkedHashSet<>();
+        for (String w : parsed.warnings()) {
+            boolean aboutYourHero = you.name() != null && w.contains(you.name())
+                    && w.toLowerCase(java.util.Locale.ROOT).contains("hero");
+            if (!aboutYourHero) {
+                warnings.add(w);
+            }
+        }
+        if (!HeroRoleCatalog.sameHero(you.lastHero(), hero)) {
+            warnings.add("Your hero set to " + hero + " as you said (the screenshot was read as "
+                    + (you.lastHero() == null ? "no hero" : you.lastHero()) + ").");
+        }
+        warnings.addAll(validator.check(fixed));
+        return new ParsedScoreboard(fixed, List.copyOf(warnings));
     }
 
     /** "3-2" or "3:2" → RoundScore(3, 2); null when absent. */

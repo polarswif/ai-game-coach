@@ -37,7 +37,7 @@ class UploadHttpTest {
     private MockMvc mvc(Optional<ScoreboardParser> reader) {
         RivalsController controller = new RivalsController(source,
                 new MatchAnalyzer(new HeroRoleCatalog(), new TeamUpCatalog()), new FakeCoachingService(),
-                uploads, validator, reader);
+                uploads, validator, reader, new HeroRoleCatalog());
         return MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(new ApiExceptionHandler()).build();
     }
 
@@ -54,6 +54,13 @@ class UploadHttpTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.match.players.length()").value(12))
                 .andExpect(jsonPath("$.warnings").isArray());
+    }
+
+    @Test
+    void theHeroFieldIsAppliedToYourRow() throws Exception {
+        mvc(Optional.of(readsPlayer29)).perform(multipart("/api/rivals/matches").file(file("image/png")).param("hero", "Luna Snow"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.match.players[?(@.uploader == true)].lastHero").value("Luna Snow"));
     }
 
     @Test
