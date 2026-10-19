@@ -31,7 +31,7 @@ public record ClaudeProperties(
             model = DEFAULT_MODEL;
         }
         if (maxTokens == null || maxTokens <= 0) {
-            maxTokens = 2000;
+            maxTokens = 4000;
         }
         if (baseUrl == null || baseUrl.isBlank()) {
             baseUrl = "https://api.anthropic.com";

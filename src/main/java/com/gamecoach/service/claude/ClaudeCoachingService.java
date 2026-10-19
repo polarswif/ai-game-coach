@@ -114,6 +114,14 @@ public class ClaudeCoachingService implements CoachingService {
     /** Finds the submit_coaching call in the reply and checks it's usable. */
     private Feedback readFeedback(MessagesResponse response) {
         if ("max_tokens".equals(response.stopReason())) {
+            // Log any text Claude wrote before (or instead of) the tool call: that's usually where
+            // the budget went, and it shows whether the prompt or the limit needs changing.
+            String text = response.content() == null ? "" : response.content().stream()
+                    .filter(block -> "text".equals(block.type()) && block.text() != null)
+                    .map(ContentBlock::text)
+                    .collect(java.util.stream.Collectors.joining(" "));
+            log.warn("Coaching reply hit max_tokens ({}). Text outside the tool call ({} chars): {}",
+                    properties.maxTokens(), text.length(), text.length() > 500 ? text.substring(0, 500) + "..." : text);
             throw new CoachingUnavailableException("The coaching reply was cut off. Raise "
                     + "gamecoach.claude.max-tokens (now " + properties.maxTokens() + ").", null);
         }

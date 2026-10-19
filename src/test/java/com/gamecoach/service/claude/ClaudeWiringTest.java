@@ -29,7 +29,7 @@ class ClaudeWiringTest {
     void theClaudeCoachIsUsedAndTheSettingsAreRead() {
         assertInstanceOf(ClaudeCoachingService.class, coach);
         assertEquals("claude-haiku-5-5", properties.model());
-        assertEquals(2000, properties.maxTokens());
+        assertEquals(4000, properties.maxTokens());
         assertEquals(120, properties.timeout().toSeconds());   // from application.properties
     }
 }
