@@ -83,8 +83,15 @@ final class CoachingPrompt {
                 different typical accuracy, so a gap with another hero is not a weakness.
                 - Never list a stat as a weakness when it isn't part of the role's job (damage blocked for \
                 a Strategist, healing for a Vanguard).
-                - Before answering, check that no stat appears in both strengths and weaknesses (for \
-                example, praising few deaths and then criticizing deaths).
+                - A strength needs a good result: a top-half rank on the team or in the lobby, or a clear \
+                role or hero reason. A mid-pack or bottom-half number is never a strength.
+                - Each stat (deaths, damage, healing, accuracy and so on) appears at most once across \
+                strengths and weaknesses. If a stat is mixed, choose one list and give both sides there.
+                - Never base a weakness on a gap with a player on a different hero. Compare with the same \
+                hero, or leave the comparison out.
+                - Name heroes exactly as the scoreboard shows them. The coached player's hero is under \
+                COACHED PLAYER; say "the other X" only if the coached player is also playing X.
+                - Before answering, re-read your lists against these rules.
                 - One match is a small sample. Present weaknesses as things to watch, not verdicts.
                 - List as many strengths and weaknesses as the data supports (usually 2 to 4 each), most \
                 important first. Give 2 to 4 things to try next match.

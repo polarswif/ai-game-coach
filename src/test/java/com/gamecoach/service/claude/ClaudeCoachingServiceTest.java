@@ -94,6 +94,8 @@ class ClaudeCoachingServiceTest {
         assertTrue(request.system().contains("Ranks: 1 is best"));
         assertTrue(request.system().contains("The match result is context, never a strength or weakness"));
         assertTrue(request.system().contains("Each stat or point goes in only one place"));
+        assertTrue(request.system().contains("A mid-pack or bottom-half number is never a strength"));
+        assertTrue(request.system().contains("Never base a weakness on a gap with a player on a different hero"));
     }
 
     @Test

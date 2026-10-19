@@ -35,6 +35,17 @@ class ToolInputTest {
     }
 
     @Test
+    void strayQuotesAtTheEndsAreRemoved() {
+        Map<String, Object> m = new HashMap<>();
+        m.put("ctx", "This was a close match.\\\"");          // ends in \"
+        m.put("list", List.of("\"Quoted item\"", "Fine"));
+        assertEquals("This was a close match.", ToolInput.string(m, "ctx"));
+        assertEquals(List.of("Quoted item", "Fine"), ToolInput.strings(m, "list"));
+        assertEquals("Say \"hi\" now.", ToolInput.clean("Say \"hi\" now."));   // inner quotes stay
+        assertEquals("Call it \"push.\"", ToolInput.clean("Call it \"push.\""));  // a real closing quote stays
+    }
+
+    @Test
     void matchesEnumNamesLoosely() {
         assertEquals(Medal.MOST_KOS, ToolInput.enumValue(Medal.class, "Most KOs"));
         assertEquals(Medal.MOST_HEALING, ToolInput.enumValue(Medal.class, "most-healing"));

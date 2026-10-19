@@ -19,8 +19,33 @@ public final class ToolInput {
         if (value == null) {
             return null;
         }
-        String s = value.toString().strip();
+        String s = clean(value.toString());
         return s.isEmpty() || s.equalsIgnoreCase("null") ? null : s;
+    }
+
+    /**
+     * Trims whitespace, a stray backslash at either end, an unmatched quote mark at either end, and
+     * quotes wrapped around the whole text: formatting slips a model sometimes makes (for example a
+     * sentence ending in \"). A sentence that legitimately ends with a quotation keeps its quotes.
+     */
+    static String clean(String text) {
+        String s = text.strip();
+        boolean changed = true;
+        while (changed && !s.isEmpty()) {
+            changed = false;
+            long quotes = s.chars().filter(c -> c == '"').count();
+            if (s.length() >= 2 && s.startsWith("\"") && s.endsWith("\"") && s.indexOf('"', 1) == s.length() - 1) {
+                s = s.substring(1, s.length() - 1).strip();          // "whole text in quotes"
+                changed = true;
+            } else if (s.endsWith("\\") || (s.endsWith("\"") && quotes % 2 == 1)) {
+                s = s.substring(0, s.length() - 1).stripTrailing();  // trailing \ or unmatched "
+                changed = true;
+            } else if (s.startsWith("\\") || (s.startsWith("\"") && quotes % 2 == 1)) {
+                s = s.substring(1).stripLeading();                   // leading \ or unmatched "
+                changed = true;
+            }
+        }
+        return s;
     }
 
     /** Accepts 12345, 12345.0 and "12,345". Null when missing or not a number. */
@@ -57,8 +82,9 @@ public final class ToolInput {
         List<String> result = new ArrayList<>();
         if (value instanceof List<?> items) {
             for (Object item : items) {
-                if (item != null && !item.toString().isBlank()) {
-                    result.add(item.toString().strip());
+                String text = item == null ? "" : clean(item.toString());
+                if (!text.isEmpty()) {
+                    result.add(text);
                 }
             }
         }
