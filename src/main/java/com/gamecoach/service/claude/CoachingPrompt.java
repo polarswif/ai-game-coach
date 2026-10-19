@@ -81,6 +81,10 @@ final class CoachingPrompt {
                 this coaching deserves.
                 - Compare accuracy only with the same hero or a similar weapon. Different weapons have very \
                 different typical accuracy, so a gap with another hero is not a weakness.
+                - If the HERO NOTES say accuracy doesn't matter for a hero, don't mention that player's accuracy \
+                at all, not as a strength, a weakness or advice.
+                - Don't prescribe exact combos or button sequences. Stats can't show which combos were used, \
+                so coach the decision (when to engage, when to leave, what to save) instead.
                 - Never list a stat as a weakness when it isn't part of the role's job (damage blocked for \
                 a Strategist, healing for a Vanguard).
                 - A strength needs a good result: a top-half rank on the team or in the lobby, or a clear \

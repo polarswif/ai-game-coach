@@ -28,8 +28,42 @@ Thor|Every ability spends Thorforce, which refills when his attacks land. Diving
 Thor|Awakening Rune is his burst for finishing low-health targets. It can be cancelled, refunding 1 Thorforce, which good players use to get out.
 Thor|He's weak against heavy crowd control. He can't be stunned while casting his ultimate, so it can counter enemy stun ultimates.
 
+The Thing|Purely a brawler: he can't be knocked back or launched, so he walks straight into the enemy, and his punches go through shields, which makes him strong against shield tanks such as Doctor Strange. His damage blocked can be about the same as other tanks'. His accuracy doesn't reflect his play: it isn't counted for punches, only for some abilities.
+The Thing|Embattled Leap jumps to an ally and reduces damage for himself and allies nearby; Battle Blitz jumps to an enemy and makes enemies in the landing area take more damage. Diving with no ally to leap back to is a mistake, and good players keep one leap for getting out rather than spending both at once.
+The Thing|Yancy Street Charge launches enemies and stops their movement abilities near where it ends, so good players use it before or during an ally's ultimate so enemies can't escape. He can't be stunned while charging, but he's weak to stuns and burst damage once the charge ends.
+The Thing|His ultimate, Clobberin' Time, launches and stuns everything in front of him; the best targets are crowds, especially ones with healers in them. He's weak against flying heroes, high ground and heroes who stay out of reach, such as Human Torch, Hela and Rocket.
+
+The Hood|A brawl tank who can also dive at times. Hitting enemies with his pistols builds Demonic Energy; at full energy he enters Half-Demon State (fast rifles with lifesteal). His damage drops off sharply at range, so low damage often means he was poking from too far away.
+The Hood|Mantle of Oblivion blocks attacks and turns the blocked damage into energy, which is where most of his damage blocked comes from. He can't use it during Half-Demon State, which is when he's easiest to kill.
+The Hood|Abyssal Veil weakens damage and healing that pass through it, and enemies who walk through it take damage and are blinded, so it's good for cutting off healing to the enemy frontline. Void Walk makes him untargetable and is his main escape; using it with no plan to get out is a common reason he dies.
+The Hood|He wins some 1v1s but it depends heavily on the opponent; he usually loses one to a Winter Soldier. His ultimate, Demon of the End, fires piercing shots and gives bonus health to him and nearby allies; missing the final shot, staying in it too long, or ulting into several heavy hitters wastes it.
+
+Venom|A dive tank who pressures the enemy backline and gives his teammates no protection; his damage blocked mostly comes from enemies hitting him while Symbiotic Resilience is active, so it can be high. He's at his best when allies follow up on his dives.
+Venom|Symbiotic Resilience gives more bonus health the lower his health is. Besides his ultimate it's his only way to survive heavy burst, so good players always dive with it off cooldown. High deaths usually mean diving without it.
+Venom|Frenzied Arrival dashes to a spot from a height and launches enemies near the landing point; Cellular Corrosion slows enemies in reach and damages those who don't break free. Good players perch on walls, let the enemy pass, then dive a Duelist or Strategist rather than the first enemy they see.
+Venom|His ultimate, Feast of the Abyss, burrows him underground to move freely, then devours enemies above for damage based on their current health, giving him that much bonus health and reducing their healing. Like Hulk's ultimate it keeps him in a fight rather than getting him out. He's weak against crowd control.
+
 # ---- Duelists ----
 Black Panther|A dive Duelist: a good Black Panther has a lot of final hits compared with his damage, because he dives in to finish targets rather than dealing steady damage. Less total damage than a sustained-damage Duelist such as Winter Soldier (Bucky) is normal for him; judge him by final hits and KOs.
+
+Daredevil|A melee dive and flank Duelist and one of the best 1v1 heroes: he picks off isolated targets and guards his backline against flankers. Judge him by KOs and final hits and by staying alive; lower total damage than a sustained-damage Duelist is normal. Accuracy doesn't matter for him: ignore it.
+Daredevil|Radar Sense shows all invisible enemies (including Invisible Woman) and enemies through walls, but only at short range. Good players use it to find isolated targets and call out positions.
+Daredevil|Sonic Pursuit is his engage, and its cooldown resets when he or an ally gets the kill, so good Daredevils chain picks. Devil's Latch pulls him to a target but doesn't stun, so good players save it as an escape. Objection! blocks frontal damage and reflects projectiles; using it to absorb a stun or burst is what keeps him alive.
+Daredevil|He has almost no answer to flying or long-range heroes. Common mistakes: engaging with Latch and no escape left, getting caught alone, and playing too passively.
+Daredevil|His ultimate, Let the Devil Out, damages enemies in his line of sight with a blind that gets stronger the longer it lasts, and gives him Fury the whole time.
+
+Spider-Man|One of the hardest heroes to master: a burst melee flanker with no defensive tools and very low health, who wins quick 1v1s and leaves. Judge him by final hits and KOs on squishy targets, not total damage. Accuracy only counts some abilities, so don't read much into it.
+Spider-Man|He has many combos (the basic one tags a target with Web-Cluster, pulls with Get Over Here! and finishes with Amazing Combo). A good Spider-Man knows which combo fits the moment in a fight, which stats can't show, so coach his choices about when to engage and when to leave, not combos.
+Spider-Man|The biggest mistake is engaging with no Web-Swing charges left, which is usually where his deaths come from; staying grounded or in melee too long is the other. Stuns, Namor's turrets and teams with three Strategists counter him.
+
+Scarlet Witch|Reworked recently: now a mid-range brawler and flanker. Chaos Marks are the core of her kit: her beam (Chaos Control) deals damage to marked enemies, and damaging marked enemies gives her bonus health, which is what lets her brawl. Scarlet Hex is a forward shockwave that damages and marks enemies.
+Scarlet Witch|Dark Seal, landed on a target or the ground (or pressed again to create the field), stuns enemies in range on the first explosion, then slows them and keeps marking them; it's best in doorways, escape routes and fights where enemies are grouped.
+Scarlet Witch|Mystic Projection's two invulnerable dashes are her escapes; using both and being left with none is a common reason she dies.
+Scarlet Witch|Her ultimate is a flight that gives bonus health while pulling nearby enemies in and marking them with damage that grows over time, then ends in a massive area blast. It's best used to counter an enemy support ultimate or to keep enemies out of a space.
+
+Psylocke|A stealth assassin who closes in, bursts a squishy target and leaves. She's decent at mid range but bad at long range. Judge her by final hits and KOs on Strategists and Duelists. Hitting crossbow shots shortens her cooldowns, so missing them slows her whole kit.
+Psylocke|Wing Shurikens stick to enemies, deal damage and give her bonus health; recalling them is her burst damage. Good players keep one Psi-Blade Dash and Psychic Stealth available to engage or get out; deaths usually mean both were spent or a combo failed with no way out.
+Psylocke|Her ultimate, Dance of the Butterfly, is best used to bait out a support ultimate or to put pressure on the enemy; using it at low health or in front of a stun wastes it.
 
 Winter Soldier|Usually deals more total damage than dive Duelists such as Black Panther, so compare his damage with other sustained-damage Duelists rather than with divers.
 
@@ -50,3 +84,7 @@ Invisible Woman|Invisibility heals her but stops her attacking, so time spent in
 Invisible Woman|She can also put Guardian Shield on herself, which helps her heal herself and survive big area ultimates such as Magneto's or Iron Man's.
 Invisible Woman|Good players put Guardian Shield on the most threatened ally and recall it before it breaks, use Force Physics to peel divers or pull in enemies who push too far, and time Psionic Vortex with a teammate's area-damage ultimate.
 Invisible Woman|Her ultimate makes allies invisible and heals them, but she is vulnerable to focus fire in general: any team that bursts her down at once can beat it.
+
+Jubilee|A Strategist who mixes healing and damage. Her output depends on keeping her kit cycling (Blooming Ball, detonating Sparkle Marks on enemies to start rapid fire), so healing and damage should both be solid; if both are low she was probably idle or out of range.
+Jubilee|Good players recall and reuse Blooming Ball instead of letting it expire, save Sparking Sprint to quickly charge up Blooming Ball rather than as an escape, and put Blooming Ball on themselves when they're being dived.
+Jubilee|She has poor mobility, so dive teams and cleansers such as White Fox and Black Cat counter her; deaths against dive are often about positioning. Her ultimate, Firework Finale, heals allies and damages enemies in an orbit around her: a tighter orbit spins faster, a wider one covers more ground.
