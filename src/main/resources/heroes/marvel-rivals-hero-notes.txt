@@ -154,6 +154,10 @@ Hawkeye|A long-range sniper: headshots matter enormously, so accuracy is meaning
 Hawkeye|Hypersonic Arrow ignores shields and knocks down flying heroes; Crescent Slash knocks back melee divers. Fast flankers and constant pressure are his biggest threats. Holding a charged arrow for a teammate's stun is how he gets reliable kills.
 Hawkeye|His ultimate, Hunter's Sight, creates afterimages that pass damage to the real enemies. Magneto's ultimate hard-counters it, and enemies can beat it by getting out of his line of sight.
 
+Iron Man|An air-burst Duelist. Unibeam, his channeled mid-range beam, is his strongest tool; low damage often means spamming Repulsor Blast from far away instead. His projectiles are slow, so compare his accuracy only with other Iron Men.
+Iron Man|Armor Overdrive powers up his whole kit for a short time; good players use it to apply maximum pressure, occasionally for a sneaky flank. His flight is slow, so hovering in the open is a common way he dies; good players peek from cover and reposition with Hyper-Velocity. Hitscan heroes (Hela, The Punisher) and other flying heroes counter him.
+Iron Man|His ultimate, Invincible Pulse Cannon, is a slow, huge explosion; it's best from an off-angle or a flank to catch enemies off guard, or on stunned or unshielded targets. Fired from far away into a group that can see it, or into a shield, it's wasted.
+
 Winter Soldier|Usually deals more total damage than dive Duelists such as Black Panther, so compare his damage with other sustained-damage Duelists rather than with divers.
 
 # ---- Strategists ----
