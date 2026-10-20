@@ -36,7 +36,7 @@ The Thing|His ultimate, Clobberin' Time, launches and stuns everything in front 
 The Hood|A brawl tank who can also dive at times. Hitting enemies with his pistols builds Demonic Energy; at full energy he enters Half-Demon State (fast rifles with lifesteal). His damage drops off sharply at range, so low damage often means he was poking from too far away.
 The Hood|Mantle of Oblivion blocks attacks and turns the blocked damage into energy, which is where most of his damage blocked comes from. He can't use it during Half-Demon State, which is when he's easiest to kill.
 The Hood|Abyssal Veil weakens damage and healing that pass through it, and enemies who walk through it take damage and are blinded, so it's good for cutting off healing to the enemy frontline. Void Walk makes him untargetable and is his main escape; using it with no plan to get out is a common reason he dies.
-The Hood|He wins some 1v1s but it depends heavily on the opponent; he usually loses one to a Winter Soldier. His ultimate, Demon of the End, fires piercing shots and gives bonus health to him and nearby allies; missing the final shot, staying in it too long, or ulting into several heavy hitters wastes it.
+The Hood|He wins some 1v1s but it depends heavily on the opponent; he usually loses one to a Winter Soldier. His ultimate, Demon of the End, fires piercing shots and gives bonus health to him and nearby allies; missing the final shot, staying in it too long, or ulting into several heavy hitters wastes it. He's stationary while firing it, so he can be focus fired, and Magneto's ultimate counters it.
 
 Venom|A dive tank who pressures the enemy backline and gives his teammates no protection; his damage blocked mostly comes from enemies hitting him while Symbiotic Resilience is active, so it can be high. He's at his best when allies follow up on his dives.
 Venom|Symbiotic Resilience gives more bonus health the lower his health is. Besides his ultimate it's his only way to survive heavy burst, so good players always dive with it off cooldown. High deaths usually mean diving without it.
@@ -126,6 +126,33 @@ Human Torch|His ultimate, Supernova, turns Flame Fields into fire tornadoes and 
 Moon Knight|Good on high ground and also when playing with his team. He farms ultimate charge by bouncing shots off tanks onto enemies behind them, so high damage partly from hitting tanks is expected. He's strongest against grouped teams.
 Moon Knight|Ancient Ankh pulls enemies together and sets up his combos; good players place it out of the enemy's sight. Moonlight Hook has no invincibility, so it isn't a last-second dodge.
 Moon Knight|Flying heroes, shield tanks (the Ankh breaks on barriers), fast divers, and teams that take off-angles on him with heroes like Hela or Phoenix punish him. His ultimate, Hand of Khonshu, is best paired with a stun or pull such as Groot's or Angela's, or on enemies whose escapes are spent.
+
+Black Widow|Reworked in Season 9: now a flanker and close-range fighter rather than a full-time sniper. Her normal shots are fast, unscoped and can't one-shot; her scoped shooting comes only from her ultimate, Assassin's Focus, a few piercing shots. She sprints and super-jumps without a stamina bar.
+Black Widow|Good Widows apply frontline pressure while taking off-angles and flanks at the right time. Widow's Bite Slam leaps to the ground for area damage in close-range combos; Edge Dancer zips in and kicks, but the kick no longer stuns, so she's still vulnerable to dive. Electro-Plasma Blast (her old ultimate) is now a regular exploding shot.
+
+Black Cat|A mobile burst diver who finds isolated targets and escapes with her movement. She runs on Fortune, built by hitting enemies and spent on abilities and Gilded Deal items; she's strong against isolated enemies and weak in long, grouped fights.
+Black Cat|Good players mainly buy Helm of Hades (a few seconds of invisibility, the most versatile engage and disengage) or Ring of Zona (a portal pair whose placement depends on where the enemy is); Chernobog's Crystal cleanses a stun but is less versatile. A common way she dies is running out of Fortune with no dashes left.
+Black Cat|Her ultimate, Calling Card, marks every enemy and lets her dash between them; each KO refreshes it, so it's best when enemies are split up. Grouped teams and saved crowd control counter her.
+
+Blade|A hybrid Duelist who can frontline, flank, poke or fight in melee. His core tool is healing reduction (Daywalker Dash with the sword, sword hits, his ultimate); good Blades put anti-heal on tanks, divers and any out-of-position target. His accuracy mixes sword and gun, so don't read much into it.
+Blade|His gun fires a bullet that breaks apart midway and spreads like a shotgun, so it's most effective at mid range, not long or point-blank range. Scarlet Shroud is a short parry that blocks frontal damage and stuns and charges his dash.
+Blade|Bloodline Awakening gives attack speed and lifesteal but reduces his own healing, so staying in it while taking extended burst can get him killed. He has low sustain in grouped fights. His ultimate, Thousand-Fold Slash, is best combined with an ally's crowd control.
+
+Cyclops|A long-range hitscan Duelist with little damage falloff who wins at mid range against short-range heroes and can also take off-angles; accuracy matters, so compare it with other hitscan heroes.
+Cyclops|Propulsion Burst knocks him and a target back and is his main escape; using it carelessly leaves him open to dives for a long cooldown. Good players use Optic Ascent for positioning and save Propulsion Burst for mid-fight escapes.
+Cyclops|His ultimate, Ruby Rage, deals damage based on the target's max health; used alone, enemies walk out of it, so it's best after an ally's stun such as Groot's, The Thing's or Doctor Strange's.
+
+Elsa Bloodstone|A close-range shotgun Duelist who snowballs: her Instinct ranks build from kills, damage and trap hits and reset when she dies, so dying early keeps her weak. The most important parts of playing her are hitting shots consistently and, above all, getting value from her ultimate.
+Elsa Bloodstone|Smoky Snare is an invisible trap she can dash to from far away; with the Devil Dinosaur team-up its radius is large enough that placement matters much less. At high Instinct her dash has a very short cooldown and gives bonus health. Fighting at long range is a mistake, since her shotgun spreads.
+Elsa Bloodstone|Her ultimate, Apex Predator, summons a monster that grabs enemies and drags them back toward her; summoning it into heavy enemy ultimates gets it destroyed.
+
+Gorr/Gorr the God Butcher|A melee dive Duelist who darts in and out. Accuracy doesn't matter for him: ignore it. His Black Berserkers (up to three) give him bonus health, damage and teleport points, so his survival depends on keeping them alive and keeping one safe as an escape.
+Gorr/Gorr the God Butcher|Living Abyss is an invulnerable dash and Shadow Harvest teleports him back to a Berserker; good players place Berserkers before committing. Failing the first engage drains his resources and leaves him weak. He has a large hitbox and is weak to burst damage, poke, knockbacks and slows, and to enemies who destroy his Berserkers.
+Gorr/Gorr the God Butcher|His ultimate, Twilight of the Gods, powers up all his Berserkers; he needs his team around him during it to keep him alive.
+
+Hawkeye|A long-range sniper: headshots matter enormously, so accuracy is meaningful. He's very strong or very weak depending on whether he lands his shots, and plays from off-angles and high ground, moving between spots rather than staying in one.
+Hawkeye|Hypersonic Arrow ignores shields and knocks down flying heroes; Crescent Slash knocks back melee divers. Fast flankers and constant pressure are his biggest threats. Holding a charged arrow for a teammate's stun is how he gets reliable kills.
+Hawkeye|His ultimate, Hunter's Sight, creates afterimages that pass damage to the real enemies. Magneto's ultimate hard-counters it, and enemies can beat it by getting out of his line of sight.
 
 Winter Soldier|Usually deals more total damage than dive Duelists such as Black Panther, so compare his damage with other sustained-damage Duelists rather than with divers.
 
