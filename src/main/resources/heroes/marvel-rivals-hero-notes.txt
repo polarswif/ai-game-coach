@@ -93,6 +93,40 @@ Psylocke|A stealth assassin who closes in, bursts a squishy target and leaves. S
 Psylocke|Wing Shurikens stick to enemies, deal damage and give her bonus health; recalling them is her burst damage. Good players keep one Psi-Blade Dash and Psychic Stealth available to engage or get out; deaths usually mean both were spent or a combo failed with no way out.
 Psylocke|Her ultimate, Dance of the Butterfly, is best used to bait out a support ultimate or to put pressure on the enemy; using it at low health or in front of a stun wastes it.
 
+Iron Fist|A brawler and diver who wins a lot of 1v1s thanks to his block. Accuracy doesn't matter for him: ignore it. Damage counts somewhat but isn't the main measure; judge him mostly by kills and staying alive.
+Iron Fist|Dragon's Defense (his block) turns blocked damage into bonus health; he's vulnerable while it's down. K'un-Lun Kick both secures kills (it hits harder on low-health targets) and is his way out of the backline, so being without both kick and block can be fatal; good players decide whether a target is low enough to spend the kick on.
+Iron Fist|After blocking, Yat Jee Chung Kuen shreds tanks and reduces the damage he takes, so fighting near several enemies isn't automatically a mistake, but doing it without block leaves him open to burst. Good Iron Fists dive in for a kill, and if it doesn't come, kick back to the team and pressure a tank with Yat Jee Chung Kuen. Harmony Recovery heals him but must be used out of sight.
+Iron Fist|His ultimate, Living Chi, boosts his damage, speed and range and shortens his cooldowns; it's best used on tanks or Strategists.
+
+Magik|A melee brawler and diver who bursts down targets and escapes through invincible Stepping Discs. Accuracy doesn't matter for her: ignore it. Part of her damage turns into bonus health, which is why she wins 1v1s; missing her first hits leaves her fragile.
+Magik|Good players chain Stepping Discs into Demon's Rage, which summons a Limbo demon that keeps attacking its target, a big source of bonus health; Umbral Incursion with the demon can secure kills. Stepping Discs also dodge enemy ultimates.
+Magik|Her ultimate, Darkchild, resets and powers up her abilities but gives no bonus health; using it in the open, at low health or alone gets her killed. A well-timed slash and dash during it can counter a support ultimate.
+Magik|Winter Soldier, high-burst teams, Namor, Peni Parker and flying heroes counter her.
+
+Wolverine|A tank-buster whose claw damage grows with the target's max health. Accuracy doesn't matter for him: ignore it. The most important part of playing him is grabbing an out-of-position target with Feral Leap and bringing them to his team; Rage matters less.
+Wolverine|He can't grab The Thing or Devil Dinosaur, who can't be displaced. The biggest mistake is snatching an enemy into their own team or leaping from too far away. High-burst teams, flying teams and crowd control counter him; Invisible Woman's Force Physics can pull him out of a snatch.
+Wolverine|His ultimate, Last Stand, launches enemies ahead, sweeps up others along his path and slams down at the landing point. It's best after grabbing a tank into their backline and ulting their supports and Duelists, or simply on the supports.
+
+Hela|A long-range hitscan Duelist. Headshots are very important for her, though her value isn't only headshots; accuracy matters, so compare it with other hitscan Duelists such as The Punisher. She can also flank and take off-angles as long as Astral Flock (her invincible escape) is available.
+Hela|Piercing Night fires thorns that detonate after a delay, good for breaking shields and bursting down targets. Soul Drainer's stun stops melee divers or sets up headshots. Shields and walls (Doctor Strange, Magneto, Groot) blunt her damage, and divers are her biggest threat; high deaths usually mean she was caught without Astral Flock.
+Hela|Her ultimate, Goddess of Death, can save her after an aggressive flank and is good for pulling out enemy support ultimates. It has a noticeable startup, so it's best when enemy defensive ultimates are spent.
+
+The Punisher|A sustained-damage Duelist who usually builds a wall of damage beside his team; compare his damage with other sustained-damage Duelists such as Winter Soldier. Low damage usually means he wasn't shooting or was shooting into shields.
+The Punisher|Rifle for mid range and flying heroes; the shotgun is strong up close and against dive tanks, and suits a flanking playstyle: good players use ziplines to get into the backline and assassinate supports unseen. Scourge Grenade blocks vision and knocks him back, his escape from divers. His turret has a long startup, so placing it under fire is a mistake.
+The Punisher|His ultimate, Final Judgment, frees him from crowd control when it starts. It's best used to pull out a support ultimate, to start a fight, or as a tempo ultimate; he uses it behind a shield tank because Magneto's ultimate hard-counters it. Divers and snipers that outrange him (Hela, Hawkeye) counter him.
+
+Star-Lord|A mobile close-range flanker who uses rocket boots and short invincible dashes to reach the backline; strong in duels and against melee heroes, weak at long range. Aim matters a lot on him, so low accuracy can mean poor aim, though his damage also falls off at range.
+Star-Lord|Stellar Shift has two charges and also reloads and gives bonus health; good players save one to dodge crowd control. Running out of both Stellar Shift and rocket fuel is how he dies. Good players flank from a different angle than their team.
+Star-Lord|Blaster Barrage fires a frenzy of shots at enemies in range; combined with Rocket Propulsion it makes him hard to hit while dealing area damage to farm his ultimate, which can decide fights. His ultimate, Galactic Legend, locks on to targets and is hard-countered by Magneto's ultimate; using it into healing ultimates also wastes it.
+
+Human Torch|A space controller and flanker. Flame Fields and Pyro-Prison walls push enemies off objectives and split them from their team. He can assassinate a target with two Blazing Blasts and a slam directly on them. He has no self-healing and is weak to hitscan heroes such as Hela, The Punisher and Adam Warlock.
+Human Torch|Good players stack Blazing Blasts in threes for a bigger Pyro-Prison; prison plus slam, timed well, can kill through support ultimates. Flaming Meteor is also his escape, and slamming into a full-health team is a common way he dies.
+Human Torch|His ultimate, Supernova, turns Flame Fields into fire tornadoes and reduces the damage he takes; it's best for funneling enemies into bad spots.
+
+Moon Knight|Good on high ground and also when playing with his team. He farms ultimate charge by bouncing shots off tanks onto enemies behind them, so high damage partly from hitting tanks is expected. He's strongest against grouped teams.
+Moon Knight|Ancient Ankh pulls enemies together and sets up his combos; good players place it out of the enemy's sight. Moonlight Hook has no invincibility, so it isn't a last-second dodge.
+Moon Knight|Flying heroes, shield tanks (the Ankh breaks on barriers), fast divers, and teams that take off-angles on him with heroes like Hela or Phoenix punish him. His ultimate, Hand of Khonshu, is best paired with a stun or pull such as Groot's or Angela's, or on enemies whose escapes are spent.
+
 Winter Soldier|Usually deals more total damage than dive Duelists such as Black Panther, so compare his damage with other sustained-damage Duelists rather than with divers.
 
 # ---- Strategists ----
