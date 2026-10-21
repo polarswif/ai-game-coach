@@ -1,5 +1,6 @@
 package com.gamecoach.controller;
 
+import com.gamecoach.datasource.CareerStatsUnavailableException;
 import com.gamecoach.parsing.BadUploadException;
 import com.gamecoach.parsing.ScoreboardUnreadableException;
 import com.gamecoach.service.CoachingUnavailableException;
@@ -30,6 +31,18 @@ public class ApiExceptionHandler {
     public ResponseEntity<ProblemDetail> coachingUnavailable(CoachingUnavailableException e) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(problem);
+    }
+
+    /** The career stats provider (OverFast) is down or rate-limited: 503 with what to do. */
+    @ExceptionHandler(CareerStatsUnavailableException.class)
+    public ResponseEntity<ProblemDetail> careerStatsUnavailable(CareerStatsUnavailableException e) {
+        return problem(503, e.getMessage());
+    }
+
+    /** A request parameter the user can fix: 400. */
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ProblemDetail> badRequest(BadRequestException e) {
+        return problem(400, e.getMessage());
     }
 
     /** The upload itself is unusable (empty, too big, wrong format, malformed score): 400. */

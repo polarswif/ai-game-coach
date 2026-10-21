@@ -49,6 +49,16 @@ curl.exe -s -F "screenshot=@C:\path\to\scoreboard.png" -F "score=3-2" -F "hero=D
 
 The model (`gamecoach.claude.model`, default `claude-sonnet-5-5`) and the reply length cap (`gamecoach.claude.max-tokens`) are in the same file. The app logs the tokens each coaching request used. If the provider is `claude` and the key is missing, the app stops at startup with a message saying so.
 
+## Overwatch career stats
+Overwatch doesn't publish individual matches, so Overwatch coaching works from a player's career: their public Blizzard profile, read through [OverFast API](https://github.com/TeKrop/overfast-api) (free, no key). `OverFastCareerSource` fetches ranks and stats and maps them into `CareerProfile`; `CareerAnalyzer` then compares each hero with the same player's other heroes in that role (per 10 minutes, and win rate), since without matches the player's own other heroes are the fairest benchmark. Heroes under an hour or 5 games are flagged as small samples.
+
+Use the BattleTag with a dash instead of `#`, and mind the capital letters:
+- Find the exact BattleTag: `http://localhost:8080/api/overwatch/players?name=Swift`
+- Career as reported: `http://localhost:8080/api/overwatch/players/Swift-1234/profile`
+- Analysis: `http://localhost:8080/api/overwatch/players/Swift-1234/analysis?mode=competitive&platform=pc`
+
+`mode` is `quickplay` (default) or `competitive`; `platform` is `pc` or `console`, or left out to combine both. The profile must be public (Overwatch: Social options, Career Profile Visibility). The public OverFast instance limits requests per second and caches each player for an hour; for heavy use, self-host it and set `gamecoach.overfast.base-url`.
+
 ## Roadmap
 - [x] Spring Boot API with fake match data and feedback
 - [x] Match analysis (team share, ranks, per-minute stats, hero roles)
@@ -57,10 +67,11 @@ The model (`gamecoach.claude.model`, default `claude-sonnet-5-5`) and the reply 
 - [x] Claude-backed coaching feedback
 - [x] Scoreboard screenshot upload and parsing, with consistency checks and a review step
 - [ ] Match history screenshot (round score) and tracker.gg as optional extras
-- [ ] Overwatch career stats (OverFast)
+- [x] Overwatch career stats and analysis (OverFast)
+- [ ] Overwatch career coaching with Claude
 - [ ] React frontend
 - [ ] Saved match history (database)
 - [ ] Authentication and deployment
 
 ## Data sources
-Marvel Rivals match data comes from end-of-match scoreboard screenshots uploaded by the user. The app doesn't access game servers or use unofficial APIs.
+Marvel Rivals match data comes from end-of-match scoreboard screenshots uploaded by the user. The app doesn't access game servers. Overwatch career stats come from public Blizzard career profiles via OverFast API; the Overwatch hero table (`overwatch-heroes.csv`) is taken from OverFast's data (MIT license).
