@@ -70,7 +70,7 @@ public record CareerAnalysis(
      * A positive deathsPer10Diff means this hero dies more; positive damage/healing/eliminations
      * diffs mean this hero does more.
      *
-     * @param percentDiffs per-10 differences as a percent of the other heroes' value (0 when theirs is 0)
+     * @param percentDiffs per-10 differences as a percent of the other heroes' value
      */
     public record Comparison(
             Duration otherTimePlayed,
@@ -78,6 +78,19 @@ public record CareerAnalysis(
             double otherWinRatePercent,
             StatValues otherPer10,
             double winRateDiffPoints,
-            StatValues percentDiffs) {
+            PercentDiffs percentDiffs) {
+    }
+
+    /**
+     * Per-10 differences in percent. A value is null when it can't be compared fairly: the other
+     * heroes' rate is too small to divide by (a few stray assists would turn into "+2590%"), or,
+     * for assists, the hero has none at all, because Blizzard only counts assists for some heroes.
+     */
+    public record PercentDiffs(
+            Double eliminations,
+            Double assists,
+            Double deaths,
+            Double damage,
+            Double healing) {
     }
 }

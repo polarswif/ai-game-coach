@@ -52,10 +52,12 @@ The model (`gamecoach.claude.model`, default `claude-sonnet-5-5`) and the reply 
 ## Overwatch career stats
 Overwatch doesn't publish individual matches, so Overwatch coaching works from a player's career: their public Blizzard profile, read through [OverFast API](https://github.com/TeKrop/overfast-api) (free, no key). `OverFastCareerSource` fetches ranks and stats and maps them into `CareerProfile`; `CareerAnalyzer` then compares each hero with the same player's other heroes in that role (per 10 minutes, and win rate), since without matches the player's own other heroes are the fairest benchmark. Heroes under an hour or 5 games are flagged as small samples.
 
-Use the BattleTag with a dash instead of `#`, and mind the capital letters:
-- Find the exact BattleTag: `http://localhost:8080/api/overwatch/players?name=Swift`
-- Career as reported: `http://localhost:8080/api/overwatch/players/Swift-1234/profile`
-- Analysis: `http://localhost:8080/api/overwatch/players/Swift-1234/analysis?mode=competitive&platform=pc`
+Search first. Blizzard no longer shows the number after the `#` in search, so several players can share a name; each result carries a `playerId`, plus the title, avatar and last-update time that tell them apart. Use the `playerId` (or a BattleTag with a dash instead of `#`; names are case-sensitive) in the other URLs:
+- Search: `http://localhost:8080/api/overwatch/players?name=Swift`
+- Career as reported: `http://localhost:8080/api/overwatch/players/{playerId}/profile`
+- Analysis: `http://localhost:8080/api/overwatch/players/{playerId}/analysis?mode=competitive&platform=pc`
+
+In the analysis, a percent difference is `null` when it can't be compared fairly: the other heroes' rate is too small to divide by, or the hero has no assists at all (Blizzard only counts assists for some heroes).
 
 `mode` is `quickplay` (default) or `competitive`; `platform` is `pc` or `console`, or left out to combine both. The profile must be public (Overwatch: Social options, Career Profile Visibility). The public OverFast instance limits requests per second and caches each player for an hour; for heavy use, self-host it and set `gamecoach.overfast.base-url`.
 
@@ -69,6 +71,7 @@ Use the BattleTag with a dash instead of `#`, and mind the capital letters:
 - [ ] Match history screenshot (round score) and tracker.gg as optional extras
 - [x] Overwatch career stats and analysis (OverFast)
 - [ ] Overwatch career coaching with Claude
+- [ ] Overwatch scoreboard screenshot coaching (per match), reusing the Rivals reader
 - [ ] React frontend
 - [ ] Saved match history (database)
 - [ ] Authentication and deployment

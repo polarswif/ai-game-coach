@@ -21,6 +21,7 @@ import com.gamecoach.model.OverwatchRole;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -70,7 +71,9 @@ public class OverFastCareerSource implements CareerStatsSource {
                 return List.of();
             }
             return result.results().stream()
-                    .map(p -> new PlayerMatch(p.playerId(), p.name(), p.isPublic()))
+                    .map(p -> new PlayerMatch(p.playerId(), p.name(), p.title(), p.avatar(),
+                            p.lastUpdatedAt() == null ? null : Instant.ofEpochSecond(p.lastUpdatedAt()),
+                            p.isPublic()))
                     .toList();
         } catch (OverFastException e) {
             throw translate(e, name);
@@ -97,8 +100,9 @@ public class OverFastCareerSource implements CareerStatsSource {
     static RuntimeException translate(OverFastException e, String id) {
         Integer wait = e.retryAfterSeconds();
         return switch (e.status()) {
-            case 404 -> new NoSuchElementException("No Overwatch profile found for " + id + ". Check the "
-                    + "spelling, the capital letters and the number after the #."
+            case 404 -> new NoSuchElementException("No Overwatch profile found for " + id + ". Search for the "
+                    + "name with /api/overwatch/players?name=... and use the playerId it returns, because "
+                    + "Blizzard's lookup by Name#1234 doesn't always work. Names are case-sensitive."
                     + (wait == null ? "" : " OverFast will look it up again in about " + minutes(wait) + "."));
             case 429 -> new CareerStatsUnavailableException("OverFast API is limiting requests right now; try again "
                     + (wait == null ? "in a few seconds." : "in " + wait + " seconds."), e);

@@ -3,6 +3,7 @@ package com.gamecoach.datasource;
 import com.gamecoach.model.CareerProfile;
 import com.gamecoach.model.OverwatchMode;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -30,8 +31,16 @@ public interface CareerStatsSource {
     /**
      * One search result.
      *
+     * Blizzard no longer shows the number after the # in search, so several players can share a
+     * name; title, avatar and last update are what tell them apart.
+     *
+     * @param playerId      what to put in the profile and analysis URLs
+     * @param title         the in-game title under the name; null when none
+     * @param avatar        URL of the player icon; null when unknown
+     * @param lastUpdated   when Blizzard last updated the profile; null when unknown
      * @param publicProfile null when the provider doesn't know yet
      */
-    record PlayerMatch(String playerId, String name, Boolean publicProfile) {
+    record PlayerMatch(String playerId, String name, String title, String avatar, Instant lastUpdated,
+                       Boolean publicProfile) {
     }
 }

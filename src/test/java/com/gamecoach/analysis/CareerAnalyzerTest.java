@@ -2,6 +2,7 @@ package com.gamecoach.analysis;
 
 import com.gamecoach.analysis.CareerAnalysis.Comparison;
 import com.gamecoach.analysis.CareerAnalysis.HeroSummary;
+import com.gamecoach.analysis.CareerAnalysis.PercentDiffs;
 import com.gamecoach.model.CareerProfile;
 import com.gamecoach.model.CareerProfile.CareerStats;
 import com.gamecoach.model.CareerProfile.HeroCareer;
@@ -70,6 +71,24 @@ class CareerAnalyzerTest {
         assertEquals(6.67, vs.otherPer10().deaths());                     // 240 deaths over 36 ten-minute blocks
         assertEquals(124.9, vs.percentDiffs().deaths());                  // Ana dies 15 per 10 min: much more
         assertEquals(31.3, vs.percentDiffs().healing());                  // and heals more
+    }
+
+    @Test
+    void tinyBaselinesAreNotCompared() {
+        // Other heroes: 2 hours with 1 assist (0.08 per 10) and 100 healing (8.3 per 10).
+        CareerStats role = stats(20, 10, Duration.ofHours(3), 2.0, 300, 21, 100, 300_000, 10_100);
+        CareerStats hero = stats(10, 5, Duration.ofHours(1), 2.0, 100, 20, 40, 100_000, 10_000);
+        PercentDiffs d = CareerAnalyzer.compare(hero, role).percentDiffs();
+        assertNull(d.assists());                                          // would have been about +4000%
+        assertNull(d.healing());                                          // a damage player's stray healing
+        assertEquals(33.4, d.deaths());                                   // 6.67 vs 5.0 per 10 still compared
+    }
+
+    @Test
+    void zeroAssistsMeansNotTrackedNotWorse() {
+        CareerStats role = stats(20, 10, Duration.ofHours(3), 2.0, 300, 60, 100, 300_000, 0);
+        CareerStats hero = stats(10, 5, Duration.ofHours(1), 2.0, 100, 0, 40, 100_000, 0);
+        assertNull(CareerAnalyzer.compare(hero, role).percentDiffs().assists());
     }
 
     @Test

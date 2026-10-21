@@ -2,6 +2,7 @@ package com.gamecoach.analysis;
 
 import com.gamecoach.analysis.CareerAnalysis.Comparison;
 import com.gamecoach.analysis.CareerAnalysis.HeroSummary;
+import com.gamecoach.analysis.CareerAnalysis.PercentDiffs;
 import com.gamecoach.analysis.CareerAnalysis.RoleSummary;
 import com.gamecoach.model.CareerProfile;
 import com.gamecoach.model.CareerProfile.CareerStats;
@@ -31,6 +32,9 @@ public class CareerAnalyzer {
     static final Duration MIN_TIME = Duration.ofHours(1);
     /** Under this many games a hero is a small sample. */
     static final int MIN_GAMES = 5;
+    /** Per-10 rates below these (eliminations, assists, deaths / damage, healing) are too small to compare with. */
+    static final double MIN_COUNT_BASELINE = 0.5;
+    static final double MIN_AMOUNT_BASELINE = 100;
 
     public CareerAnalysis analyze(CareerProfile profile) {
         Duration total = profile.overall().timePlayed();
@@ -74,12 +78,13 @@ public class CareerAnalyzer {
         double otherWinRate = otherGames <= 0 ? 0 : round1(100.0 * otherWon / otherGames);
         StatValues otherTotals = minus(role.totals(), hero.totals());
         StatValues otherPer10 = per10(otherTotals, otherTime);
-        StatValues diffs = new StatValues(
-                percentDiff(hero.per10().eliminations(), otherPer10.eliminations()),
-                percentDiff(hero.per10().assists(), otherPer10.assists()),
-                percentDiff(hero.per10().deaths(), otherPer10.deaths()),
-                percentDiff(hero.per10().damage(), otherPer10.damage()),
-                percentDiff(hero.per10().healing(), otherPer10.healing()));
+        StatValues h = hero.per10();
+        PercentDiffs diffs = new PercentDiffs(
+                percentDiff(h.eliminations(), otherPer10.eliminations(), MIN_COUNT_BASELINE),
+                h.assists() == 0 ? null : percentDiff(h.assists(), otherPer10.assists(), MIN_COUNT_BASELINE),
+                percentDiff(h.deaths(), otherPer10.deaths(), MIN_COUNT_BASELINE),
+                percentDiff(h.damage(), otherPer10.damage(), MIN_AMOUNT_BASELINE),
+                percentDiff(h.healing(), otherPer10.healing(), MIN_AMOUNT_BASELINE));
         return new Comparison(otherTime, otherGames, otherWinRate, otherPer10,
                 round1(hero.winRatePercent() - otherWinRate), diffs);
     }
@@ -100,8 +105,9 @@ public class CareerAnalyzer {
                 round2(totals.deaths() / tens), round2(totals.damage() / tens), round2(totals.healing() / tens));
     }
 
-    private static double percentDiff(double value, double other) {
-        return other == 0 ? 0 : round1(100.0 * (value - other) / other);
+    /** Null when the other heroes' rate is under the baseline: too small to be a fair "100%". */
+    private static Double percentDiff(double value, double other, double minBaseline) {
+        return other < minBaseline ? null : round1(100.0 * (value - other) / other);
     }
 
     private static double share(Duration part, Duration total) {

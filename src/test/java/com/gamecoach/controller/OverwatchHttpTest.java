@@ -46,7 +46,7 @@ class OverwatchHttpTest {
 
         @Override
         public List<PlayerMatch> searchPlayers(String name) {
-            return List.of(new PlayerMatch("Swift-1234", "Swift", true));
+            return List.of(new PlayerMatch("Swift-1234", "Swift", null, null, null, true));
         }
     };
 

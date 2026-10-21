@@ -68,7 +68,7 @@ class OverFastCareerSourceTest {
             if (error != null) {
                 throw error;
             }
-            return new SearchResult(1, List.of(new PlayerShort("Swift-1234", "Swift", true)));
+            return new SearchResult(1, List.of(new PlayerShort("Swift-1234", "Swift", "Grandmaster", "https://x/a.png", 1_760_000_000L, true)));
         }
     }
 
@@ -134,7 +134,7 @@ class OverFastCareerSourceTest {
         NoSuchElementException e = assertThrows(NoSuchElementException.class,
                 () -> source.getCareerProfile("swift-1234", OverwatchMode.QUICKPLAY, null));
         assertTrue(e.getMessage().contains("No Overwatch profile found for swift-1234"));
-        assertTrue(e.getMessage().contains("capital letters"));
+        assertTrue(e.getMessage().contains("use the playerId"));
         assertTrue(e.getMessage().contains("10 minutes"));
     }
 
@@ -153,7 +153,8 @@ class OverFastCareerSourceTest {
 
     @Test
     void searchResultsAreMapped() {
-        assertEquals(List.of(new PlayerMatch("Swift-1234", "Swift", true)), source.searchPlayers(" Swift "));
+        assertEquals(List.of(new PlayerMatch("Swift-1234", "Swift", "Grandmaster", "https://x/a.png",
+                java.time.Instant.ofEpochSecond(1_760_000_000L), true)), source.searchPlayers(" Swift "));
     }
 
     @Test
