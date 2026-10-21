@@ -133,8 +133,11 @@ class ClaudeCoachingServiceTest {
 
     @Test
     void promptLeavesOutTheNotesSectionWhenThereAreNone() {
-        PlayerAnalysis deadpool = analyzer.analyze(deadpoolMatch, deadpoolMatch.players().get(5));
-        assertFalse(promptFor(deadpoolMatch, deadpool).contains("HERO NOTES"));
+        // Every real hero has notes now, so use a catalog that only knows Magneto.
+        ClaudeCoachingService noNotes = new ClaudeCoachingService(client, properties,
+                HeroNotesCatalog.fromText("Magneto|A shield tank."));
+        PlayerAnalysis rocket = analyzer.analyze(player29Match, (String) null);
+        assertFalse(noNotes.buildRequest(player29Match, rocket).messages().get(0).text().contains("HERO NOTES"));
     }
 
     @Test

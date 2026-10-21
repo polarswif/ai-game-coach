@@ -26,10 +26,28 @@ public class HeroNotesCatalog {
 
     private final Map<String, List<String>> notesByHero = new HashMap<>();
 
+    /** Reads the notes file from resources; this is the one Spring uses. */
     public HeroNotesCatalog() {
-        try (InputStream in = HeroNotesCatalog.class.getResourceAsStream(DEFAULT_FILE)) {
+        this(DEFAULT_FILE);
+    }
+
+    /** Reads notes from text in the same hero|note format. Tests use it to control which notes exist. */
+    public static HeroNotesCatalog fromText(String text) {
+        return new HeroNotesCatalog(new java.io.ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    private HeroNotesCatalog(InputStream in) {
+        try {
+            load(in);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private HeroNotesCatalog(String resource) {
+        try (InputStream in = HeroNotesCatalog.class.getResourceAsStream(resource)) {
             if (in == null) {
-                throw new IllegalStateException("Missing hero notes " + DEFAULT_FILE);
+                throw new IllegalStateException("Missing hero notes " + resource);
             }
             load(in);
         } catch (IOException e) {
@@ -37,12 +55,21 @@ public class HeroNotesCatalog {
         }
     }
 
-    /** The notes for a hero, in file order. Empty when there are none yet. */
+    /**
+     * The notes for a hero, in file order. Empty when there are none yet. Names are matched exactly
+     * (ignoring case and spaces), so "Deadpool (Strategist)" gets the shared Deadpool notes plus the
+     * Strategist ones, not the Vanguard's. A Deadpool label with no notes of its own falls back to
+     * plain "Deadpool".
+     */
     public List<String> forHero(String hero) {
         if (hero == null) {
             return List.of();
         }
-        return notesByHero.getOrDefault(HeroRoleCatalog.baseName(hero), List.of());
+        List<String> exact = notesByHero.get(HeroRoleCatalog.normalize(hero));
+        if (exact != null) {
+            return exact;
+        }
+        return HeroRoleCatalog.isDeadpool(hero) ? notesByHero.getOrDefault("deadpool", List.of()) : List.of();
     }
 
     private void load(InputStream in) throws IOException {
@@ -61,7 +88,7 @@ public class HeroNotesCatalog {
             // "Hulk/Bruce Banner": the same note under every name the scoreboard can show.
             for (String name : cols[0].split("/")) {
                 if (!name.isBlank()) {
-                    notesByHero.computeIfAbsent(HeroRoleCatalog.baseName(name.strip()), k -> new ArrayList<>())
+                    notesByHero.computeIfAbsent(HeroRoleCatalog.normalize(name.strip()), k -> new ArrayList<>())
                             .add(cols[1].strip());
                 }
             }
