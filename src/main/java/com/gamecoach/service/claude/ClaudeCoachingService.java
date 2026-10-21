@@ -108,11 +108,14 @@ public class ClaudeCoachingService implements CoachingService {
             log.info("Coached match {} with {}: {} input + {} output tokens", match.matchId(), response.model(),
                     response.usage().inputTokens(), response.usage().outputTokens());
         }
-        return readFeedback(response);
+        return readFeedback(response, properties.maxTokens());
     }
 
-    /** Finds the submit_coaching call in the reply and checks it's usable. */
-    private Feedback readFeedback(MessagesResponse response) {
+    /**
+     * Finds the submit_coaching call in the reply and checks it's usable. Static and package-private
+     * because the Overwatch coach answers through the same tool.
+     */
+    static Feedback readFeedback(MessagesResponse response, int maxTokens) {
         if ("max_tokens".equals(response.stopReason())) {
             // Log any text Claude wrote before (or instead of) the tool call: that's usually where
             // the budget went, and it shows whether the prompt or the limit needs changing.
@@ -121,9 +124,9 @@ public class ClaudeCoachingService implements CoachingService {
                     .map(ContentBlock::text)
                     .collect(java.util.stream.Collectors.joining(" "));
             log.warn("Coaching reply hit max_tokens ({}). Text outside the tool call ({} chars): {}",
-                    properties.maxTokens(), text.length(), text.length() > 500 ? text.substring(0, 500) + "..." : text);
+                    maxTokens, text.length(), text.length() > 500 ? text.substring(0, 500) + "..." : text);
             throw new CoachingUnavailableException("The coaching reply was cut off. Raise "
-                    + "gamecoach.claude.max-tokens (now " + properties.maxTokens() + ").", null);
+                    + "gamecoach.claude.max-tokens (now " + maxTokens + ").", null);
         }
         Feedback feedback = response.content() == null ? null : response.content().stream()
                 .filter(block -> "tool_use".equals(block.type()) && CoachingPrompt.TOOL_NAME.equals(block.name()))
