@@ -79,7 +79,7 @@ Black Panther|Anti-dive heroes such as The Thing and Winter Soldier, stuns, flyi
 
 Daredevil|A melee dive and flank Duelist and one of the best 1v1 heroes: he picks off isolated targets and guards his backline against flankers. Judge him by KOs and final hits and by staying alive; lower total damage than a sustained-damage Duelist is normal. Accuracy doesn't matter for him: ignore it.
 Daredevil|Radar Sense shows all invisible enemies (including Invisible Woman) and enemies through walls, but only at short range. Good players use it to find isolated targets and call out positions.
-Daredevil|Sonic Pursuit is his engage, and its cooldown resets when he or an ally gets the kill, so good Daredevils chain picks. Devil's Latch pulls him to a target but doesn't stun, so good players save it as an escape. Objection! blocks frontal damage and reflects projectiles; using it to absorb a stun or burst is what keeps him alive.
+Daredevil|Sonic Pursuit is his engage, and its cooldown resets when he or an ally gets the kill, so good Daredevils chain picks. Devil's Latch pulls him to a target but doesn't stun, so good players save it as an escape. Objection! blocks frontal damage and reflects projectiles; using it to absorb a stun or burst is what keeps him alive. Weaving his abilities into the air also helps him survive, especially when Objection! is on cooldown.
 Daredevil|He has almost no answer to flying or long-range heroes. Common mistakes: engaging with Latch and no escape left, getting caught alone, and playing too passively.
 Daredevil|His ultimate, Let the Devil Out, damages enemies in his line of sight with a blind that gets stronger the longer it lasts, and gives him Fury the whole time.
 
