@@ -158,6 +158,26 @@ Iron Man|An air-burst Duelist. Unibeam, his channeled mid-range beam, is his str
 Iron Man|Armor Overdrive powers up his whole kit for a short time; good players use it to apply maximum pressure, occasionally for a sneaky flank. His flight is slow, so hovering in the open is a common way he dies; good players peek from cover and reposition with Hyper-Velocity. Hitscan heroes (Hela, The Punisher) and other flying heroes counter him.
 Iron Man|His ultimate, Invincible Pulse Cannon, is a slow, huge explosion; it's best from an off-angle or a flank to catch enemies off guard, or on stunned or unshielded targets. Fired from far away into a group that can see it, or into a shield, it's wasted.
 
+Mister Fantastic|Listed as a Duelist but very hard to kill and very good in 1v1s and at peeling for his team, so his damage blocked can be high for a Duelist; judge him partly like a tank. He works at medium-to-close range and is slow, so long-range and high-mobility teams can kite him.
+Mister Fantastic|Using abilities builds Elasticity; at full he inflates (more health, a damage aura, a speed boost), so good players cycle abilities quickly. Reflexive Rubber absorbs damage and fires part of it back, but not while inflated. Flexible Elongation is his only movement tool and is also used to peel for allies; good players keep a charge to escape. Distended Grip pulls enemies into his team.
+Mister Fantastic|His ultimate, Brainiac Bounce, is best used when being aggressive, such as taking a flank (which he's decent at alongside another diver) and ulting right after, like Hulk.
+
+Namor|A mid-team Duelist whose turrets track and fire automatically, so he's strong against flankers and divers and weak without turrets; part of his damage comes from them. He's also really good at flanking thanks to high burst with both turrets down plus Wrath of the Seven Seas, which makes the turrets fire faster at its target.
+Namor|Good players place turrets high on walls and change their spots so enemies don't learn them. Blessing of the Deep makes him invulnerable but leaves him no movement afterward; using it to reposition rather than escape is a common way he dies. He loses fights at long range.
+Namor|His ultimate, Horn of Proteus, slams a big area and is deadly at the center; it's best after an ally's stun ultimate such as Groot's or Angela's.
+
+Phoenix|A soft flanker with burst, mobility and self-healing who is also strong playing with her team, because her Sparks spread area damage: three Sparks on an enemy explode, spread and heal her. Like Hela, headshots matter, but less because of the Sparks; accuracy is meaningful.
+Phoenix|Telekinesis Burst stuns briefly and can interrupt channeled ultimates. Single divers don't counter her, but a dive-heavy team can; a Phoenix who hits her shots, like an Elsa Bloodstone or Winter Soldier who does, is very hard to counter. Playing aggressively with no escape or healing left is a common way she dies.
+Phoenix|Her ultimate, Endsong Inferno, destroys shields, summons and bonus health, so it's best as a counter-ultimate after the enemy uses deployables or bonus-health ultimates, not to start a fight. She can be focus fired while floating before the dive.
+
+Squirrel Girl|A group-damage Duelist whose acorns bounce off walls and floors, so she hits enemies who can't see her; strongest on tight maps and against grouped enemies. She struggles to finish single targets, and damage spammed into the frontline without getting kills is wasted, so judge her by kills as well as damage.
+Squirrel Girl|Squirrel Blockade traps the first enemy hit; good players check ammo first so they can finish the trapped target. Tail Bounce is her only escape, so using it early leaves her stuck. Flying, fast and hitscan heroes counter her.
+Squirrel Girl|Her ultimate, Unbeatable Squirrel Tsunami, is best launched from an off-angle or above, or after trapping an out-of-position Duelist or Strategist to secure the kill; fired straight at the enemy, the lead squirrel is easily destroyed.
+
+Storm|A flying Duelist with steady piercing damage that farms ultimate charge well. She buffs allies inside her weather sphere (Tornado for speed, Thunder for damage), so allies must stay near her. She's slow in the air and has no escape.
+Storm|Good players peek from cover with constant vertical movement and line up enemies so Wind Blade pierces several. Goddess Boost is for real 1v1s against divers; switching weather mid-duel wastes time. Hela, Phoenix, The Punisher and Spider-Man counter her.
+Storm|Her ultimate, Omega Hurricane, pulls enemies in; it's best on the backline when enemy Strategists have no defensive ultimate ready, and it can also be used to force out support ultimates. High-damage ultimates such as The Punisher's, or one-shot ultimates such as Iron Man's or Scarlet Witch's, beat it.
+
 Winter Soldier|Usually deals more total damage than dive Duelists such as Black Panther, so compare his damage with other sustained-damage Duelists rather than with divers.
 
 # ---- Strategists ----
