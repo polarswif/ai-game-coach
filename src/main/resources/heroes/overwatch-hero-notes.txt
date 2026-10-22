@@ -8,8 +8,8 @@
 # our own words. Not yet reviewed by a player: corrections welcome.
 # Sombra (reworked into a support), Roadhog (reworked) and Doctrine (new) come from pro and Top 500
 # YouTube guides (Samito, Questron, Awkward, Ants, Z3tliX), summarized by Gemini, checked against the
-# October 6, 2026 patch notes and the user's review. D.Mon, Hazard, Sierra, Anran and Freja were
-# deepened the same way (Ants, Winton_OW2, Awkward, Spilo, BKAir, Asydix).
+# October 6, 2026 patch notes and the user's review. D.Mon, Hazard, Sierra, Anran, Freja and
+# Shion were deepened the same way (Ants, Winton_OW2, Awkward, Spilo, BKAir, Asydix, alvicate).
 
 # ---- Tanks (5v5: one per team, so the tank's deaths swing most fights) ----
 D.Va|Initiator dive tank. Fights at close range: Fusion Cannons lose most damage past about 10-20 m, so long-range poking with D.Va is a waste.
@@ -77,10 +77,11 @@ Zarya|Engage first, then bubble, so enemies keep shooting it; bubbling too early
 Zarya|Graviton Surge pulls enemies together for several seconds and pairs with team ultimates; D.Va's Defense Matrix and similar abilities can eat it. Her bubbles counter Junker Queen's wounds and burst heroes like Junkrat.
 
 # ---- Damage ----
-Anran|Flanker (added Season 1, 2026) who dives with fans and fire: hits build an Ignition meter that sets targets burning; Fan the Flames is a short-range blast that hits much harder on burning targets. Her value comes from assassinating isolated targets, not raw damage: she is poor at poke, so modest damage numbers are normal.
-Anran|Plays at medium-close range from off-angles. Typical engage: one Inferno Rush charge in, Dancing Blaze (a brief invulnerable strike that heals her) to survive the reply, second Rush charge out. Many deaths usually mean poor cooldown management or bad engage timing.
-Anran|Dancing Blaze lasts under a second, so it works best timed against an enemy ability (it can phase through Sleep Dart). Vermillion Ascent leaves her a sitting duck while starting, so start it from cover, never right in front of enemies; Heat Shield and Hungering Blaze are common perk picks.
-Anran|Strong into Widowmaker and Hanzo; countered by crowd control and burst (Cassidy, Junkrat, Vendetta, Ana, Roadhog, Sigma, Jetpack Cat). Cleanses remove her burn.
+Anran|Flanker (added Season 1, 2026) who dives with fans and fire: hits build an Ignition meter that sets targets burning (a couple of headshots or a few body shots ignite), and Fan the Flames is a short-range blast that hits much harder on burning targets. She is poor at poke, so modest damage numbers are normal; her value is pressure and picks.
+Anran|Hit-and-run style: touch the fight, burn several targets, force cooldowns, and get out before the enemy reacts, then come back from a new angle. Staying past her first burst window or tunneling one target feeds the enemy ultimate charge and usually gets her killed; many deaths usually mean poor cooldown management or bad engage timing.
+Anran|Typical engage: one Inferno Rush charge in, Dancing Blaze (a brief invulnerable strike that hits nearby enemies and heals her) to survive the reply, second Rush charge out. Dancing Blaze works best timed against an enemy ability (it can phase through Sleep Dart) and can turn a deep position into an escape.
+Anran|Vermillion Ascent charges at a target and explodes (often combined with Dancing Blaze for a kill); start it from cover, never right in front of enemies. Vermillion Revival brings her back after dying to swing the fight. Perk picks vary between creators (longer burn and faster dashes, or Heat Shield and Hungering Blaze).
+Anran|Targets isolated, distracted enemies and supports; strong into Widowmaker and Hanzo. Countered by crowd control and burst (Cassidy, Junkrat, Vendetta, Ana, Roadhog, Sigma, Jetpack Cat). Cleanses remove her burn.
 Ashe|Sharpshooter who plays mid to long range: scoped shots for big damage, hip fire to finish. Weak up close, so she needs her team near her.
 Ashe|Coach Gun is mainly for escaping and reaching high ground, not for damage; using it to engage leaves her with no escape. Dynamite plus a shot on it is her area damage (good over barriers).
 Ashe|B.O.B. charges in, knocks enemies up and then shoots as a turret: best used to launch a group and follow up with headshots and Dynamite. Stuns and sleeps can stop him.
@@ -127,9 +128,10 @@ Reaper|Flanker who excels at close range, especially against tanks; his shotguns
 Reaper|Plays aggressively when Wraith Form (invulnerable, fast, reloads) is ready and cautiously when it isn't; Wraith Form also dodges hooks, charges and flashbangs.
 Reaper|Shadow Step is loud and leaves him immobile, so it's poor near snipers. Death Blossom needs him close to several enemies, can't be cancelled, and is stopped by stuns; check for enemy crowd control first.
 Reaper|Weak at mid to long range; Pharah, Echo and long-range heroes beat him.
-Shion|Flanker (added Season 3, 2026) with hitscan dual pistols and Execution, a short-range shotgun blast (140 damage at full spread) for burst.
-Shion|Evade dashes through enemies and gives overhealth; Joyride (a bike) is for flanking, reaching high ground, escaping, then launching it as an explosive.
-Shion|Starts her ultimate from a flank, since she stays almost still during it. Ana's sleep, hinders and Widowmaker punish her; health packs heal her more than most heroes.
+Shion|Flanker (added Season 3, 2026) with hitscan dual pistols (tap-firing is more accurate than holding) and Execution, a short-range X-shaped shotgun blast that tightens as it's held. Her job is pressure from off-angles: pinning supports and forcing enemies to turn around.
+Shion|Evade dashes through enemies and gives short-lived overhealth: it must be used before taking damage, so using it only after being hit wastes it. Joyride (a bike) is for flanking, reaching high ground, escaping, then launching it into enemies for damage.
+Shion|Plays near her team but not stacked on it, looking for angles and tracking enemy cooldowns. When a support spends a big save (Kiriko's Suzu, Life Grip) on her target, the job is done: back off instead of forcing the kill. Tunnel vision without tracking cooldowns is a common mistake.
+Shion|Satsuriku Spree gives several dashes with lock-on shots; she doesn't have to use them all at once and can wait out enemy cooldowns, and combining it with Joyride sets up kills. Ana's sleep, hinders and Widowmaker punish her; Mauga is hard for her. Health packs heal her more than most heroes.
 Sierra|Recon damage hero (added Season 2, 2026) with an automatic rifle that tightens from a spread into a beam; her value comes from Anchor Drone, which gives two grapple points to dip in and out of cover. Without the drone she has no escape, so it is often saved for retreating.
 Sierra|Plays off-angles rather than the main lane (some pros poke from the main line first and move to an off-angle once the fight starts); playing like a stationary main-lane hero wastes her. Backing off as soon as her tank or teammates die avoids feeding.
 Sierra|Tracking Shot marks a target so her rifle auto-tracks it for a few seconds (needs line of sight). Pros use it and Tremor Charge freely to surprise and burst an isolated target rather than holding them; landing the opening pick and cleaning up with the team is her game plan.
