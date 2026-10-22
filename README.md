@@ -87,7 +87,7 @@ In the analysis, a percent difference is `null` when it can't be compared fairly
 - [ ] Match history screenshot (round score) and tracker.gg as optional extras
 - [x] Overwatch career stats and analysis (OverFast)
 - [x] Overwatch match coaching from match report screenshots
-- [x] Overwatch hero notes (researched; Sombra, Roadhog and Doctrine still to write)
+- [x] Overwatch hero notes for every hero (researched, plus pro guides for Sombra, Roadhog and Doctrine)
 - [ ] React frontend
 - [ ] Saved match history (database)
 - [ ] Authentication and deployment

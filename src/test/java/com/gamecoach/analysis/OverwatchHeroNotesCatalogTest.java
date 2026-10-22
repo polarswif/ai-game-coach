@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,20 +13,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class OverwatchHeroNotesCatalogTest {
 
-    /** Reworked or new heroes the user writes from play experience. */
-    private static final Set<String> LEFT_FOR_THE_USER = Set.of("Sombra", "Roadhog", "Doctrine");
-
     private final OverwatchHeroCatalog heroes = new OverwatchHeroCatalog();
     private final OverwatchHeroNotesCatalog notes = new OverwatchHeroNotesCatalog();
 
     @Test
-    void everyHeroHasNotesExceptTheOnesLeftForTheUser() {
+    void everyHeroInTheTableHasNotes() {
         for (String hero : heroes.heroNames()) {
-            if (LEFT_FOR_THE_USER.contains(hero)) {
-                assertTrue(notes.forHero(hero).isEmpty(), hero + " should be left for the user");
-            } else {
-                assertFalse(notes.forHero(hero).isEmpty(), hero + " has no notes");
-            }
+            assertFalse(notes.forHero(hero).isEmpty(), hero + " has no notes");
         }
     }
 

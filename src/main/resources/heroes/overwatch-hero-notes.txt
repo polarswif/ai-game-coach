@@ -6,8 +6,9 @@
 # Researched October 2026 (Season 5: A Grim Doctrine) from the Overwatch Wiki
 # (overwatch.weirdgloop.org) hero pages and community guides (Mobalytics, esports.gg), written in
 # our own words. Not yet reviewed by a player: corrections welcome.
-# Sombra (reworked into a support), Roadhog (reworked) and Doctrine (new) are left for the user to
-# write from play experience.
+# Sombra (reworked into a support), Roadhog (reworked) and Doctrine (new) come from pro and Top 500
+# YouTube guides (Samito, Questron, Awkward, Ants, Z3tliX), summarized by Gemini, checked against the
+# October 6, 2026 patch notes and the user's review.
 
 # ---- Tanks (5v5: one per team, so the tank's deaths swing most fights) ----
 D.Va|Initiator dive tank. Fights at close range: Fusion Cannons lose most damage past about 10-20 m, so long-range poking with D.Va is a waste.
@@ -52,6 +53,10 @@ Reinhardt|Stalwart frontline tank: Barrier Field is the largest barrier in the g
 Reinhardt|Good Reinhardt keeps a few meters in front of his team, swings when enemies come close, and lowers the barrier to trade only when his team can follow. Long-range maps without cover are hard for him.
 Reinhardt|Charge is strongest at short range or around corners; charging deep into the enemy team is his most common death. Fire Strike (two charges, pierces barriers) is his ranged damage and ultimate charge.
 Reinhardt|Earthshatter knocks down everyone in front in a line but is stopped by other barriers. Orisa counters him hard; flankers and strong barrier-breakers (Mei's Blizzard, Dragonblade, Rip-Tire) punish him.
+Roadhog|Reworked in October 2026: his gun fires two bursts per trigger (12 ammo), his old right-click is gone, and the new Trash Compactor absorbs projectiles in front of him for about 2 seconds, then fires them back as an explosive that grows with what it absorbed. His mitigation comes mostly from Trash Compactor and Take a Breather.
+Roadhog|Plays for steady pressure rather than fishing for one-shot hooks: the hook's stun is shorter and pulls targets less close than before, so hook combos are much less reliable, especially on mobile heroes.
+Roadhog|Patient style: poke from cover until the enemy spends its big cooldowns, then push. Push aggressively only while Trash Compactor is ready, and save it for when he or a teammate is being shot rather than using it early; many deaths usually mean over-committing without it.
+Roadhog|Take a Breather heals faster but for a shorter time and has a longer cooldown than before. Whole Hog pushes enemies back: best used after the enemy commits (not popped early) to peel for the team or finish a hooked target; a perk makes his hook come back much faster during Whole Hog.
 Sigma|Stalwart poke tank: Hyperspheres bounce off walls and explode, so he fights at range and around corners.
 Sigma|Experimental Barrier can be placed far away and recalled to regenerate; Kinetic Grasp absorbs projectiles in front and turns them into overhealth. Both are his mitigation; rotating them (barrier, then drop it and absorb) is the core skill.
 Sigma|Accretion knocks down a target and is best saved for interrupting or finishing a fleeing enemy. Gravitic Flux lifts enemies in an area then slams them for half their max health; it pairs well with team damage.
@@ -167,6 +172,12 @@ Brigitte|Survivor brawler support: her flail, Whip Shot and Shield Bash hits tri
 Brigitte|She protects her backline from divers and flankers (peeling): Whip Shot knocks them away (or off high ground), Shield Bash stuns, Barrier Shield blocks. Her mitigation comes from Barrier Shield.
 Brigitte|Repair Pack (three charges) heals at range through barriers. She should stay grouped, since Inspire needs line of sight; Whip Shot in the open makes her easy to headshot.
 Brigitte|Rally gives her armor and nearby allies overhealth for a team push. Burst damage (Junkrat, Bastion), snipers and close-range tanks are her main threats.
+Doctrine|Support added in Season 5 (October 2026): a mid-range hero whose shots heal allies or damage enemies (headshots count), with Infuse charges (right click) that empower his next shot or ability. Holding about one and a half charges going into a fight, instead of spending them on poke, is a key habit.
+Doctrine|Not a heal-bot: he switches constantly between damage and healing, dealing damage when no one is in danger, but team survival comes first. Plays from mid range and high ground with off-angles; standing in the open or flanking deep early in fights gets him picked.
+Doctrine|Shrouded Momentum dashes him (it becomes flight with right click) and briefly reduces damage taken; it is his escape from divers and should be used as soon as he's engaged, not held until critical or used to go in. Many deaths usually mean misusing it.
+Doctrine|Invigorating Drones heal an ally and boost their attack speed: best on allies who are actively fighting or about to get a kill (Sojourn, Tracer, Vendetta), wasted on allies not engaging.
+Doctrine|Deliverance bounces between targets for several seconds, giving allies overhealth and lowering enemies' max health. Use it to take space or swing a fight (strong against enemy sustain ultimates), not as a panic button: its cast is too slow to save him when low. Sombra's EMP can cancel it, and shooting Doomfist's Power Block charges his punch.
+Doctrine|Divers punish him more than most supports when he is caught out of position. The Transfusion perk (damage and healing build Infuse) is the usual major pick.
 Illari|Survivor support who pokes from off-angles with a charged hitscan rifle (always fire at full charge) and heals with a short-range beam that runs out of energy.
 Illari|Healing Pylon heals the lowest-health ally nearby and should be placed out of enemy sight; much of her healing comes from it, so a pylon that keeps getting destroyed costs her team.
 Illari|Outburst launches her and knocks back nearby enemies: her tool against dives and her escape from area ultimates.
@@ -203,6 +214,12 @@ Moira|Medic support with no aim needed for healing: Biotic Grasp sprays healing 
 Moira|Survival first: Fade makes her invulnerable and fast, her escape from burst and flankers and her way to high ground. Biotic Orb (healing or damage) bounces off walls.
 Moira|Her damage beam ignores barriers but her damage is low per second; high damage numbers with low healing can mean she neglected her team.
 Moira|Coalescence heals allies and damages enemies in a long beam and is cancelled by stuns; Roadhog, Torbjorn and Soldier: 76 beat her in duels.
+Sombra|Reworked in October 2026 into a Tactician support: a defensive utility healer who protects her team, not a flanker. Playing her like the old damage Sombra (deep flanks, chasing one target) is the most common mistake and gets her killed; as a support she is hunted more, so staying alive comes first.
+Sombra|Hotfix (2 charges) heals an ally over several seconds and also hacks health packs and most enemy deployables; taking damage interrupts a hack. Good Sombras keep Hotfix in constant use and keep hacking health packs, so her healing comes from steady uptime rather than big bursts.
+Sombra|Anchors near a hacked health pack and plays defensively: lets enemies commit their cooldowns, then drops Cyberspace, a zone that damages enemies and heals allies, and makes enemies inside deal and heal 50% less. Strong against dive (Winston, other divers).
+Sombra|Translocator teleports her and gives stealth; it is her escape and her way to reposition. Many deaths on Sombra usually mean playing too aggressively or using Translocator to go in with no way out.
+Sombra|EMP is her main way to start a fight, best when enemies are grouped and started outside stealth so Translocator is still ready afterwards. The Life Hack perk (EMP also applies Hotfix to nearby allies) and Data Packet perk (health-pack hacks cut Hotfix's cooldown) are the common picks.
+Sombra|She can see which enemies have their ultimate ready. Hanzo can take her health-pack value, since one of his perks also hacks health packs.
 Wuyang|Survivor support (added Season 18, August 2025): a steerable water orb (holding it longer powers the explosion, ignores barriers) for damage and a channeled healing stream that passively keeps healing one ally.
 Wuyang|He can't fire while channeling the stream, so damage and healing compete; letting the stream energy recharge instead of feathering it keeps healing up.
 Wuyang|Guardian Wave heals, boosts healing received and knocks back enemies. Tidal Blast puts a big shield on an ally that later explodes to heal and knock down enemies; it counters Dragonblade and pairs with tanks and divers.
