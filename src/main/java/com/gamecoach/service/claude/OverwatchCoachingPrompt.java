@@ -65,8 +65,12 @@ final class OverwatchCoachingPrompt {
                 the objective to take space (ahead of the payload or robot, or on the enemy's side) is \
                 often the right play, especially for tanks. Never call low contest time a weakness by \
                 itself; mention it only alongside other evidence, such as many deaths away from the team.
-                - Mention a hero ability only if it appears in the hero-specific stats or you're sure it \
-                exists in the current game: Overwatch reworks heroes often. Otherwise give role-level advice.
+                - HERO NOTES, when given, are researched knowledge of how the hero plays now. Trust them over \
+                general assumptions and use them to read the stats (for example, what a hero's mitigation \
+                comes from, or why low damage is normal for them).
+                - Mention a hero ability only if it appears in the HERO NOTES or hero-specific stats, or \
+                you're sure it exists in the current game: Overwatch reworks heroes often. Otherwise give \
+                role-level advice.
                 - The match result is context, never a strength or weakness: the player can't win or lose alone.
                 - Match closeness: use the MATCH CLOSENESS section. CLOSE: coach normally. ONE-SIDED loss: \
                 most numbers reflect the mismatch, so don't pile on totals like deaths; focus on what the \
@@ -92,7 +96,8 @@ final class OverwatchCoachingPrompt {
                 """;
     }
 
-    static String userMessage(OverwatchMatch match, OverwatchPlayerAnalysis a) {
+    /** @param heroNotes notes for the coached player's heroes, hero name to notes; may be empty */
+    static String userMessage(OverwatchMatch match, OverwatchPlayerAnalysis a, Map<String, List<String>> heroNotes) {
         StringBuilder s = new StringBuilder();
         s.append("MATCH\n");
         s.append("Mode: ").append(orUnknown(match.mode())).append(" | Map: ").append(orUnknown(match.map()))
@@ -120,6 +125,13 @@ final class OverwatchCoachingPrompt {
         s.append("Team composition (tanks-damage-supports): ").append(a.teamComposition())
                 .append(" | Enemy: ").append(a.enemyComposition()).append('\n');
         s.append("Eliminations per death: ").append(a.eliminationsPerDeath()).append("\n\n");
+
+        if (!heroNotes.isEmpty()) {
+            s.append("HERO NOTES (researched; how the hero plays now)\n");
+            heroNotes.forEach((hero, notes) -> notes.forEach(note ->
+                    s.append("- ").append(hero).append(": ").append(note).append('\n')));
+            s.append('\n');
+        }
 
         if (!a.heroStats().isEmpty()) {
             s.append("HERO-SPECIFIC STATS (Personal screen, this match only)\n");

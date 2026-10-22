@@ -1,0 +1,213 @@
+# Overwatch hero notes for the coach, sent to Claude when the coached player played that hero.
+# Format: hero|note, several lines per hero; names as in overwatch-heroes.csv (case, spaces,
+# punctuation and accents are ignored, so "Torbjorn" and "Lucio" work).
+# Keep notes about how a hero plays and how to read their stats. Avoid exact numbers that change
+# with balance patches.
+# Researched October 2026 (Season 5: A Grim Doctrine) from the Overwatch Wiki
+# (overwatch.weirdgloop.org) hero pages and community guides (Mobalytics, esports.gg), written in
+# our own words. Not yet reviewed by a player: corrections welcome.
+# Sombra (reworked into a support), Roadhog (reworked) and Doctrine (new) are left for the user to
+# write from play experience.
+
+# ---- Tanks (5v5: one per team, so the tank's deaths swing most fights) ----
+D.Va|Initiator dive tank. Fights at close range: Fusion Cannons lose most damage past about 10-20 m, so long-range poking with D.Va is a waste.
+D.Va|Defense Matrix eats projectiles in front of her (not beams, melee or area damage) and is her main mitigation. Good use: blocking key cooldowns and ultimates for the team or for allies diving with her, not holding it at random.
+D.Va|Boosters engages or escapes in one button. Micro Missiles are strongest at close range alongside Defense Matrix.
+D.Va|When the mech dies she ejects into a fragile pilot form; a mech loss is not a death on its own, but losing the mech often in a fight is a positioning warning. Self-Destruct is blocked by cover and is best used to zone or to finish a fight, not thrown into open sightlines.
+D.Mon|Stalwart melee brawler (added Season 4, 2026): fights with a Plasma Saber in her mech and holds a frontal Power Barrier; Propulsors give strong horizontal dashes on an energy meter.
+D.Mon|Her main weakness is height: enemies above her or on high ground are hard to reach. Fight on flat ground and around corners, like other melee tanks.
+D.Mon|Surging Strike needs Power Barrier up and pushes enemies back; Fusion Repeater lowers the barrier briefly while firing, so firing it is a trade between damage and protection.
+D.Mon|When the mech breaks she ejects into a pilot form with a machine gun and must rebuild the mech with Call Mech. Limit Break hits through shields, grants her overhealth and makes enemies take more damage, so it is best on grouped enemies with the team ready to follow.
+D.Mon|Struggles into Mauga, Reinhardt, Roadhog and Orisa and badly into Bastion and Torbjorn; does well into Sigma and Domina.
+Domina|Stalwart poke tank (added Season 1, 2026): plays slow and positional from behind cover on long sightlines. No mobility and a large hitbox, so overextending or being caught in the open is her biggest risk.
+Domina|Photon Magnum ignores barriers and rewards holding the trigger on one target (letting go resets its charge); her ability damage refills her shields, so landing Crystal Charge and Sonic Repulsors keeps her alive.
+Domina|Sonic Repulsors is her answer to divers: knock them into a wall for a stun. Barrier Array is a segmented wall that blocks for 8 seconds; mitigation comes mostly from it.
+Domina|Panopticon cages one enemy and later implodes for heavy damage: best on a key target the team can focus. Sombra's EMP breaks it, and Ramattra's Pummel pierces her barrier.
+Doomfist|Initiator dive tank and a combo hero: Rocket Punch (charged lunge, wall slam for extra damage and stun), Seismic Slam and Power Block. Ability damage gives him overhealth, so trading hits with abilities keeps him alive.
+Doomfist|Power Block cuts frontal damage by 75% and, after blocking enough damage, empowers his next Rocket Punch: blocking damage aimed at teammates is a reliable way to charge it. Most of his mitigation comes from Power Block.
+Doomfist|Charge Rocket Punch behind cover (he barely moves while charging), and keep an escape: running out of cooldowns deep in the enemy team is his most common death. Stuns, knockdowns and Sombra-type interrupts cancel his abilities.
+Doomfist|Hand Cannon is a short-range shotgun (weak past about 12 m) used between abilities to finish targets. Meteor Strike makes him untargetable while aiming and is also a safe way to escape or reset cooldowns.
+Hazard|Initiator brawler tank with a short-range shotgun (Bonespur, ignores barriers), Spike Guard (blocks frontal damage and fires homing spikes), Violent Leap (leap plus slash) and Jagged Wall.
+Hazard|Spike Guard is his main mitigation and should be used often, not saved for low health; it also reloads his shotgun. He fights in short leap-sized hops from corners and should reload before committing.
+Hazard|Jagged Wall cuts off escapes, blocks sightlines or protects a flank. Downpour roots enemies in a wide line, passes through walls and pulls down fliers; barriers and projectile-blocking abilities stop it.
+Hazard|Excels at isolating low-mobility heroes; struggles against crowd control (stuns, knockbacks) and must be in close range to do damage. Strong on wall-heavy maps and chokes, weaker on open maps.
+Junker Queen|Stalwart brawler who heals by wounding enemies (Jagged Blade, Carnage, melee and Rampage apply wounds and she lifesteals from them). She has no barrier or damage block, so low mitigation is normal for her.
+Junker Queen|Burst-and-commit style: engage, spend Jagged Blade (throw, then recall to pull an enemy), Carnage and her shotgun, secure a kill, then back off while cooldowns are down. Pulling a squishy out of position with the blade is her best play.
+Junker Queen|Commanding Shout gives overhealth and speed to her and nearby allies; spending it at the start of a fight leaves nothing to survive the middle of it.
+Junker Queen|Ana's Biotic Grenade cuts her self-healing, Kiriko's Suzu and Zarya's barriers cleanse wounds, and Mei's slows and walls stop her engages. Rampage reduces enemy healing by 100%, so it pairs well with a team dive.
+Mauga|Bruiser tank with two chainguns: one ignites targets, the other always crits burning targets, and his crits give him temporary overhealth. Large hitbox and no defensive barrier, so he depends on dealing damage to survive.
+Mauga|Cardiac Overdrive (damage reduction plus lifesteal for him and nearby allies) is his main sustain; using it during a big damage trade wins fights, using it with no one to shoot wastes it.
+Mauga|Overrun is an unstoppable charge for engaging or escaping; he can't shoot during it. Cage Fight chains enemies inside a barrier with him, cutting them off from their team's help.
+Mauga|Weak to burst and anti-heal (Ana's grenade cuts his lifesteal); Zarya's bubbles and Kiriko's Suzu remove burn. Kiting him at range takes away his sustain.
+Orisa|Bruiser tank that tanks through cooldowns, not a barrier (by default): Fortify (damage reduction, overhealth and crowd-control immunity) and Javelin Spin (blocks projectiles and melee from the front) are her mitigation.
+Orisa|Strongest at close to mid range. Rotating Fortify and Spin is the core skill: using both at once leaves a long window where she is just a big target.
+Orisa|Energy Javelin stuns and interrupts: good for cancelling key abilities (charges, Take a Breather, Earthshatter channels). Fortify does not save her from Whole Hog-style knockback damage.
+Orisa|Weak when flanked or surrounded because Spin only protects the front; strong into Reinhardt and other close-range tanks.
+Ramattra|Stalwart tank who switches forms. Omnic Form: Void Accelerator (no damage falloff, ignores barriers) and Void Barrier (placeable barrier up to 35 m away). Nemesis Form: armor, speed, Pummel and Block.
+Ramattra|Pummel's punches pierce enemies and barriers, so its misses are never caused by barriers; low Pummel accuracy means swinging at targets out of its 10 m range, at moving targets, or around corners.
+Ramattra|Nemesis Form is where he deals burst damage and survives (big armor bonus); Omnic Form is for poking and repositioning. Cancelling Nemesis early when not punching brings its cooldown back sooner.
+Ramattra|Block reduces frontal damage by 75% with no cooldown while in Nemesis Form but slows him and doesn't cover flanks. His mitigation comes from Void Barrier and Block.
+Ramattra|Ravenous Vortex slows and pulls enemies down (stops escapes, grounds jumpers and Doomfist); weak against fliers. Annihilation lasts much longer while it keeps hitting enemies, and resets Nemesis Form when it ends.
+Reinhardt|Stalwart frontline tank: Barrier Field is the largest barrier in the game and his main mitigation; Rocket Hammer is melee only, so he needs to close distance through cover or with his team.
+Reinhardt|Good Reinhardt keeps a few meters in front of his team, swings when enemies come close, and lowers the barrier to trade only when his team can follow. Long-range maps without cover are hard for him.
+Reinhardt|Charge is strongest at short range or around corners; charging deep into the enemy team is his most common death. Fire Strike (two charges, pierces barriers) is his ranged damage and ultimate charge.
+Reinhardt|Earthshatter knocks down everyone in front in a line but is stopped by other barriers. Orisa counters him hard; flankers and strong barrier-breakers (Mei's Blizzard, Dragonblade, Rip-Tire) punish him.
+Sigma|Stalwart poke tank: Hyperspheres bounce off walls and explode, so he fights at range and around corners.
+Sigma|Experimental Barrier can be placed far away and recalled to regenerate; Kinetic Grasp absorbs projectiles in front and turns them into overhealth. Both are his mitigation; rotating them (barrier, then drop it and absorb) is the core skill.
+Sigma|Accretion knocks down a target and is best saved for interrupting or finishing a fleeing enemy. Gravitic Flux lifts enemies in an area then slams them for half their max health; it pairs well with team damage.
+Sigma|Very little mobility, so overextending is heavily punished; beams, melee and area damage go straight through Kinetic Grasp.
+Winston|Initiator dive tank: Tesla Cannon is a short-range auto-hitting beam that ignores barriers and hits several targets at once, and charged secondary fire gives him a long-range poke.
+Winston|Winston's damage is low by design; his job is diving the backline (supports and snipers) with his team and creating chaos. Low damage numbers alone are not a weakness for him.
+Winston|Typical burst: charge secondary fire, Jump Pack in, then fire and melee. Diving alone without his team following is his most common death. Barrier Projector is his mitigation and protects him and allies in its bubble.
+Winston|Strong into Genji, Tracer and other mobile squishies; struggles into Roadhog, Reaper and D.Va. Primal Rage is also an emergency life-saver (it fully heals him).
+Wrecking Ball|Initiator tank who rolls, swings with Grappling Claw and slams with Piledriver; he disrupts, scouts and picks off weak targets rather than holding a front line.
+Wrecking Ball|Adaptive Shield gives overhealth that grows with nearby enemies and can be shared with allies; that and his high mobility are how he survives, not damage reduction.
+Wrecking Ball|Good Ball engages with his team (or right before it), knocks enemies out of position, then rolls out before he is caught; stuns, hooks and sleeps knock him out of ball form and are his main dangers.
+Wrecking Ball|Minefield works best air-cast combined with Piledriver to slam enemies onto the mines. In overtime his roll keeps contesting the objective.
+Zarya|Bruiser tank whose damage scales with Energy, gained when her bubbles absorb damage. A Zarya with high energy is the biggest damage threat on the field; low energy means low damage, so her damage numbers depend on bubbles being shot.
+Zarya|Particle Barrier (self) and Projected Barrier (on an ally) share two charges and absorb damage and most status effects for about 2 seconds. Timing bubbles against predictable burst (or to save a diving ally) is the core skill and her main mitigation.
+Zarya|Engage first, then bubble, so enemies keep shooting it; bubbling too early wastes it. Her beam ignores barriers and Defense Matrix.
+Zarya|Graviton Surge pulls enemies together for several seconds and pairs with team ultimates; D.Va's Defense Matrix and similar abilities can eat it. Her bubbles counter Junker Queen's wounds and burst heroes like Junkrat.
+
+# ---- Damage ----
+Anran|Flanker (added Season 1, 2026) who dives with fans and fire: hits build an Ignition meter that sets targets burning; Fan the Flames is a short-range blast that hits much harder on burning targets.
+Anran|Plays at medium-close range from off-angles, isolating backline targets. Typical engage: one Inferno Rush charge in, Dancing Blaze (a brief invulnerable strike that heals her) to survive the reply, second Rush charge out. Spending both dashes going in leaves no escape.
+Anran|Dancing Blaze lasts under a second, so it works best timed against an enemy ability (it can phase through Sleep Dart), not pressed early. Her ultimate is either Vermillion Ascent (a charging explosion for kills) or Vermillion Revival (comes back after dying).
+Anran|Stuns, slows and knockbacks are her biggest threats; long-range heroes that stay out of Fan the Flames' range (Ashe on long sightlines) beat her. Cleanses remove her burn.
+Ashe|Sharpshooter who plays mid to long range: scoped shots for big damage, hip fire to finish. Weak up close, so she needs her team near her.
+Ashe|Coach Gun is mainly for escaping and reaching high ground, not for damage; using it to engage leaves her with no escape. Dynamite plus a shot on it is her area damage (good over barriers).
+Ashe|B.O.B. charges in, knocks enemies up and then shoots as a turret: best used to launch a group and follow up with headshots and Dynamite. Stuns and sleeps can stop him.
+Ashe|Divers (D.Va, Doomfist, Winston) and Orisa's Fortify and Javelin Spin give her trouble.
+Bastion|Specialist who switches between Recon (mobile SMG with headshots) and Assault (stationary-ish turret with huge damage and damage reduction). Huge damage numbers are normal for him.
+Bastion|Pokes in Recon and saves Assault for when enemies commit or for breaking tanks and barriers; changing position between Assault windows keeps him alive. His back is weak in turret form, so flankers punish him.
+Bastion|Artillery (stationary, up to three big shells) is best on enemies that can't move away: after crowd control or on an objective.
+Bastion|Very weak into D.Va's Defense Matrix and fast flankers; pairs well with a barrier tank and pocket healing.
+Cassidy|Sharpshooter mid-range duelist with a hitscan revolver; headshots matter a lot. Combat Roll dodges, reduces damage taken and reloads; it is his escape and reload, not an engage tool.
+Cassidy|Flashbang slows and stops movement abilities: his answer to Tracer, Doomfist, Genji and other divers. Using it early on a tank wastes it.
+Cassidy|Low mobility and loud footsteps make lone flanks risky; he wants to stay near his team, ideally on high ground.
+Cassidy|Deadeye locks onto several enemies and must keep line of sight; it is strongest from high ground or as a surprise, and is easily cancelled by stuns or punished by snipers. D.Va's Defense Matrix blocks his shots.
+Echo|Recon hero who flies: Tri-Shot (three-bolt volleys), Sticky Bombs for burst, Flight to dash and Focusing Beam, which deals huge damage only to targets below half health.
+Echo|Plays from off-angles on the edges of the fight, opening with Sticky Bombs on targets who can't see her. Flight is mainly an escape; using it to dive leaves her exposed.
+Echo|Starting Focusing Beam before the target is clearly under half health wastes it. Duplicate copies an enemy hero for 15 seconds (choose by kit or ultimate) and charges that hero's ultimate very fast.
+Echo|Hitscan heroes (Soldier: 76, Emre, Cassidy, Ashe, Widowmaker) and D.Va are her biggest counters.
+Emre|Specialist (added Season 1, 2026) with a three-round burst rifle that can aim down sights with no movement penalty; strong at mid range and close quarters with self-sustain, but lower raw damage than Soldier: 76 or Cassidy.
+Emre|Siphon Blaster is a short lifesteal pistol with extra speed and jump: save it for close fights, since without it he is vulnerable. Cyber Frag grenades (two charges) are his main burst damage.
+Emre|Override Protocol lets him fly and fire heavy rounds for several seconds; start it from cover, not while under fire. Favoured into Echo and Pharah, struggles into Widowmaker.
+Freja|Recon hybrid sniper: an automatic crossbow plus Take Aim, a sticky explosive bolt. Two direct explosive bolts can kill a 250-health hero; the explosion alone can't headshot.
+Freja|Quick Dash (two charges) resets Take Aim and chases targets; keeping one charge to escape divers is important. Updraft lifts her high to reach high ground or shoot over cover, but she is an easy target in the air for hitscan heroes.
+Freja|Plays behind a front-line tank or on a soft flank, ideally on high ground. Bola Shot needs a direct hit to slow and pull; it's best saved for divers trying to escape or to set up team kills.
+Freja|Close-range mobile heroes (D.Va, Doomfist, Genji, Lucio) catch her, and long-range hitscans punish Updraft. Her final blows also charge her ultimate faster.
+Genji|Flanker who wins by finishing low-health targets: Swift Strike resets its cooldown on eliminations, so chaining kills is his strength and his damage total can be modest for his impact.
+Genji|Plays mid-range with shuriken until a target is weak, then commits. Diving without a low target or his ultimate gets him killed.
+Genji|Deflect reflects projectiles but not beams, area damage or melee-like abilities; baiting enemy abilities into it is a core skill.
+Genji|Dragonblade is a short melee ultimate: best within melee range of weakened enemies and alongside a team engage. Winston and Zarya (beams he can't deflect), Sigma's Accretion and stuns are hard for him.
+Hanzo|Sharpshooter with charged arrows (travel time, big headshots); plays patiently from off-angles. Storm Arrows give a short burst of fast arrows.
+Hanzo|Sonic Arrow reveals enemies in an area and is best used for information before fights. Spraying arrows into crowds instead of aiming for headshots wastes his potential.
+Hanzo|Dragonstrike passes through walls and barriers and is strongest combined with crowd control (Graviton Surge, Earthshatter, Blizzard).
+Hanzo|Winston, Genji and Reaper beat him up close.
+Junkrat|Specialist who controls areas with bouncing grenades; his explosives don't hurt himself. Grenades are aimed at areas and chokes, not single moving targets.
+Junkrat|Steel Trap roots an enemy (often to guard a flank); Concussion Mine deals damage and launches enemies or Junkrat himself for mobility.
+Junkrat|RIP-Tire is a steerable explosive that leaves him helpless while driving it; it works best on supports from side routes.
+Junkrat|Pharah, D.Va's Defense Matrix and Genji's Deflect are his main counters.
+Mei|Specialist with 300 health who controls space: her beam slows, Icicle (right click) can headshot, Ice Wall blocks movement and sightlines, and Cryo-Freeze makes her invulnerable and heals her.
+Mei|Ice Wall is a decision tool: cutting off retreats, splitting the enemy team, or blocking a sightline. A badly placed wall can block her own team. Her mitigation comes from her walls and Cryo-Freeze.
+Mei|Strong in duels and at close to mid range; weak to long-range hitscan heroes. Using Cryo-Freeze when death is certain only delays it; baiting enemy cooldowns with it is better.
+Mei|Blizzard slows and freezes enemies in a wide area after a short delay; it pairs with team ultimates.
+Pharah|Recon hero who fights from the air with rockets; she depends on staying airborne (hover fuel, Jump Jet, Jet Dash).
+Pharah|Hitscan heroes (Widowmaker, Ana, Soldier: 76, Cassidy, Ashe) punish her; she wants to target heroes who can't shoot up well (Reaper, Mei, Junkrat). A pocket healer (Mercy) helps her a lot.
+Pharah|Concussive Blast knocks enemies off ledges or away and also moves her. Barrage makes her stationary in the air and is cancelled by stuns; use it with crowd control or from a hidden angle.
+Reaper|Flanker who excels at close range, especially against tanks; his shotguns lose most damage past about 10-20 m, and he heals from damage he deals.
+Reaper|Plays aggressively when Wraith Form (invulnerable, fast, reloads) is ready and cautiously when it isn't; Wraith Form also dodges hooks, charges and flashbangs.
+Reaper|Shadow Step is loud and leaves him immobile, so it's poor near snipers. Death Blossom needs him close to several enemies, can't be cancelled, and is stopped by stuns; check for enemy crowd control first.
+Reaper|Weak at mid to long range; Pharah, Echo and long-range heroes beat him.
+Shion|Flanker (added Season 3, 2026) with hitscan dual pistols and Execution, a short-range shotgun blast (140 damage at full spread) for burst.
+Shion|Evade dashes through enemies and gives overhealth; Joyride (a bike) is for flanking, reaching high ground, escaping, then launching it as an explosive.
+Shion|Starts her ultimate from a flank, since she stays almost still during it. Ana's sleep, hinders and Widowmaker punish her; health packs heal her more than most heroes.
+Sierra|Recon hero (added Season 2, 2026) with an automatic rifle; her value comes from Anchor Drone: grapple to it for an attack angle, deal damage, then grapple out. Without the drone she has no escape.
+Sierra|Tracking Shot marks a target so her rifle shots auto-track it for a few seconds without using ammo; it needs line of sight. Using Tremor Charge first and Tracking Shot second gets more out of the tracking time.
+Sierra|Place the drone at a steep, protected angle with an escape route. After she has used Tracking Shot or Anchor Drone her threat drops, so enemies push her then.
+Sierra|Trailblazer drops bombs from a drone that reach around corners and high ground; best fired right after enemies use defensive abilities. Snipers punish her in the air.
+Sojourn|Sharpshooter with a rapid railgun whose hits build energy for Charged Shot, a piercing hitscan shot up to 120 damage. Very aim-dependent.
+Sojourn|Power Slide repositions (jump-cancel for height); Disruptor Shot is an area that damages for several seconds and zones; Overclock refills energy fast and gives instant reloads for big charged shots.
+Sojourn|She is strong at mid range; dives catch her once Power Slide is used.
+Soldier: 76|Specialist with a hitscan rifle: bursts at long range, full auto up close; Helix Rockets add burst damage (aim at feet when unsure).
+Soldier: 76|Sprint is his only movement and has no vertical; Biotic Field heals him and nearby allies and is best dropped at the start of a fight.
+Soldier: 76|Fights best from high ground at mid range; avoid close range against hooks, Doomfist and D.Va's Defense Matrix. Tactical Visor auto-aims for a few seconds and is best on agile targets.
+Symmetra|Specialist: a short-range beam that charges up the longer it stays on a target (hitting barriers charges it too), plus turrets that slow and Teleporter for her team.
+Symmetra|Turrets cover chokepoints and flanks and slow pursuers; exposed turrets get shot quickly. Teleporters enable surprise angles and high ground.
+Symmetra|Strong into Reinhardt and other barrier tanks (barriers feed her beam); weak into long range, Winston and Junkrat. Photon Barrier is a huge map-wide wall for one fight.
+Torbjorn|Specialist who zones with a turret; Rivet Gun has a long-range arcing shot and a close-range shotgun blast, so he should shoot, not just stand by the turret.
+Torbjorn|Moving the turret to fresh positions catches enemies off guard; a turret in the open gets destroyed by Junkrat, Pharah and ranged heroes. Overload gives overhealth and speed for a few seconds.
+Torbjorn|Strong on defense and chokepoints; weak when flanked and into D.Va's Defense Matrix. Molten Core's lava pools should be spread to deny space.
+Tracer|Flanker with only 175 health: she wins by harassing and picking off weak targets from flanks, not by fighting head-on.
+Tracer|Blink (three charges) moves her through enemies; Recall rewinds her health, ammo and position 3 seconds and is her life-saver. Dying with Recall unused is a common mistake.
+Tracer|Pulse Bomb is a sticky bomb: blink in close, stick it, recall out. Cassidy's Flashbang, Pharah and Widowmaker are dangerous for her; health packs heal her more than most heroes.
+Vendetta|Flanker melee assassin (added December 2025) with 200 health and armor: her sword combo makes every third swing an overhead critical strike, and hits stack attack and movement speed.
+Vendetta|Warding Stance blocks frontal damage using energy but slows her; blocking near hard crowd control is dangerous. Projected Edge throws a piercing blade to build stacks before diving.
+Vendetta|Engages with Soaring Slice (sword throw) or Whirlwind Dash and saves Whirlwind Dash to get out. Weak at range; Junkrat and Cassidy punish her.
+Vendetta|Sundering Blade is a charged cleave that ignores damage reduction and destroys overhealth (it beats Sound Barrier and Nano Boost) but leaves her exposed while charging.
+Venture|Flanker who fights at close range with an explosive excavator, melee Clobber, Drill Dash and Burrow; her abilities give her shields.
+Venture|Burrow makes her invulnerable underground, removes most negative effects and reloads her; it is both an escape and an engage. Ice Wall, Tree of Life and Cryo-Freeze block burrow paths.
+Venture|Typical combo chains Clobber into Drill Dash or Burrow; Tectonic Shock sends shockwaves around her for several seconds and can't start while burrowed.
+Widowmaker|Sharpshooter who one-shots most damage and support heroes with a charged headshot; her value is picks, so low total damage can still be a good game if she killed key targets.
+Widowmaker|Keeps moving between sniper spots, since her shots reveal her position. Grappling Hook is her escape; using it to reposition without a backup plan leaves her exposed.
+Widowmaker|Priorities: enemy snipers first, then supports like Mercy and Zenyatta. Venom Mine guards her flank.
+Widowmaker|Winston, Wrecking Ball, D.Va and other divers catch her; she is fragile up close.
+
+# ---- Supports ----
+Ana|Tactician sniper healer with no mobility: plays at range from cover, healing with her rifle (scoped shots are hitscan). Being caught in the open by divers is her most common death.
+Ana|Sleep Dart is her self-defense and her biggest play: sleeping a diving tank, a flanker on her, or an enemy using an ultimate. Missing it or using it on a low-value target leaves her defenseless for 14 seconds.
+Ana|Biotic Grenade heals allies and boosts their healing, and stops enemies from being healed; throwing it on enemies during a fight (especially on a tank) is one of the strongest tools in the game.
+Ana|Nano Boost belongs on a tank or damage hero who can use it right away, not on a support. D.Va's Defense Matrix, Sigma's Kinetic Grasp and Zarya's barriers stop her darts and grenades.
+Baptiste|Tactician with a three-round hitscan burst for damage (headshots count) and an arcing healing grenade for allies (it can't heal himself); switching between the two quickly is the core skill.
+Baptiste|Regenerative Burst heals him and nearby allies and is best early in a fight; staying out of close range while it's on cooldown keeps him alive. Exo Boots charge a high jump to reach angles or escape.
+Baptiste|Immortality Field stops nearby allies from dropping below 20% health for about 5 seconds; it saves allies from burst and ultimates, and enemies will try to shoot the device first. Throwing it too early or when no one is in danger wastes a 20-second cooldown.
+Baptiste|Amplification Matrix doubles the damage and healing of friendly shots passing through it; it is strongest in front of allies with projectile or hitscan weapons. Hooks, charges and Doomfist punish him at close range.
+Brigitte|Survivor brawler support: her flail, Whip Shot and Shield Bash hits trigger Inspire, an area heal for nearby allies, so her healing comes from hitting enemies at close range.
+Brigitte|She protects her backline from divers and flankers (peeling): Whip Shot knocks them away (or off high ground), Shield Bash stuns, Barrier Shield blocks. Her mitigation comes from Barrier Shield.
+Brigitte|Repair Pack (three charges) heals at range through barriers. She should stay grouped, since Inspire needs line of sight; Whip Shot in the open makes her easy to headshot.
+Brigitte|Rally gives her armor and nearby allies overhealth for a team push. Burst damage (Junkrat, Bastion), snipers and close-range tanks are her main threats.
+Illari|Survivor support who pokes from off-angles with a charged hitscan rifle (always fire at full charge) and heals with a short-range beam that runs out of energy.
+Illari|Healing Pylon heals the lowest-health ally nearby and should be placed out of enemy sight; much of her healing comes from it, so a pylon that keeps getting destroyed costs her team.
+Illari|Outburst launches her and knocks back nearby enemies: her tool against dives and her escape from area ultimates.
+Illari|Captive Sun slows and marks enemies that then explode after taking more damage; it needs team follow-up. She is weak against coordinated dive.
+Jetpack Cat|Tactician support (added Season 1, 2026) who flies permanently; her shotgun-like Pawjectiles damage enemies and heal allies at mid range. Stuns, sleeps, hinders and knockbacks ground her.
+Jetpack Cat|Lifeline tows an ally, healing them while she carries them: used to rescue allies from danger or move a tank or diver into position. Purr is her only self-heal and also knocks back nearby enemies.
+Jetpack Cat|Flying in the open exposes her to hitscan heroes, so she should use terrain and barriers and keep Frenetic Flight energy for escapes. Catnapper dives to knock down enemies and drag the nearest one.
+Jetpack Cat|Strong with Doomfist and other divers she can rescue; Roadhog's hook and Mauga are dangerous for her.
+Juno|Survivor support who moves a lot: a hitscan blaster that heals allies or damages enemies (falls off past 25 m), homing Pulsar Torpedoes for burst healing or damage, Glide Boost and a double jump.
+Juno|Hyper Ring speeds up allies passing through it: used to engage together or escape. Torpedoes are strong finishers against mobile heroes.
+Juno|Aim-heavy with little self-sustain: predictable jumps and Glide Boosts across open ground get her killed. Orbital Ray heals and boosts damage in a line and is best used early, ahead of the tanks' engage.
+Juno|D.Va's Defense Matrix blocks both of her damage sources.
+Kiriko|Medic support: homing Healing Ofuda heal allies, Kunai deal high headshot damage, and she wall-climbs.
+Kiriko|Swift Step teleports her to an ally (with brief invulnerability) and is her escape; combined with Protection Suzu it saves allies at a distance.
+Kiriko|Protection Suzu heals, makes allies briefly invulnerable and cleanses most debuffs (anti-heal, sleep, burns, wounds); it does not stop knockdowns, Steel Trap, Charge or hooks. Holding Suzu for the enemy's key ability is a core decision.
+Kiriko|Kitsune Rush speeds up allies' movement, attacks and cooldowns for a team push. Pairs well with flankers like Tracer and Genji.
+Lifeweaver|Medic healer who should usually stay back near cover: his main healing is a charged homing Healing Blossom (fire it well charged); Thorn Volley pokes when allies don't need healing.
+Lifeweaver|Life Grip pulls an ally to him, healing and cleansing them, and is his big save (also against hard crowd control and ultimates). Using it on someone merely overextended, or pulling an ally out of their own play, wastes an 18-second cooldown.
+Lifeweaver|Petal Platform lifts heroes up for high ground or escapes; keeping it for himself when dived is often right. Tree of Life heals a large area over time and can block chokepoints.
+Lifeweaver|D.Va, Genji and other divers punish him, especially after Life Grip is used.
+Lúcio|Tactician support with an aura that either heals or speeds up nearby allies (Crossfade); his healing per second is low but constant, and speed is how his team engages and escapes.
+Lúcio|Wall riding keeps him alive and fast; Soundwave knocks enemies back, especially off ledges. Amp It Up boosts the current song briefly.
+Lúcio|Sound Barrier gives the team big overhealth for a few seconds; it is best saved to counter enemy ultimates (Dragonblade, Gravitic Flux, Graviton Surge), and he must be on the ground to finish casting it.
+Lúcio|Stays behind or with his team; Cassidy, Pharah, Widowmaker and Symmetra turrets give him trouble.
+Mercy|Medic healer with a beam that heals or boosts an ally's damage by 25% (boosted damage builds her ultimate); her own damage is weak, so she depends on her team.
+Mercy|Guardian Angel flies her to allies (alive or dead) and is her survival tool; flying between allies keeps her hard to hit. Flankers like Reaper and Tracer punish her while her beam is locked.
+Mercy|Resurrect (30-second cooldown) is strongest on tanks and key damage players, but it draws fire, so reviving in the open often gets her killed.
+Mercy|Pairs well with Pharah, Ashe and Cassidy. Valkyrie lets her heal several allies at once while flying; keep moving during it.
+Mizuki|Survivor support (added Season 1, 2026): her Remedy Aura heals nearby allies and grows as she deals damage or heals, so landing Spirit Glaive body shots keeps her healing up.
+Mizuki|Healing Kasa (two charges) bounces between allies and ignores barriers; saving the second charge for emergencies is good practice.
+Mizuki|Katashiro Return leaps away and leaves a paper doll she can teleport back to with brief invulnerability; keep the doll out of enemy sight. Binding Chain hinders the first enemy hit and is best saved for divers and fliers.
+Mizuki|Kekkai Sanctuary heals allies inside and blocks most projectiles; Brigitte and Mercy can heal through it, and trapping escape-capable heroes (Winston, Doomfist) in it is wasteful.
+Moira|Medic support with no aim needed for healing: Biotic Grasp sprays healing in front of her (energy-limited) and her damage beam refills that energy and heals her.
+Moira|Survival first: Fade makes her invulnerable and fast, her escape from burst and flankers and her way to high ground. Biotic Orb (healing or damage) bounces off walls.
+Moira|Her damage beam ignores barriers but her damage is low per second; high damage numbers with low healing can mean she neglected her team.
+Moira|Coalescence heals allies and damages enemies in a long beam and is cancelled by stuns; Roadhog, Torbjorn and Soldier: 76 beat her in duels.
+Wuyang|Survivor support (added Season 18, August 2025): a steerable water orb (holding it longer powers the explosion, ignores barriers) for damage and a channeled healing stream that passively keeps healing one ally.
+Wuyang|He can't fire while channeling the stream, so damage and healing compete; letting the stream energy recharge instead of feathering it keeps healing up.
+Wuyang|Guardian Wave heals, boosts healing received and knocks back enemies. Tidal Blast puts a big shield on an ally that later explodes to heal and knock down enemies; it counters Dragonblade and pairs with tanks and divers.
+Wuyang|Weak to area damage, burst and fast flankers like Genji and Tracer; best poking from cover.
+Zenyatta|Tactician with only 250 health (mostly shields) and no mobility, but a strong damage weapon: his damage numbers should be high for a support.
+Zenyatta|Orb of Discord makes the target take 30% more damage: keep it on the enemy tank or the target the team is fighting. Orb of Harmony heals one ally over time and should go on whoever is taking damage.
+Zenyatta|Staying back with his team is his survival; running from Genji or Tracer usually loses, discording and shooting back usually wins. Snap Kick knocks enemies back.
+Zenyatta|Transcendence makes him invulnerable and heals allies hugely for 6 seconds; best used against heavy incoming damage or enemy ultimates, not as an escape when he's just low. Hanzo and Widowmaker punish him.

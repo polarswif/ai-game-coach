@@ -63,7 +63,7 @@ All screens go to Claude in one request, each labeled, so they can be cross-chec
 - `GET /api/overwatch/matches/{matchId}/analysis`: per-10 rates, team share, ranks, and the best enemy in your role (tank against tank).
 - `POST /api/overwatch/matches/{matchId}/feedback`: coaching, in the same strengths / weaknesses / advice shape as Rivals.
 
-Add `?username=NAME` to either to analyze someone else in the match. Close-match judgment uses the final score, except in Push, where the score only says who pushed further, so deaths are used instead. Matches live in memory until the app restarts.
+Coaching includes hero notes for the heroes you played (`overwatch-hero-notes.txt`): researched descriptions of how each hero plays now and how to read their stats, from the Overwatch Wiki and community guides, in our own words. Add `?username=NAME` to either to analyze someone else in the match. Close-match judgment uses the final score, except in Push, where the score only says who pushed further, so deaths are used instead. Matches live in memory until the app restarts.
 
 ## Overwatch career stats
 Overwatch doesn't publish individual matches through any API, so besides screenshots the app can read a player's career: their public Blizzard profile, read through [OverFast API](https://github.com/TeKrop/overfast-api) (free, no key). `OverFastCareerSource` fetches ranks and stats and maps them into `CareerProfile`; `CareerAnalyzer` then compares each hero with the same player's other heroes in that role (per 10 minutes, and win rate), since without matches the player's own other heroes are the fairest benchmark. Heroes under an hour or 5 games are flagged as small samples.
@@ -87,7 +87,7 @@ In the analysis, a percent difference is `null` when it can't be compared fairly
 - [ ] Match history screenshot (round score) and tracker.gg as optional extras
 - [x] Overwatch career stats and analysis (OverFast)
 - [x] Overwatch match coaching from match report screenshots
-- [ ] Overwatch hero notes
+- [x] Overwatch hero notes (researched; Sombra, Roadhog and Doctrine still to write)
 - [ ] React frontend
 - [ ] Saved match history (database)
 - [ ] Authentication and deployment

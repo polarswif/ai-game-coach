@@ -1,6 +1,8 @@
 package com.gamecoach.service.claude;
 
+import com.gamecoach.analysis.OverwatchHeroNotesCatalog;
 import com.gamecoach.analysis.OverwatchPlayerAnalysis;
+import com.gamecoach.model.OverwatchMatch.HeroTime;
 import com.gamecoach.model.Feedback;
 import com.gamecoach.model.OverwatchMatch;
 import com.gamecoach.service.CoachingUnavailableException;
@@ -33,6 +35,7 @@ public class ClaudeOverwatchCoach implements OverwatchCoachingService {
 
     private final ClaudeClient client;
     private final ClaudeProperties properties;
+    private final OverwatchHeroNotesCatalog heroNotes;
 
     private final Map<String, Feedback> cache = Collections.synchronizedMap(
             new LinkedHashMap<>(16, 0.75f, true) {
@@ -42,9 +45,10 @@ public class ClaudeOverwatchCoach implements OverwatchCoachingService {
                 }
             });
 
-    public ClaudeOverwatchCoach(ClaudeClient client, ClaudeProperties properties) {
+    public ClaudeOverwatchCoach(ClaudeClient client, ClaudeProperties properties, OverwatchHeroNotesCatalog heroNotes) {
         this.client = client;
         this.properties = properties;
+        this.heroNotes = heroNotes;
     }
 
     @Override
@@ -77,8 +81,20 @@ public class ClaudeOverwatchCoach implements OverwatchCoachingService {
                 properties.model(),
                 properties.maxTokens(),
                 OverwatchCoachingPrompt.systemPrompt(),
-                List.of(Message.user(OverwatchCoachingPrompt.userMessage(match, analysis))),
+                List.of(Message.user(OverwatchCoachingPrompt.userMessage(match, analysis, notesFor(analysis)))),
                 List.of(CoachingPrompt.tool()),
                 ToolChoice.auto());
+    }
+
+    /** Notes for every hero the coached player played, in play order; heroes without notes are left out. */
+    private Map<String, List<String>> notesFor(OverwatchPlayerAnalysis analysis) {
+        Map<String, List<String>> notes = new LinkedHashMap<>();
+        for (HeroTime h : analysis.heroesPlayed()) {
+            List<String> forHero = heroNotes.forHero(h.hero());
+            if (!forHero.isEmpty()) {
+                notes.putIfAbsent(h.hero(), forHero);
+            }
+        }
+        return notes;
     }
 }
