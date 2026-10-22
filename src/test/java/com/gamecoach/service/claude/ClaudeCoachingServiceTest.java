@@ -197,6 +197,13 @@ class ClaudeCoachingServiceTest {
     }
 
     @Test
+    void aRoughLossMayHaveNoStrengths() {
+        Feedback honest = new Feedback(List.of(), List.of("Six deaths, most on your team."), List.of("Play closer to your tank."), "A one-sided loss.");
+        client.reply = toolReply(honest, "tool_use");
+        assertEquals(honest, coach.coach(player29Match, analyzer.analyze(player29Match, (String) null)));
+    }
+
+    @Test
     void aCutOffReplyIsReported() {
         client.reply = toolReply(CANNED, "max_tokens");
         CoachingUnavailableException e = assertThrows(CoachingUnavailableException.class,
@@ -211,7 +218,9 @@ class ClaudeCoachingServiceTest {
         PlayerAnalysis analysis = analyzer.analyze(player29Match, (String) null);
         assertThrows(CoachingUnavailableException.class, () -> coach.coach(player29Match, analysis));
 
-        client.reply = toolReply(new Feedback(List.of("x"), List.of(), List.of("y"), null), "tool_use");  // empty weaknesses
+        client.reply = toolReply(new Feedback(List.of("x"), List.of("w"), List.of(), null), "tool_use");  // no advice
+        assertThrows(CoachingUnavailableException.class, () -> coach.coach(player29Match, analysis));
+        client.reply = toolReply(new Feedback(List.of(), List.of(), List.of("y"), null), "tool_use");     // nothing to say
         assertThrows(CoachingUnavailableException.class, () -> coach.coach(player29Match, analysis));
 
         client.reply = toolReply(CANNED, "tool_use");

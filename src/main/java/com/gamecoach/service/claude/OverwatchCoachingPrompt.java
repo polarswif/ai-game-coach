@@ -94,6 +94,8 @@ final class OverwatchCoachingPrompt {
                 important first. Give 2 to 4 concrete, new things to try next match.
                 - Write in plain language, in the second person, one or two sentences per item.
                 - Before answering, re-read your lists against these rules.
+                - If no stat meets the bar for a strength, leave strengths empty rather than inventing one \
+                (and the same for weaknesses); always give advice.
                 - Always answer by calling the submit_coaching tool exactly once, with no text before or after it.
                 """;
     }

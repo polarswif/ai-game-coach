@@ -136,8 +136,11 @@ public class ClaudeCoachingService implements CoachingService {
                         ToolInput.strings(input, "advice"), ToolInput.string(input, "matchContext")))
                 .findFirst()
                 .orElse(null);
-        if (feedback == null || isEmpty(feedback.strengths()) || isEmpty(feedback.weaknesses())
-                || isEmpty(feedback.advice())) {
+        // Strengths or weaknesses may honestly be empty (a rough loss can have no top-half stat);
+        // a reply with no advice, or with neither strengths nor weaknesses, is not usable.
+        if (feedback == null || isEmpty(feedback.advice())
+                || (isEmpty(feedback.strengths()) && isEmpty(feedback.weaknesses()))) {
+            log.warn("Unusable coaching reply (stop reason {}): {}", response.stopReason(), response.content());
             throw new CoachingUnavailableException("Claude's reply didn't contain usable coaching "
                     + "(stop reason: " + response.stopReason() + ").", null);
         }

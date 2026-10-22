@@ -100,6 +100,8 @@ final class CoachingPrompt {
                 - List as many strengths and weaknesses as the data supports (usually 2 to 4 each), most \
                 important first. Give 2 to 4 things to try next match.
                 - Write in plain language, in the second person, one or two sentences per item.
+                - If no stat meets the bar for a strength, leave strengths empty rather than inventing one \
+                (and the same for weaknesses); always give advice.
                 - Always answer by calling the submit_coaching tool exactly once, with no text before \
                 or after it.
                 """;
@@ -109,11 +111,13 @@ final class CoachingPrompt {
     static Tool tool() {
         Map<String, Object> listOfStrings = Map.of(
                 "type", "array", "minItems", 1, "items", Map.of("type", "string"));
+        // Strengths and weaknesses may be empty when nothing honestly qualifies; advice may not.
+        Map<String, Object> possiblyEmpty = Map.of("type", "array", "items", Map.of("type", "string"));
         Map<String, Object> schema = Map.of(
                 "type", "object",
                 "properties", Map.of(
-                        "strengths", withDescription(listOfStrings, "What the player did well, most important first."),
-                        "weaknesses", withDescription(listOfStrings, "What to improve, most important first."),
+                        "strengths", withDescription(possiblyEmpty, "What the player did well, most important first. Empty only if nothing meets the bar."),
+                        "weaknesses", withDescription(possiblyEmpty, "What to improve, most important first. Empty only if nothing meets the bar."),
                         "advice", withDescription(listOfStrings, "2 to 4 concrete things to try next match."),
                         "matchContext", Map.of("type", "string", "description",
                                 "One or two sentences on how close the match was and how much weight this coaching deserves.")),
