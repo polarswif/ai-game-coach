@@ -51,4 +51,15 @@ class ToolInputTest {
         assertEquals(Medal.MOST_HEALING, ToolInput.enumValue(Medal.class, "most-healing"));
         assertNull(ToolInput.enumValue(Medal.class, "best hair"));
     }
+
+    @Test
+    void aListSentAsTextIsStillRead() {
+        java.util.Map<String, Object> m = new java.util.HashMap<>();
+        m.put("a", "[\"First point.\", \"Second, with a comma.\"]");
+        m.put("b", "One plain sentence.");
+        m.put("c", "[]");
+        assertEquals(java.util.List.of("First point.", "Second, with a comma."), ToolInput.strings(m, "a"));
+        assertEquals(java.util.List.of("One plain sentence."), ToolInput.strings(m, "b"));
+        assertTrue(ToolInput.strings(m, "c").isEmpty());
+    }
 }

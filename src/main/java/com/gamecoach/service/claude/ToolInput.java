@@ -80,6 +80,22 @@ public final class ToolInput {
     public static List<String> strings(Map<String, Object> map, String key) {
         Object value = map == null ? null : map.get(key);
         List<String> result = new ArrayList<>();
+        if (value instanceof String text) {
+            // A model sometimes sends a list as text: a JSON array, or one plain sentence.
+            String t = text.strip();
+            if (t.startsWith("[") && t.endsWith("]")) {
+                java.util.regex.Matcher m = java.util.regex.Pattern.compile("\"((?:[^\"\\\\]|\\\\.)*)\"").matcher(t);
+                while (m.find()) {
+                    String item = clean(m.group(1).replace("\\\"", "\"").replace("\\n", " "));
+                    if (!item.isEmpty()) {
+                        result.add(item);
+                    }
+                }
+            } else if (!clean(t).isEmpty() && !t.equalsIgnoreCase("null")) {
+                result.add(clean(t));
+            }
+            return result;
+        }
         if (value instanceof List<?> items) {
             for (Object item : items) {
                 String text = item == null ? "" : clean(item.toString());
