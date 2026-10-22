@@ -100,7 +100,7 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
             for (ContentBlock block : response.content()) {
                 if ("tool_use".equals(block.type()) && ScoreboardPrompt.TOOL_NAME.equals(block.name())
                         && block.input() != null) {
-                    return block.input();
+                    return ToolInput.repairLeakedParameters(block.input());
                 }
             }
         }

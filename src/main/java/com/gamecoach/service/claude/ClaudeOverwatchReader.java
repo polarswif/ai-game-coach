@@ -113,7 +113,7 @@ public class ClaudeOverwatchReader implements OverwatchMatchReader {
             for (ContentBlock block : response.content()) {
                 if ("tool_use".equals(block.type()) && OverwatchReaderPrompt.TOOL_NAME.equals(block.name())
                         && block.input() != null) {
-                    return block.input();
+                    return ToolInput.repairLeakedParameters(block.input());
                 }
             }
         }

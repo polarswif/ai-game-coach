@@ -135,4 +135,47 @@ public final class ToolInput {
         }
         return null;
     }
+
+    private static final java.util.regex.Pattern LEAKED_PARAMETER =
+            java.util.regex.Pattern.compile("\\s*</?parameter(?:\\s+name=\"(\\w+)\")?\\s*>\\s*");
+
+    /**
+     * Repairs a malformed tool call where the model wrote later parameters inside an earlier one's
+     * text, e.g. strengths = "[...]\\n<parameter name=\"weaknesses\">[...]". Each leaked part is
+     * moved to its own key (unless that key already has a value), so the reply can still be read.
+     * Returns the input unchanged when nothing leaked.
+     */
+    public static Map<String, Object> repairLeakedParameters(Map<String, Object> input) {
+        if (input == null || input.values().stream().noneMatch(v -> v instanceof String t && t.contains("<parameter name="))) {
+            return input;
+        }
+        Map<String, Object> repaired = new java.util.LinkedHashMap<>(input);
+        for (Map.Entry<String, Object> e : input.entrySet()) {
+            if (!(e.getValue() instanceof String text) || !text.contains("<parameter name=")) {
+                continue;
+            }
+            java.util.regex.Matcher m = LEAKED_PARAMETER.matcher(text);
+            String currentKey = e.getKey();
+            int start = 0;
+            while (m.find()) {
+                put(repaired, currentKey, text.substring(start, m.start()), currentKey.equals(e.getKey()));
+                if (m.group(1) != null) {
+                    currentKey = m.group(1);
+                }
+                start = m.end();
+            }
+            put(repaired, currentKey, text.substring(start), currentKey.equals(e.getKey()));
+        }
+        return repaired;
+    }
+
+    private static void put(Map<String, Object> map, String key, String part, boolean replaceOwn) {
+        String value = part.strip();
+        if (value.isEmpty()) {
+            return;
+        }
+        if (replaceOwn || map.get(key) == null) {
+            map.put(key, value);
+        }
+    }
 }

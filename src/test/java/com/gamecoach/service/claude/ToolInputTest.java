@@ -62,4 +62,16 @@ class ToolInputTest {
         assertEquals(java.util.List.of("One plain sentence."), ToolInput.strings(m, "b"));
         assertTrue(ToolInput.strings(m, "c").isEmpty());
     }
+
+    @Test
+    void parametersLeakedIntoAnotherParameterAreMovedBack() {
+        java.util.Map<String, Object> input = new java.util.HashMap<>();
+        input.put("matchContext", "A one-sided loss.");
+        input.put("strengths", "[\"Six eliminations.\", \"Second in damage.\"]\n<parameter name=\"weaknesses\">[\"Accuracy 27%.\"]\n<parameter name=\"advice\">[\"Play off-angles.\", \"Back off when the tank dies.\"]\n");
+        java.util.Map<String, Object> fixed = ToolInput.repairLeakedParameters(input);
+        assertEquals(java.util.List.of("Six eliminations.", "Second in damage."), ToolInput.strings(fixed, "strengths"));
+        assertEquals(java.util.List.of("Accuracy 27%."), ToolInput.strings(fixed, "weaknesses"));
+        assertEquals(java.util.List.of("Play off-angles.", "Back off when the tank dies."), ToolInput.strings(fixed, "advice"));
+        assertEquals("A one-sided loss.", ToolInput.string(fixed, "matchContext"));
+    }
 }

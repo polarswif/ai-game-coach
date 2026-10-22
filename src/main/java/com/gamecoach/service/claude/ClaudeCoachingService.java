@@ -132,6 +132,7 @@ public class ClaudeCoachingService implements CoachingService {
                 .filter(block -> "tool_use".equals(block.type()) && CoachingPrompt.TOOL_NAME.equals(block.name()))
                 .map(ContentBlock::input)
                 .filter(input -> input != null)
+                .map(ToolInput::repairLeakedParameters)
                 .map(input -> new Feedback(ToolInput.strings(input, "strengths"), ToolInput.strings(input, "weaknesses"),
                         ToolInput.strings(input, "advice"), ToolInput.string(input, "matchContext")))
                 .findFirst()
