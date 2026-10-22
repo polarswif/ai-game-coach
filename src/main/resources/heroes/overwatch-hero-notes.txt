@@ -8,18 +8,19 @@
 # our own words. Not yet reviewed by a player: corrections welcome.
 # Sombra (reworked into a support), Roadhog (reworked) and Doctrine (new) come from pro and Top 500
 # YouTube guides (Samito, Questron, Awkward, Ants, Z3tliX), summarized by Gemini, checked against the
-# October 6, 2026 patch notes and the user's review.
+# October 6, 2026 patch notes and the user's review. D.Mon, Hazard, Sierra, Anran and Freja were
+# deepened the same way (Ants, Winton_OW2, Awkward, Spilo, BKAir, Asydix).
 
 # ---- Tanks (5v5: one per team, so the tank's deaths swing most fights) ----
 D.Va|Initiator dive tank. Fights at close range: Fusion Cannons lose most damage past about 10-20 m, so long-range poking with D.Va is a waste.
 D.Va|Defense Matrix eats projectiles in front of her (not beams, melee or area damage) and is her main mitigation. Good use: blocking key cooldowns and ultimates for the team or for allies diving with her, not holding it at random.
 D.Va|Boosters engages or escapes in one button. Micro Missiles are strongest at close range alongside Defense Matrix.
 D.Va|When the mech dies she ejects into a fragile pilot form; a mech loss is not a death on its own, but losing the mech often in a fight is a positioning warning. Self-Destruct is blocked by cover and is best used to zone or to finish a fight, not thrown into open sightlines.
-D.Mon|Stalwart melee brawler (added Season 4, 2026): fights with a Plasma Saber in her mech and holds a frontal Power Barrier; Propulsors give strong horizontal dashes on an energy meter.
-D.Mon|Her main weakness is height: enemies above her or on high ground are hard to reach. Fight on flat ground and around corners, like other melee tanks.
-D.Mon|Surging Strike needs Power Barrier up and pushes enemies back; Fusion Repeater lowers the barrier briefly while firing, so firing it is a trade between damage and protection.
-D.Mon|When the mech breaks she ejects into a pilot form with a machine gun and must rebuild the mech with Call Mech. Limit Break hits through shields, grants her overhealth and makes enemies take more damage, so it is best on grouped enemies with the team ready to follow.
-D.Mon|Struggles into Mauga, Reinhardt, Roadhog and Orisa and badly into Bastion and Torbjorn; does well into Sigma and Domina.
+D.Mon|Stalwart melee tank (added Season 4, 2026) with strong horizontal mobility: Plasma Saber in her mech, a frontal Power Barrier, Propulsors dashes on a fuel meter. Pros play her as a flanking brawler who weaves in and out from the sides, not a main-lane shield tank; standing in the open down the middle gets her killed.
+D.Mon|Engages when the enemy tank overextends, a key cooldown is spent, or a support is isolated. Always keep fuel and cooldowns for the retreat: burning all fuel to go in is the most common way she dies.
+D.Mon|Power Barrier is for blocking specific abilities and cooldowns rather than soaking all damage; letting it break also takes away Surging Strike, which needs the barrier up. Fusion Repeater pokes or finishes low targets but briefly lowers the barrier.
+D.Mon|When the mech breaks she ejects into a pilot form with a machine gun and must rebuild it with Call Mech. Limit Break is a dash slash through shields that gives her overhealth and makes enemies take more damage: best on grouped enemies with the team ready, after baiting out stuns (Orisa can stop it); it can also save her when low.
+D.Mon|Weak to height (enemies on high ground she can't reach), poke compositions with Zenyatta, burst damage, and Orisa; also struggles into Mauga, Reinhardt and Roadhog and badly into Bastion and Torbjorn. Pairs with mobile teammates (Venture, Sojourn, Lucio, Kiriko). Common perks: Beast Within or MEKA Mobility, and Overstrike or Focused Fusion.
 Domina|Stalwart poke tank (added Season 1, 2026): plays slow and positional from behind cover on long sightlines. No mobility and a large hitbox, so overextending or being caught in the open is her biggest risk.
 Domina|Photon Magnum ignores barriers and rewards holding the trigger on one target (letting go resets its charge); her ability damage refills her shields, so landing Crystal Charge and Sonic Repulsors keeps her alive.
 Domina|Sonic Repulsors is her answer to divers: knock them into a wall for a stun. Barrier Array is a segmented wall that blocks for 8 seconds; mitigation comes mostly from it.
@@ -28,10 +29,11 @@ Doomfist|Initiator dive tank and a combo hero: Rocket Punch (charged lunge, wall
 Doomfist|Power Block cuts frontal damage by 75% and, after blocking enough damage, empowers his next Rocket Punch: blocking damage aimed at teammates is a reliable way to charge it. Most of his mitigation comes from Power Block.
 Doomfist|Charge Rocket Punch behind cover (he barely moves while charging), and keep an escape: running out of cooldowns deep in the enemy team is his most common death. Stuns, knockdowns and Sombra-type interrupts cancel his abilities.
 Doomfist|Hand Cannon is a short-range shotgun (weak past about 12 m) used between abilities to finish targets. Meteor Strike makes him untargetable while aiming and is also a safe way to escape or reset cooldowns.
-Hazard|Initiator brawler tank with a short-range shotgun (Bonespur, ignores barriers), Spike Guard (blocks frontal damage and fires homing spikes), Violent Leap (leap plus slash) and Jagged Wall.
-Hazard|Spike Guard is his main mitigation and should be used often, not saved for low health; it also reloads his shotgun. He fights in short leap-sized hops from corners and should reload before committing.
-Hazard|Jagged Wall cuts off escapes, blocks sightlines or protects a flank. Downpour roots enemies in a wide line, passes through walls and pulls down fliers; barriers and projectile-blocking abilities stop it.
-Hazard|Excels at isolating low-mobility heroes; struggles against crowd control (stuns, knockbacks) and must be in close range to do damage. Strong on wall-heavy maps and chokes, weaker on open maps.
+Hazard|Initiator dive tank with a short-range shotgun (Bonespur, ignores barriers), Spike Guard (blocks frontal damage, fires homing spikes and reloads his gun), Violent Leap (leap plus slash) and Jagged Wall. His job is to create space by threatening the backline and drawing attention without dying.
+Hazard|Patient style: wait for low-health enemies or missing cooldowns instead of forcing plays, and plan the exit (Jagged Wall, Spike Guard, Leap) before diving. Preserving health over a risky kill keeps him in every fight; burning all cooldowns with no plan leaves him open to crowd control.
+Hazard|Spike Guard is his main mitigation and should be used early and often, not held until he is low. Forcing frontline trades against Reinhardt or Zarya without a health advantage loses.
+Hazard|Jagged Wall confirms kills, cuts off supports or escape routes, splits the enemy team and blocks sightlines. Downpour roots enemies in a wide line through walls: best on targets without answers like Fortify or Suzu, and rooted enemies can still shoot back.
+Hazard|Countered by crowd control (Ana's Sleep Dart, Cassidy's Flashbang, stuns and knockbacks); pairs well with Tracer and other divers. Strong on wall-heavy maps and chokes, weaker on open maps.
 Junker Queen|Stalwart brawler who heals by wounding enemies (Jagged Blade, Carnage, melee and Rampage apply wounds and she lifesteals from them). She has no barrier or damage block, so low mitigation is normal for her.
 Junker Queen|Burst-and-commit style: engage, spend Jagged Blade (throw, then recall to pull an enemy), Carnage and her shotgun, secure a kill, then back off while cooldowns are down. Pulling a squishy out of position with the blade is her best play.
 Junker Queen|Commanding Shout gives overhealth and speed to her and nearby allies; spending it at the start of a fight leaves nothing to survive the middle of it.
@@ -75,10 +77,10 @@ Zarya|Engage first, then bubble, so enemies keep shooting it; bubbling too early
 Zarya|Graviton Surge pulls enemies together for several seconds and pairs with team ultimates; D.Va's Defense Matrix and similar abilities can eat it. Her bubbles counter Junker Queen's wounds and burst heroes like Junkrat.
 
 # ---- Damage ----
-Anran|Flanker (added Season 1, 2026) who dives with fans and fire: hits build an Ignition meter that sets targets burning; Fan the Flames is a short-range blast that hits much harder on burning targets.
-Anran|Plays at medium-close range from off-angles, isolating backline targets. Typical engage: one Inferno Rush charge in, Dancing Blaze (a brief invulnerable strike that heals her) to survive the reply, second Rush charge out. Spending both dashes going in leaves no escape.
-Anran|Dancing Blaze lasts under a second, so it works best timed against an enemy ability (it can phase through Sleep Dart), not pressed early. Her ultimate is either Vermillion Ascent (a charging explosion for kills) or Vermillion Revival (comes back after dying).
-Anran|Stuns, slows and knockbacks are her biggest threats; long-range heroes that stay out of Fan the Flames' range (Ashe on long sightlines) beat her. Cleanses remove her burn.
+Anran|Flanker (added Season 1, 2026) who dives with fans and fire: hits build an Ignition meter that sets targets burning; Fan the Flames is a short-range blast that hits much harder on burning targets. Her value comes from assassinating isolated targets, not raw damage: she is poor at poke, so modest damage numbers are normal.
+Anran|Plays at medium-close range from off-angles. Typical engage: one Inferno Rush charge in, Dancing Blaze (a brief invulnerable strike that heals her) to survive the reply, second Rush charge out. Many deaths usually mean poor cooldown management or bad engage timing.
+Anran|Dancing Blaze lasts under a second, so it works best timed against an enemy ability (it can phase through Sleep Dart). Vermillion Ascent leaves her a sitting duck while starting, so start it from cover, never right in front of enemies; Heat Shield and Hungering Blaze are common perk picks.
+Anran|Strong into Widowmaker and Hanzo; countered by crowd control and burst (Cassidy, Junkrat, Vendetta, Ana, Roadhog, Sigma, Jetpack Cat). Cleanses remove her burn.
 Ashe|Sharpshooter who plays mid to long range: scoped shots for big damage, hip fire to finish. Weak up close, so she needs her team near her.
 Ashe|Coach Gun is mainly for escaping and reaching high ground, not for damage; using it to engage leaves her with no escape. Dynamite plus a shot on it is her area damage (good over barriers).
 Ashe|B.O.B. charges in, knocks enemies up and then shoots as a turret: best used to launch a group and follow up with headshots and Dynamite. Stuns and sleeps can stop him.
@@ -98,10 +100,10 @@ Echo|Hitscan heroes (Soldier: 76, Emre, Cassidy, Ashe, Widowmaker) and D.Va are 
 Emre|Specialist (added Season 1, 2026) with a three-round burst rifle that can aim down sights with no movement penalty; strong at mid range and close quarters with self-sustain, but lower raw damage than Soldier: 76 or Cassidy.
 Emre|Siphon Blaster is a short lifesteal pistol with extra speed and jump: save it for close fights, since without it he is vulnerable. Cyber Frag grenades (two charges) are his main burst damage.
 Emre|Override Protocol lets him fly and fire heavy rounds for several seconds; start it from cover, not while under fire. Favoured into Echo and Pharah, struggles into Widowmaker.
-Freja|Recon hybrid sniper: an automatic crossbow plus Take Aim, a sticky explosive bolt. Two direct explosive bolts can kill a 250-health hero; the explosion alone can't headshot.
-Freja|Quick Dash (two charges) resets Take Aim and chases targets; keeping one charge to escape divers is important. Updraft lifts her high to reach high ground or shoot over cover, but she is an easy target in the air for hitscan heroes.
-Freja|Plays behind a front-line tank or on a soft flank, ideally on high ground. Bola Shot needs a direct hit to slow and pull; it's best saved for divers trying to escape or to set up team kills.
-Freja|Close-range mobile heroes (D.Va, Doomfist, Genji, Lucio) catch her, and long-range hitscans punish Updraft. Her final blows also charge her ultimate faster.
+Freja|Recon hybrid sniper: an automatic crossbow plus Take Aim, a sticky explosive bolt (aiming also slows her fall). Her job is picks on squishy targets from high ground; deliberate, controlled shots beat flicks, because missed explosive bolts are wasted value.
+Freja|Quick Dash (two charges) resets Take Aim and chases targets; keeping one charge to escape is key, and using all movement at once strands her. Updraft lifts her for high ground but she is an easy target in the air for hitscan heroes. Many deaths usually mean standing in the open or no escape kept.
+Freja|Before committing to a kill, she checks the target's defensive cooldowns (Zarya's bubble, Kiriko's Suzu). Bola Shot is a single-target pick ultimate: a direct hit hinders and heavily damages the target and refreshes Take Aim.
+Freja|Strong into tanks without barriers (Roadhog, Mauga); countered by hitscan (Ashe, Cassidy, Emre) and close-range divers (D.Va, Doomfist, Genji). A Mercy pocket helps her. Common perks: Relentless Barrage and Aerial Recovery.
 Genji|Flanker who wins by finishing low-health targets: Swift Strike resets its cooldown on eliminations, so chaining kills is his strength and his damage total can be modest for his impact.
 Genji|Plays mid-range with shuriken until a target is weak, then commits. Diving without a low target or his ultimate gets him killed.
 Genji|Deflect reflects projectiles but not beams, area damage or melee-like abilities; baiting enemy abilities into it is a core skill.
@@ -128,10 +130,11 @@ Reaper|Weak at mid to long range; Pharah, Echo and long-range heroes beat him.
 Shion|Flanker (added Season 3, 2026) with hitscan dual pistols and Execution, a short-range shotgun blast (140 damage at full spread) for burst.
 Shion|Evade dashes through enemies and gives overhealth; Joyride (a bike) is for flanking, reaching high ground, escaping, then launching it as an explosive.
 Shion|Starts her ultimate from a flank, since she stays almost still during it. Ana's sleep, hinders and Widowmaker punish her; health packs heal her more than most heroes.
-Sierra|Recon hero (added Season 2, 2026) with an automatic rifle; her value comes from Anchor Drone: grapple to it for an attack angle, deal damage, then grapple out. Without the drone she has no escape.
-Sierra|Tracking Shot marks a target so her rifle shots auto-track it for a few seconds without using ammo; it needs line of sight. Using Tremor Charge first and Tracking Shot second gets more out of the tracking time.
-Sierra|Place the drone at a steep, protected angle with an escape route. After she has used Tracking Shot or Anchor Drone her threat drops, so enemies push her then.
-Sierra|Trailblazer drops bombs from a drone that reach around corners and high ground; best fired right after enemies use defensive abilities. Snipers punish her in the air.
+Sierra|Recon damage hero (added Season 2, 2026) with an automatic rifle that tightens from a spread into a beam; her value comes from Anchor Drone, which gives two grapple points to dip in and out of cover. Without the drone she has no escape, so it is often saved for retreating.
+Sierra|Plays off-angles rather than the main lane (some pros poke from the main line first and move to an off-angle once the fight starts); playing like a stationary main-lane hero wastes her. Backing off as soon as her tank or teammates die avoids feeding.
+Sierra|Tracking Shot marks a target so her rifle auto-tracks it for a few seconds (needs line of sight). Pros use it and Tremor Charge freely to surprise and burst an isolated target rather than holding them; landing the opening pick and cleaning up with the team is her game plan.
+Sierra|Trailblazer drops a line of bombs (aimed down they cluster, aimed up they spread): best mid-fight when enemies are grouped, distracted or have spent defensive cooldowns like Suzu or Life Grip, not to open a fight.
+Sierra|Strong against fliers; dive tanks like Wrecking Ball and snipers punish her. Works well with Zenyatta's Discord and other focus-fire tools.
 Sojourn|Sharpshooter with a rapid railgun whose hits build energy for Charged Shot, a piercing hitscan shot up to 120 damage. Very aim-dependent.
 Sojourn|Power Slide repositions (jump-cancel for height); Disruptor Shot is an area that damages for several seconds and zones; Overclock refills energy fast and gives instant reloads for big charged shots.
 Sojourn|She is strong at mid range; dives catch her once Power Slide is used.
