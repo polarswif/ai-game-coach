@@ -86,6 +86,8 @@ final class OverwatchCoachingPrompt {
                 when to leave, what to save).
                 - Name heroes exactly as given. The coached player's hero is under COACHED PLAYER.
                 - One match is a small sample. Present weaknesses as things to watch, not verdicts.
+                - Weaknesses are about the player's own play. How weak or strong the enemy team was belongs \
+                only in matchContext, never as a strength, weakness or advice item.
                 - matchContext: one or two sentences saying how close the match was and how much weight \
                 this coaching deserves.
                 - List as many strengths and weaknesses as the data supports (usually 2 to 4 each), most \
