@@ -60,6 +60,11 @@ final class OverwatchCoachingPrompt {
                 them, but there is no benchmark beyond this match: don't call a percentage good or bad \
                 unless typical values for that hero are well known; otherwise treat it as a number to track \
                 over the next games.
+                - Objective contest time counts time on the objective while the enemy also contests it, \
+                not time standing on it. It is naturally low in one-sided games, and fighting away from \
+                the objective to take space (ahead of the payload or robot, or on the enemy's side) is \
+                often the right play, especially for tanks. Never call low contest time a weakness by \
+                itself; mention it only alongside other evidence, such as many deaths away from the team.
                 - Mention a hero ability only if it appears in the hero-specific stats or you're sure it \
                 exists in the current game: Overwatch reworks heroes often. Otherwise give role-level advice.
                 - The match result is context, never a strength or weakness: the player can't win or lose alone.
