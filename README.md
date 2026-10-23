@@ -7,7 +7,7 @@ An AI coaching app for competitive games. Players upload a screenshot of the end
 ## Stack
 - **Backend:** Java 17, Spring Boot 4.1.1, Maven
 - **Tests:** JUnit 5, run on every push with GitHub Actions
-- **Frontend:** React (planned)
+- **Frontend:** React 19, React Router, Vite
 - **AI:** Claude API (Messages API over Spring's `RestClient`)
 
 ## How it works
@@ -49,6 +49,17 @@ curl.exe -s -F "screenshot=@C:\path\to\scoreboard.png" -F "score=3-2" -F "hero=D
 
 The model (`gamecoach.claude.model`, default `claude-sonnet-5-5`) and the reply length cap (`gamecoach.claude.max-tokens`) are in the same file. The app logs the tokens each coaching request used. If the provider is `claude` and the key is missing, the app stops at startup with a message saying so.
 
+## Website (React)
+The `frontend/` folder is the website: upload screenshots for either game, check the read (fix any hero the reader guessed wrong from a dropdown), then read the coaching. Light and dark themes. Built with React, React Router and Vite.
+
+To run it, start the Spring Boot app as usual, then in a second terminal:
+```
+cd frontend
+npm install      # first time only: downloads React, Vite and friends into node_modules
+npm run dev
+```
+and open http://localhost:5173. The dev server passes every `/api` request on to the Spring Boot app on port 8080. Needs Node.js 20 or newer.
+
 ## Overwatch match coaching
 The same flow as Rivals, from the end-of-match report (the screen after a match, or the match in your history). Take up to three kinds of screenshot:
 - **Teams** (required): the scoreboard with all 10 players, E / A / D / damage / healing / mitigation.
@@ -88,7 +99,7 @@ In the analysis, a percent difference is `null` when it can't be compared fairly
 - [x] Overwatch career stats and analysis (OverFast)
 - [x] Overwatch match coaching from match report screenshots
 - [x] Overwatch hero notes for every hero (researched, plus pro guides for Sombra, Roadhog and Doctrine)
-- [ ] React frontend
+- [x] React frontend (upload, review with hero fixes, coaching; light and dark)
 - [ ] Saved match history (database)
 - [ ] Authentication and deployment
 
