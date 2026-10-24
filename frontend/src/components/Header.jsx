@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, NavLink } from 'react-router';
 import { LogoMark, MoonIcon, SunIcon } from './Icons.jsx';
 
 const STEPS = ['Upload', 'Review', 'Coaching'];
@@ -16,6 +16,7 @@ export default function Header({ theme, step }) {
         <span>Game Coach</span>
       </Link>
       <div className="header__right">
+        <NavLink to="/matches" className="pill">My matches</NavLink>
         {step ? (
           <ol className="steps">
             {STEPS.map((label, index) => (
@@ -27,7 +28,7 @@ export default function Header({ theme, step }) {
           </ol>
         ) : (
           <nav className="nav">
-            <Link to="/" className="pill pill--solid">Upload</Link>
+            <NavLink to="/" end className="pill">Upload</NavLink>
           </nav>
         )}
         <button type="button" className="icon-button" onClick={theme.toggle}

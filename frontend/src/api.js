@@ -43,6 +43,11 @@ function once(key, makeRequest) {
 export const api = {
   heroes: (game) => request(`/${game}/heroes`),
 
+  /** Saved matches, newest first. game is 'rivals', 'overwatch', or left out for both. */
+  matches: (game) => request(game ? `/matches?game=${game}` : '/matches'),
+
+  deleteMatch: (matchId) => request(`/matches/${matchId}`, { method: 'DELETE' }),
+
   /** formData holds the screenshots and optional fields, named the way the controller expects. */
   upload: (game, formData) => request(`/${game}/matches`, { method: 'POST', body: formData }),
 

@@ -278,3 +278,27 @@ input[type='radio'] { width: 20px; height: 20px; accent-color: var(--accent); }
   .page-title { font-size: 34px; }
   .button--large { width: 100%; }
 }
+
+/* ---------- My matches ---------- */
+.pill { color: var(--text); }
+.pill.active { background: var(--primary); color: var(--primary-text); }
+.filter-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.filter-tab { font: inherit; font-weight: 600; font-size: 15px; padding: 10px 16px; border-radius: 999px; cursor: pointer;
+  border: 1.5px solid var(--border); background: var(--surface); color: var(--text); }
+.filter-tab--on { background: var(--primary); color: var(--primary-text); border-color: var(--primary); }
+.match-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.match-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 16px 20px; border-radius: 18px;
+  background: var(--surface); border: 1.5px solid var(--border); }
+.match-row__icon { color: var(--accent); display: inline-flex; }
+.match-row__icon svg { width: 36px; height: 36px; }
+.match-row__main { display: flex; flex-direction: column; gap: 4px; flex: 1 1 260px; min-width: 0; }
+.match-row__title { font-family: var(--font-display); font-weight: 800; font-size: 19px; }
+.match-row__meta { font-size: 14px; color: var(--muted); }
+.match-row__actions { display: flex; align-items: center; gap: 8px; }
+.result { font-family: var(--font-display); font-weight: 800; font-size: 17px; min-width: 110px; }
+.result--victory { color: var(--win); }
+.result--defeat { color: var(--bad); }
+.result--unknown, .result--draw { color: var(--muted); }
+.button--small { padding: 10px 14px; font-size: 14px; }
+.icon-button--small { width: 40px; height: 40px; }
+.empty { align-items: flex-start; }

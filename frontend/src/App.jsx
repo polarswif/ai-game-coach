@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router';
 import UploadPage from './pages/UploadPage.jsx';
 import ReviewPage from './pages/ReviewPage.jsx';
 import ResultsPage from './pages/ResultsPage.jsx';
+import MatchesPage from './pages/MatchesPage.jsx';
 import { useTheme } from './theme.js';
 
 /**
@@ -13,6 +14,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<UploadPage theme={theme} />} />
+      <Route path="/matches" element={<MatchesPage theme={theme} />} />
       <Route path="/:game/matches/:matchId/review" element={<ReviewPage theme={theme} />} />
       <Route path="/:game/matches/:matchId/results" element={<ResultsPage theme={theme} />} />
       <Route path="*" element={<Navigate to="/" replace />} />
