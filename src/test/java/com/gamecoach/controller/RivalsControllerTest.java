@@ -12,6 +12,7 @@ import com.gamecoach.parsing.BadUploadException;
 import com.gamecoach.parsing.ParsedScoreboard;
 import com.gamecoach.parsing.ScoreboardParser;
 import com.gamecoach.parsing.ScoreboardValidator;
+import com.gamecoach.parsing.InMemoryUploadedMatchStore;
 import com.gamecoach.parsing.UploadedMatchStore;
 import com.gamecoach.service.CoachingUnavailableException;
 import com.gamecoach.service.FakeCoachingService;
@@ -40,7 +41,7 @@ class RivalsControllerTest {
     private final FakeMatchHistorySource source = new FakeMatchHistorySource();
     private final MatchAnalyzer analyzer = new MatchAnalyzer(new HeroRoleCatalog(), new TeamUpCatalog());
     private final ScoreboardValidator validator = new ScoreboardValidator(new HeroRoleCatalog(), new TeamUpCatalog());
-    private final UploadedMatchStore uploads = new UploadedMatchStore();
+    private final UploadedMatchStore uploads = new InMemoryUploadedMatchStore();
 
     /** A stand-in reader: "reads" every screenshot as the Player29 match, with the given id and score. */
     private final ScoreboardParser fakeReader = (screenshot, matchId, score) -> new ParsedScoreboard(

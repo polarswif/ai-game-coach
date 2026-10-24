@@ -8,6 +8,7 @@ import com.gamecoach.model.Feedback;
 import com.gamecoach.model.OverwatchMatch;
 import com.gamecoach.parsing.BadUploadException;
 import com.gamecoach.parsing.OverwatchMatchReader;
+import com.gamecoach.parsing.InMemoryOverwatchMatchStore;
 import com.gamecoach.parsing.OverwatchMatchStore;
 import com.gamecoach.parsing.OverwatchMatchValidator;
 import com.gamecoach.parsing.OverwatchScreens;
@@ -33,7 +34,7 @@ class OverwatchMatchControllerTest {
 
     private final OverwatchHeroCatalog heroes = new OverwatchHeroCatalog();
     private final OverwatchMatchValidator validator = new OverwatchMatchValidator(heroes);
-    private final OverwatchMatchStore store = new OverwatchMatchStore();
+    private final OverwatchMatchStore store = new InMemoryOverwatchMatchStore();
     private final List<OverwatchScreens> readScreens = new ArrayList<>();
 
     /** "Reads" every upload as the Colosseo match, with a portrait doubt about your row. */

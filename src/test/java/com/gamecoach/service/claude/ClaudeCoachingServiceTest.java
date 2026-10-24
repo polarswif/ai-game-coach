@@ -1,5 +1,6 @@
 package com.gamecoach.service.claude;
 
+import com.gamecoach.service.CoachingArchive;
 import com.gamecoach.analysis.HeroNotesCatalog;
 import com.gamecoach.analysis.HeroRoleCatalog;
 import com.gamecoach.analysis.MatchAnalyzer;
@@ -74,7 +75,7 @@ class ClaudeCoachingServiceTest {
     }
 
     private final FakeClient client = new FakeClient();
-    private final ClaudeCoachingService coach = new ClaudeCoachingService(client, properties, new HeroNotesCatalog());
+    private final ClaudeCoachingService coach = new ClaudeCoachingService(client, properties, new HeroNotesCatalog(), CoachingArchive.inMemory());
 
     private String promptFor(MatchDetails match, PlayerAnalysis analysis) {
         return coach.buildRequest(match, analysis).messages().get(0).text();
@@ -135,7 +136,7 @@ class ClaudeCoachingServiceTest {
     void promptLeavesOutTheNotesSectionWhenThereAreNone() {
         // Every real hero has notes now, so use a catalog that only knows Magneto.
         ClaudeCoachingService noNotes = new ClaudeCoachingService(client, properties,
-                HeroNotesCatalog.fromText("Magneto|A shield tank."));
+                HeroNotesCatalog.fromText("Magneto|A shield tank."), CoachingArchive.inMemory());
         PlayerAnalysis rocket = analyzer.analyze(player29Match, (String) null);
         assertFalse(noNotes.buildRequest(player29Match, rocket).messages().get(0).text().contains("HERO NOTES"));
     }

@@ -5,6 +5,7 @@ import com.gamecoach.analysis.HeroPlayed;
 import com.gamecoach.analysis.PlayerAnalysis;
 import com.gamecoach.model.Feedback;
 import com.gamecoach.model.MatchDetails;
+import com.gamecoach.service.CoachingArchive;
 import com.gamecoach.service.CoachingService;
 import com.gamecoach.service.CoachingUnavailableException;
 import com.gamecoach.service.claude.ClaudeApi.ContentBlock;
@@ -18,15 +19,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Coaching written by Claude. Sends the match and the Java-computed analysis, asks Claude to answer
  * through the submit_coaching tool, and turns that into Feedback.
- * Results are cached per match and player, so asking twice doesn't pay twice.
+ * Results are saved per match version and player (CoachingArchive, the database in the app), so
+ * asking twice doesn't pay twice, even after a restart.
  * Active when application.properties has gamecoach.coach.provider=claude.
  */
 @Service
@@ -34,40 +36,29 @@ import java.util.Map;
 public class ClaudeCoachingService implements CoachingService {
 
     private static final Logger log = LoggerFactory.getLogger(ClaudeCoachingService.class);
-    private static final int CACHE_SIZE = 500;
 
     private final ClaudeClient client;
     private final ClaudeProperties properties;
     private final HeroNotesCatalog heroNotes;
+    private final CoachingArchive archive;
 
-    /**
-     * A LinkedHashMap in "access order" with removeEldestEntry overridden is a simple LRU cache: when
-     * it's full, the entry used longest ago is dropped. synchronizedMap makes it safe when several
-     * requests arrive at once (Spring handles each request on its own thread).
-     */
-    private final Map<String, Feedback> cache = Collections.synchronizedMap(
-            new LinkedHashMap<>(16, 0.75f, true) {
-                @Override
-                protected boolean removeEldestEntry(Map.Entry<String, Feedback> eldest) {
-                    return size() > CACHE_SIZE;
-                }
-            });
-
-    public ClaudeCoachingService(ClaudeClient client, ClaudeProperties properties, HeroNotesCatalog heroNotes) {
+    public ClaudeCoachingService(ClaudeClient client, ClaudeProperties properties, HeroNotesCatalog heroNotes,
+                                 CoachingArchive archive) {
         this.client = client;
         this.properties = properties;
         this.heroNotes = heroNotes;
+        this.archive = archive;
     }
 
     @Override
     public Feedback coach(MatchDetails match, PlayerAnalysis analysis) {
-        String key = cacheKey(match, analysis);
-        Feedback cached = cache.get(key);
-        if (cached != null) {
-            return cached;
+        String who = playerKey(analysis);
+        Optional<Feedback> saved = archive.find(match.matchId(), match, who);
+        if (saved.isPresent()) {
+            return saved.get();
         }
         Feedback feedback = askClaude(match, analysis);
-        cache.put(key, feedback);
+        archive.save(match.matchId(), match, who, feedback);
         return feedback;
     }
 
@@ -152,15 +143,10 @@ public class ClaudeCoachingService implements CoachingService {
         return items == null || items.stream().allMatch(s -> s == null || s.isBlank());
     }
 
-    /**
-     * One coaching per match version per player. Hidden names fall back to team plus last hero,
-     * which is unique enough within one match.
-     */
-    private static String cacheKey(MatchDetails match, PlayerAnalysis a) {
-        String who = a.player() != null ? "name:" + a.player().toLowerCase()
+    /** Who was coached. Hidden names fall back to team plus last hero, unique enough within one match. */
+    private static String playerKey(PlayerAnalysis a) {
+        return a.player() != null ? "name:" + a.player().toLowerCase()
                 : "row:" + a.team() + ":" + a.heroes().stream().filter(HeroPlayed::lastPlayed)
                         .map(HeroPlayed::hero).findFirst().orElse("?");
-        // hashCode covers every field of the match record, so a corrected scoreboard gets fresh coaching.
-        return match.matchId() + "#" + Integer.toHexString(match.hashCode()) + "|" + who;
     }
 }

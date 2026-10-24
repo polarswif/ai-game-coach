@@ -2,45 +2,26 @@ package com.gamecoach.parsing;
 
 import com.gamecoach.model.MatchDetails;
 
-import org.springframework.stereotype.Component;
-
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Matches read from uploaded screenshots, kept in memory until the database step replaces this.
- * Everything is lost when the app restarts. Holds the most recent 200, dropping the oldest.
+ * Where uploaded Marvel Rivals matches are kept. The app uses the database version
+ * (persistence.DbUploadedMatchStore); tests use InMemoryUploadedMatchStore, so they need no database.
  */
-@Component
-public class UploadedMatchStore {
-
-    private static final int CAPACITY = 200;
-
-    private final Map<String, MatchDetails> matches = Collections.synchronizedMap(
-            new LinkedHashMap<>(16, 0.75f, false) {
-                @Override
-                protected boolean removeEldestEntry(Map.Entry<String, MatchDetails> eldest) {
-                    return size() > CAPACITY;
-                }
-            });
+public interface UploadedMatchStore {
 
     /** A fresh id like "upload-1a2b3c4d", so uploaded matches can't collide with other sources' ids. */
-    public String newId() {
+    default String newId() {
         return "upload-" + UUID.randomUUID().toString().substring(0, 8);
     }
 
-    public void save(MatchDetails match) {
-        matches.put(match.matchId(), match);
-    }
+    /** Saves a new match, or replaces the one with the same id (a correction). */
+    void save(MatchDetails match);
 
-    public Optional<MatchDetails> find(String matchId) {
-        return Optional.ofNullable(matches.get(matchId));
-    }
+    Optional<MatchDetails> find(String matchId);
 
-    public boolean contains(String matchId) {
-        return matches.containsKey(matchId);
+    default boolean contains(String matchId) {
+        return find(matchId).isPresent();
     }
 }

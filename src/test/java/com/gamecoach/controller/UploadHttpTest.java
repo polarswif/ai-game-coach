@@ -8,6 +8,7 @@ import com.gamecoach.parsing.ParsedScoreboard;
 import com.gamecoach.parsing.ScoreboardParser;
 import com.gamecoach.parsing.ScoreboardUnreadableException;
 import com.gamecoach.parsing.ScoreboardValidator;
+import com.gamecoach.parsing.InMemoryUploadedMatchStore;
 import com.gamecoach.parsing.UploadedMatchStore;
 import com.gamecoach.service.FakeCoachingService;
 
@@ -31,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UploadHttpTest {
 
     private final FakeMatchHistorySource source = new FakeMatchHistorySource();
-    private final UploadedMatchStore uploads = new UploadedMatchStore();
+    private final UploadedMatchStore uploads = new InMemoryUploadedMatchStore();
     private final ScoreboardValidator validator = new ScoreboardValidator(new HeroRoleCatalog(), new TeamUpCatalog());
 
     private MockMvc mvc(Optional<ScoreboardParser> reader) {

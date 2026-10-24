@@ -1,5 +1,6 @@
 package com.gamecoach.service.claude;
 
+import com.gamecoach.service.CoachingArchive;
 import com.gamecoach.OverwatchMatchFixtures;
 import com.gamecoach.analysis.OverwatchHeroCatalog;
 import com.gamecoach.analysis.OverwatchHeroNotesCatalog;
@@ -40,7 +41,7 @@ class ClaudeOverwatchCoachTest {
 
     private final FakeClient client = new FakeClient();
     private final ClaudeOverwatchCoach coach = new ClaudeOverwatchCoach(client,
-            new ClaudeProperties("test-key", null, null, null, null), new OverwatchHeroNotesCatalog());
+            new ClaudeProperties("test-key", null, null, null, null), new OverwatchHeroNotesCatalog(), CoachingArchive.inMemory());
     private final OverwatchMatch match = OverwatchMatchFixtures.colosseo();
     private final OverwatchPlayerAnalysis analysis =
             new OverwatchMatchAnalyzer(new OverwatchHeroCatalog()).analyze(match, null);

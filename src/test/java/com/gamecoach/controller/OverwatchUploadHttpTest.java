@@ -4,6 +4,7 @@ import com.gamecoach.OverwatchMatchFixtures;
 import com.gamecoach.analysis.OverwatchHeroCatalog;
 import com.gamecoach.analysis.OverwatchMatchAnalyzer;
 import com.gamecoach.parsing.OverwatchMatchReader;
+import com.gamecoach.parsing.InMemoryOverwatchMatchStore;
 import com.gamecoach.parsing.OverwatchMatchStore;
 import com.gamecoach.parsing.OverwatchMatchValidator;
 import com.gamecoach.parsing.ParsedOverwatchMatch;
@@ -43,7 +44,7 @@ class OverwatchUploadHttpTest {
 
     private MockMvc mvc() {
         OverwatchMatchController controller = new OverwatchMatchController(Optional.of(reader), Optional.empty(),
-                new OverwatchMatchStore(), new OverwatchMatchValidator(heroes), new OverwatchMatchAnalyzer(heroes), heroes);
+                new InMemoryOverwatchMatchStore(), new OverwatchMatchValidator(heroes), new OverwatchMatchAnalyzer(heroes), heroes);
         return MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(new ApiExceptionHandler()).build();
     }
 

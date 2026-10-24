@@ -16,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 @SpringBootTest(properties = {
         "gamecoach.coach.provider=claude",
         "gamecoach.claude.api-key=dummy-key-for-tests",
-        "gamecoach.claude.model=claude-haiku-5-5"})
+        "gamecoach.claude.model=claude-haiku-5-5",
+        "spring.datasource.url=jdbc:h2:mem:wiring-test;DB_CLOSE_DELAY=-1"})
 class ClaudeWiringTest {
 
     @Autowired
