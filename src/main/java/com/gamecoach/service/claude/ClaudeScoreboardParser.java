@@ -73,7 +73,7 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
         MatchDetails match = ScoreboardToolInput.toMatch(input, matchId, warnings);
         if (match.players().isEmpty()) {
             throw new ScoreboardUnreadableException("No scoreboard rows could be read from this image"
-                    + (warnings.isEmpty() ? "." : ": " + String.join(" ", warnings)));
+                    + (warnings.isEmpty() ? "." : ": " + ToolInput.firstSentence(warnings.get(0))));
         }
         if (score != null) {
             match = match.withScore(score);

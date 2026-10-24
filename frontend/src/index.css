@@ -232,6 +232,10 @@ th:last-child, td:last-child { padding-right: 22px; }
 .center { text-align: center; }
 .row--you { background: var(--row-you); }
 .row--flagged { background: var(--row-flag); }
+.row--mismatch { background: var(--warn-bg); }
+.role-note { display: block; margin-top: 6px; font-size: 12px; line-height: 1.4; color: var(--warn-text); font-weight: 600; }
+.link-button { font: inherit; color: inherit; background: none; border: none; padding: 0; text-decoration: underline; cursor: pointer; }
+.warning-box p { font-size: 15px; line-height: 1.5; }
 .player { display: flex; flex-direction: column; gap: 2px; }
 .player__name { font-weight: 700; display: flex; align-items: center; gap: 8px; }
 .player__title { font-size: 13px; color: var(--muted); }

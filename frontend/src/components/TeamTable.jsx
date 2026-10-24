@@ -4,7 +4,7 @@ import { formatNumber } from '../format.js';
  * One team's rows. Each hero cell is a dropdown so a wrong portrait read can be fixed, and the
  * "You" column marks whose row gets coached. Rows the reader was unsure about are highlighted.
  */
-export default function TeamTable({ game, title, rows, heroesByRole, onHeroChange, onYouChange, headKind }) {
+export default function TeamTable({ game, title, rows, heroesByRole, onHeroChange, onRoleChange, onYouChange, headKind }) {
   return (
     <section className={`team-table team-table--${headKind}`}>
       <div className="team-table__head">
@@ -24,8 +24,8 @@ export default function TeamTable({ game, title, rows, heroesByRole, onHeroChang
             </tr>
           </thead>
           <tbody>
-            {rows.map(({ player, index, flagged }) => (
-              <tr key={index} className={player.uploader ? 'row--you' : flagged ? 'row--flagged' : undefined}>
+            {rows.map(({ player, index, flagged, heroRole }) => (
+              <tr key={index} className={heroRole ? 'row--mismatch' : player.uploader ? 'row--you' : flagged ? 'row--flagged' : undefined}>
                 <td>
                   <span className="player">
                     <span className="player__name">
@@ -53,6 +53,15 @@ export default function TeamTable({ game, title, rows, heroesByRole, onHeroChang
                       ))}
                     </select>
                   </label>
+                  {heroRole && (
+                    <span className="role-note">
+                      The icon showed {game.roles[player.role] ?? player.role}, but {player[game.heroField]} is
+                      a {game.roles[heroRole] ?? heroRole}.{' '}
+                      <button type="button" className="link-button" onClick={() => onRoleChange(index, heroRole)}>
+                        Use {game.roles[heroRole] ?? heroRole}
+                      </button>
+                    </span>
+                  )}
                 </td>
                 {game.columns.map((column) => (
                   <td key={column.key} className="num">

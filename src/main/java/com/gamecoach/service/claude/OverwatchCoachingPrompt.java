@@ -63,8 +63,12 @@ final class OverwatchCoachingPrompt {
                 - Objective contest time counts time on the objective while the enemy also contests it, \
                 not time standing on it. It is naturally low in one-sided games, and fighting away from \
                 the objective to take space (ahead of the payload or robot, or on the enemy's side) is \
-                often the right play, especially for tanks. Never call low contest time a weakness by \
-                itself; mention it only alongside other evidence, such as many deaths away from the team.
+                often the right play, especially for tanks. Never list contest time as a weakness or its \
+                own advice item; at most mention it inside another point that has real evidence (such as \
+                many deaths away from the team).
+                - A row's hero is the hero that player ended on, but the row's numbers cover the whole \
+                match. If a player's numbers clearly don't fit their hero (for example lots of healing on \
+                a tank), they probably switched heroes, so don't use them as a same-role comparison.
                 - HERO NOTES, when given, are researched knowledge of how the hero plays now. Trust them over \
                 general assumptions and use them to read the stats (for example, what a hero's mitigation \
                 comes from, or why low damage is normal for them).

@@ -76,7 +76,7 @@ public class ClaudeOverwatchReader implements OverwatchMatchReader {
         OverwatchMatch match = OverwatchToolInput.toMatch(input, matchId, warnings);
         if (match.players().isEmpty()) {
             throw new ScoreboardUnreadableException("No scoreboard rows could be read from the Teams screen"
-                    + (warnings.isEmpty() ? "." : ": " + String.join(" ", warnings)));
+                    + (warnings.isEmpty() ? "." : ": " + ToolInput.firstSentence(warnings.get(0))));
         }
         warnings.addAll(validator.check(match));
         return new ParsedOverwatchMatch(match, List.copyOf(warnings));

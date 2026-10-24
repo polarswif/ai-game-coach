@@ -178,4 +178,17 @@ public final class ToolInput {
             map.put(key, value);
         }
     }
+
+    /**
+     * The first sentence of a model's note, for showing to a user: "It shows a cat. There are no
+     * players. Ignore the duration." becomes "It shows a cat." Text without a sentence end is kept whole.
+     */
+    public static String firstSentence(String text) {
+        if (text == null) {
+            return "";
+        }
+        String t = text.strip();
+        java.util.regex.Matcher m = java.util.regex.Pattern.compile("^.+?[.!?](?=\\s|$)").matcher(t);
+        return m.find() ? m.group() : t;
+    }
 }

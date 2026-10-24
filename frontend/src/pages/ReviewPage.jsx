@@ -56,15 +56,30 @@ export default function ReviewPage({ theme }) {
     });
   };
 
+  // Changing a hero keeps the row's role as the reader saw it: role icons are read very reliably,
+  // so a hero from another role is more often a slip than a real change. The row then shows a note
+  // with a button to switch the role on purpose (see roleMismatch below).
   function changeHero(index, heroName) {
     setMatch((current) => ({
       ...current,
-      players: current.players.map((p, i) => (i === index
-        ? { ...p, [game.heroField]: heroName, role: heroesByRole.roleOf[heroName] ?? p.role }
-        : p)),
+      players: current.players.map((p, i) => (i === index ? { ...p, [game.heroField]: heroName } : p)),
     }));
     setChanged(true);
   }
+
+  function changeRole(index, role) {
+    setMatch((current) => ({
+      ...current,
+      players: current.players.map((p, i) => (i === index ? { ...p, role } : p)),
+    }));
+    setChanged(true);
+  }
+
+  /** The hero's real role when it differs from the row's role icon; null when they agree. */
+  const roleMismatch = (player) => {
+    const heroRole = heroesByRole.roleOf[player[game.heroField]];
+    return heroRole && player.role && player.role !== 'UNKNOWN' && heroRole !== player.role ? heroRole : null;
+  };
 
   function changeYou(index) {
     setMatch((current) => ({ ...current, players: current.players.map((p, i) => ({ ...p, uploader: i === index })) }));
@@ -89,9 +104,10 @@ export default function ReviewPage({ theme }) {
   }
 
   const rowsFor = (team) => (match?.players ?? [])
-    .map((player, index) => ({ player, index, flagged: isFlagged(player) }))
+    .map((player, index) => ({ player, index, flagged: isFlagged(player), heroRole: roleMismatch(player) }))
     .filter(({ player }) => player.team === team);
   const flaggedCount = (match?.players ?? []).filter(isFlagged).length;
+  const mismatchCount = (match?.players ?? []).filter((p) => roleMismatch(p)).length;
   const you = match?.players.find((p) => p.uploader);
 
   return (
@@ -128,15 +144,23 @@ export default function ReviewPage({ theme }) {
           </section>
         )}
 
+        {mismatchCount > 0 && (
+          <section className="warning-box" aria-live="polite">
+            <WarningIcon />
+            <p><strong>{mismatchCount === 1 ? '1 row has' : `${mismatchCount} rows have`} a hero that doesn't match the role icon.</strong>{' '}
+              That's usually a slip in the dropdown. Check the highlighted {mismatchCount === 1 ? 'row' : 'rows'}.</p>
+          </section>
+        )}
+
         {error && <ErrorBox message={error} />}
         {!match && !error && <Spinner label="Loading the match" />}
 
         {match && (
           <>
             <TeamTable game={game} title="Your team" headKind="own" rows={rowsFor('A')} heroesByRole={heroesByRole}
-              onHeroChange={changeHero} onYouChange={changeYou} />
+              onHeroChange={changeHero} onRoleChange={changeRole} onYouChange={changeYou} />
             <TeamTable game={game} title="Enemy team" headKind="enemy" rows={rowsFor('B')} heroesByRole={heroesByRole}
-              onHeroChange={changeHero} />
+              onHeroChange={changeHero} onRoleChange={changeRole} />
             <div className="actions">
               <Link to="/" className="button button--outline">Upload again</Link>
               <button type="button" className="button button--primary button--large" onClick={continueToCoaching}

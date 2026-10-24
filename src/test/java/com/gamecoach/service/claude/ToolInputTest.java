@@ -74,4 +74,12 @@ class ToolInputTest {
         assertEquals(java.util.List.of("Play off-angles.", "Back off when the tank dies."), ToolInput.strings(fixed, "advice"));
         assertEquals("A one-sided loss.", ToolInput.string(fixed, "matchContext"));
     }
+
+    @Test
+    void firstSentenceKeepsOnlyTheUsefulPart() {
+        assertEquals("The image is not a Marvel Rivals scoreboard.",
+                ToolInput.firstSentence("The image is not a Marvel Rivals scoreboard. It shows a Google page. Ignore both values."));
+        assertEquals("No full stop here", ToolInput.firstSentence("No full stop here"));
+        assertEquals("Version 1.5 is fine.", ToolInput.firstSentence("Version 1.5 is fine. More."));
+    }
 }
