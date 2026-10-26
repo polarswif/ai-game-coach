@@ -322,3 +322,4 @@ input[type='radio'] { width: 20px; height: 20px; accent-color: var(--accent); }
 .password-field .input { padding-right: 76px; }
 .password-toggle { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font: inherit; font-size: 14px; font-weight: 700;
   padding: 6px 12px; border-radius: 8px; border: none; background: var(--chip); color: var(--chip-text); cursor: pointer; }
+.welcome { font-size: 15px; color: var(--text); margin-right: 4px; }

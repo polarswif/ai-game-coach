@@ -18,6 +18,7 @@ export default function Header({ theme, step }) {
         <span>Game Coach</span>
       </Link>
       <div className="header__right">
+        {session && <span className="welcome">Welcome, <strong>{session.username}</strong></span>}
         {session && <NavLink to="/matches" className="pill">My matches</NavLink>}
         {session && step ? (
           <ol className="steps">
@@ -39,8 +40,7 @@ export default function Header({ theme, step }) {
           </nav>
         )}
         {session && (
-          <button type="button" className="pill pill--button" onClick={auth.signOut}
-            title={`Signed in as ${session.username}`}>
+          <button type="button" className="pill pill--button" onClick={auth.signOut}>
             Log out
           </button>
         )}
