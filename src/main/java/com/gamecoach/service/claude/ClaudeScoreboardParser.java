@@ -40,7 +40,7 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
     private static final Logger log = LoggerFactory.getLogger(ClaudeScoreboardParser.class);
 
     /** Twelve rows of JSON need more room than a coaching reply. */
-    static final int MAX_TOKENS = 8000;
+    static final int MAX_TOKENS = 16000;
 
     private final ClaudeClient client;
     private final ClaudeProperties properties;

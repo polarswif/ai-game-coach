@@ -40,7 +40,7 @@ public class ClaudeOverwatchReader implements OverwatchMatchReader {
     private static final Logger log = LoggerFactory.getLogger(ClaudeOverwatchReader.class);
 
     /** Ten rows plus hero tiles; the same room the Rivals reader gets. */
-    static final int MAX_TOKENS = 8000;
+    static final int MAX_TOKENS = 16000;
 
     /** How much of the Teams screen's width the portrait zoom keeps: role icons, portraits and names. */
     static final double ZOOM_FRACTION = 0.40;
