@@ -44,10 +44,9 @@ final class ScoreboardPrompt {
                 healing, accuracy, and the Medals column. MVP and SVP tags mark at most one player each.
                 - Names can be hidden (blacked out or covered by a popup): use null, never guess.
                 - Team-up box: it pictures the partner hero, who must be one of the row hero's own TEAM-UP \
-                PARTNERS (listed after HERO NAMES; team-ups go one way); compare the small face with those heroes on HERO \
-                PORTRAITS. If it doesn't clearly match one of them, leave teamUpPartner null. Full color \
-                means enhanced (the partner is on the team); shaded or grey means not enhanced. Omit the \
-                team-up when there's no box.
+                PARTNERS (listed after HERO NAMES; team-ups go one way); compare the small face with those \
+                heroes on HERO PORTRAITS. If it doesn't clearly match one, leave teamUpPartner null. Omit it \
+                when there's no box. (Whether it was enhanced is worked out from the teams; don't judge colors.)
                 - Medals column: per-match medals, each given to the lobby leader in one stat: crossed swords \
                 (most KOs), flame (most damage), shield (most damage blocked), green plus (most healing), fist \
                 (most assists). A red number there is the best multi-kill (3 to 6). Leave both out if unsure.
@@ -83,7 +82,9 @@ final class ScoreboardPrompt {
                 - Always answer by calling the submit_scoreboard tool exactly once, straight away, with no \
                 text before it. If the image is not a Marvel Rivals scoreboard, call it with no players and \
                 a warning saying what the image shows.
-                - Keep warnings short and only for real doubts; don't repeat what heroSure already says.
+                - Warnings are only for doubts that change the coaching: a name, hero or number you couldn't \
+                read. Keep each one short. Don't warn about badges, bans, multi-kill icons or team-up boxes, \
+                and don't repeat what heroSure already says.
                 """;
     }
 
@@ -109,7 +110,6 @@ final class ScoreboardPrompt {
         player.put("role", Map.of("type", "string", "enum", List.of("VANGUARD", "DUELIST", "STRATEGIST", "UNKNOWN")));
         player.put("hero", Map.of("type", "string", "description", "The portrait's hero, from HERO NAMES."));
         player.put("teamUpPartner", nullableString("Hero pictured in the team-up box; null when there is no box."));
-        player.put("teamUpEnhanced", Map.of("type", "boolean", "description", "True when the team-up box is in full color."));
         player.put("portrait", enumOf(PortraitStyle.class, "DEFAULT unless the portrait is Lord art."));
         player.put("badge", enumOf(ProficiencyBadge.class, "NONE", "Proficiency Badge on the portrait's bottom-left; NONE when absent."));
         for (String stat : List.of("kills", "deaths", "assists", "finalHits", "damage", "blocked", "healing")) {

@@ -212,4 +212,22 @@ class ClaudeScoreboardParserTest {
         assertEquals("Loki", parsed.match().players().get(7).lastHero());
         assertTrue(parsed.warnings().stream().noneMatch(w -> w.contains("isn't in the hero table")));
     }
+
+    @Test
+    void enhancedTeamUpsAreWorkedOutFromTheTeams() {
+        Map<String, Object> input = ScoreboardInputs.of(player29);
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> rows = (List<Map<String, Object>>) input.get("players");
+        String teammate = (String) rows.get(1).get("hero");                 // same team as row 0
+        String enemy = (String) rows.get(7).get("hero");
+        rows.get(0).put("teamUpPartner", teammate);
+        rows.get(0).put("teamUpEnhanced", false);                           // the reader's guess is ignored
+        rows.get(2).put("teamUpPartner", enemy);
+        rows.get(2).put("teamUpEnhanced", true);
+        client.reply = reply(input);
+
+        MatchDetails match = parser.parse(new Screenshot(PNG, "image/png"), "u", null).match();
+        assertTrue(match.players().get(0).teamUp().enhanced());
+        assertTrue(!match.players().get(2).teamUp().enhanced());           // partner is on the other team
+    }
 }

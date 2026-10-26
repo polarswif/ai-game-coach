@@ -2,6 +2,7 @@ package com.gamecoach.service.claude;
 
 import com.gamecoach.analysis.HeroRoleCatalog;
 import com.gamecoach.analysis.TeamUpCatalog;
+import com.gamecoach.model.EquippedTeamUp;
 import com.gamecoach.model.MatchDetails;
 import com.gamecoach.model.RoundScore;
 import com.gamecoach.parsing.HeroDoubt;
@@ -78,7 +79,7 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
 
         Map<String, Object> input = toolInput(response);
         List<String> warnings = new ArrayList<>(ToolInput.strings(input, "warnings"));
-        MatchDetails match = officialHeroNames(ScoreboardToolInput.toMatch(input, matchId, warnings));
+        MatchDetails match = enhancedFromTeams(officialHeroNames(ScoreboardToolInput.toMatch(input, matchId, warnings)));
         List<HeroDoubt> doubts = PortraitCheck.doubts(ToolInput.objects(input, "players"), roles::officialName);
         if (match.players().isEmpty()) {
             throw new ScoreboardUnreadableException("No scoreboard rows could be read from this image"
@@ -136,6 +137,18 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
             }
         }
         return chars == 0 ? "" : " (plus " + chars + " characters of text outside the tool call)";
+    }
+
+    /**
+     * A team-up is enhanced exactly when the partner is on the same team, so that is computed here
+     * instead of judging the small box's colors, which the reader can't do reliably.
+     */
+    private static MatchDetails enhancedFromTeams(MatchDetails match) {
+        return match.withPlayers(match.players().stream()
+                .map(p -> p.teamUp() == null ? p : p.withTeamUp(new EquippedTeamUp(p.teamUp().partner(),
+                        match.players().stream().anyMatch(mate -> mate != p && java.util.Objects.equals(mate.team(), p.team())
+                                && HeroRoleCatalog.sameHero(mate.lastHero(), p.teamUp().partner())))))
+                .toList());
     }
 
     private static ImagePart image(Screenshot screenshot) {
