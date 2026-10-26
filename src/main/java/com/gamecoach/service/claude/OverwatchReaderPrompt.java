@@ -93,8 +93,8 @@ final class OverwatchReaderPrompt {
         player.put("uploader", Map.of("type", "boolean"));
         Map<String, Object> playerSchema = Map.of(
                 "type", "object",
-                "properties", PortraitCheck.withPortraitFields(player),
-                "required", PortraitCheck.withPortraitRequired(List.of("name", "team", "role", "hero",
+                "properties", PortraitCheck.withPortraitFields(player, false),
+                "required", PortraitCheck.withPortraitRequired(false, List.of("name", "team", "role", "hero",
                         "eliminations", "assists", "deaths", "damage", "healing", "mitigation", "uploader")));
 
         Map<String, Object> heroTime = Map.of(

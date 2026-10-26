@@ -1,6 +1,7 @@
 package com.gamecoach.service.claude;
 
 import com.gamecoach.analysis.HeroRoleCatalog;
+import com.gamecoach.analysis.TeamUpCatalog;
 import com.gamecoach.model.MatchDetails;
 import com.gamecoach.model.RoundScore;
 import com.gamecoach.parsing.HeroDoubt;
@@ -47,14 +48,16 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
     private final HeroRoleCatalog roles;
     private final ScoreboardValidator validator;
     private final HeroPortraitSheet portraits;
+    private final TeamUpCatalog teamUps;
 
     public ClaudeScoreboardParser(ClaudeClient client, ClaudeProperties properties, HeroRoleCatalog roles,
-                                  ScoreboardValidator validator, HeroPortraitSheet portraits) {
+                                  ScoreboardValidator validator, HeroPortraitSheet portraits, TeamUpCatalog teamUps) {
         this.client = client;
         this.properties = properties;
         this.roles = roles;
         this.validator = validator;
         this.portraits = portraits;
+        this.teamUps = teamUps;
     }
 
     @Override
@@ -66,8 +69,8 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
             throw new CoachingUnavailableException(ClaudeErrors.explain(e), e);
         }
         if (response.usage() != null) {
-            log.info("Read scoreboard {} with {}: {} input + {} output tokens", matchId, response.model(),
-                    response.usage().inputTokens(), response.usage().outputTokens());
+            log.info("Read scoreboard {} with {}: {} input + {} output tokens{}", matchId, response.model(),
+                    response.usage().inputTokens(), response.usage().outputTokens(), textNote(response));
         }
         if ("max_tokens".equals(response.stopReason())) {
             throw new CoachingUnavailableException("The scoreboard reply was cut off before it finished.", null);
@@ -104,7 +107,7 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
             parts.add(TextPart.of(ScoreboardPrompt.SHEET_LABEL));
             parts.add(image(sheet));
         });
-        parts.add(TextPart.of(ScoreboardPrompt.instructions(roles.heroNames())));
+        parts.add(TextPart.of(ScoreboardPrompt.instructions(roles.heroNames(), teamUps::partnersOf)));
         return new MessagesRequest(
                 properties.model(),
                 MAX_TOKENS,
@@ -120,6 +123,19 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
                 .map(p -> roles.officialName(p.lastHero()).filter(n -> !n.equals(p.lastHero()))
                         .map(p::withLastHero).orElse(p))
                 .toList());
+    }
+
+    /** ", plus N characters of text" when Claude wrote prose besides the tool call (it costs tokens). */
+    private static String textNote(MessagesResponse response) {
+        int chars = 0;
+        if (response.content() != null) {
+            for (ContentBlock block : response.content()) {
+                if ("text".equals(block.type()) && block.text() != null) {
+                    chars += block.text().length();
+                }
+            }
+        }
+        return chars == 0 ? "" : " (plus " + chars + " characters of text outside the tool call)";
     }
 
     private static ImagePart image(Screenshot screenshot) {

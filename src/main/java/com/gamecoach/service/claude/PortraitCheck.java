@@ -29,57 +29,72 @@ final class PortraitCheck {
     /**
      * The prompt section explaining the three fields.
      *
-     * @param referenceSheet true when a HERO PORTRAITS sheet is sent, so being sure means matching it
+     * @param referenceSheet true when a HERO PORTRAITS sheet is sent: the hero is found by matching it,
+     *                       and only unsure rows are described (descriptions are the costly part of a reply)
      */
     static String rules(boolean referenceSheet) {
-        String sure = referenceSheet
-                ? """
-                3. Set heroSure to true when the portrait clearly matches one picture on HERO PORTRAITS. Set \
-                it to false when two pictures could fit, when the portrait is dark or partly hidden, or when \
-                it matches no picture (a costume portrait or a hero missing from the sheet).
-                """
-                : """
-                3. Set heroSure to true only when the description has features that belong to that hero and \
-                to no similar one. Set it to false when the portrait is small, dark, partly hidden or \
-                alternate art, when two heroes could fit, and for heroes added in recent seasons, which you \
-                may know less well. An unsure mark costs the player a glance; a wrong confident one costs \
-                them their coaching.
-                """;
+        if (referenceSheet) {
+            return """
+                    Portraits (a wrong hero ruins the coaching), for every row:
+                    1. Find the portrait's face on HERO PORTRAITS and choose that hero.
+                    2. Set heroSure to true when it clearly matches one picture. Set it to false when two \
+                    pictures could fit, when the portrait is dark or partly hidden, or when it matches no \
+                    picture (a costume portrait or a hero missing from the sheet).
+                    3. Only when heroSure is false: describe what the portrait shows in portraitLooks (a few \
+                    words: hair, face, mask, colors) and put up to two other heroes it could be in \
+                    heroAlternatives, most likely first. Leave both out when sure.
+                    """;
+        }
         return """
                 Portraits (the hardest part, and a wrong hero ruins the coaching), for every row:
                 1. In portraitLooks, first describe what the portrait actually shows in a few words: hair, \
                 face, mask or helmet, costume colors, glow, weapon. Write it before choosing the hero.
                 2. Then choose the hero whose look matches that description.
-                """ + sure + """
+                3. Set heroSure to true only when the description has features that belong to that hero and \
+                to no similar one. Set it to false when the portrait is small, dark, partly hidden or \
+                alternate art, when two heroes could fit, and for heroes added in recent seasons, which you \
+                may know less well. An unsure mark costs the player a glance; a wrong confident one costs \
+                them their coaching.
                 4. When unsure, put up to two other heroes it could be in heroAlternatives, most likely \
                 first, from HERO NAMES.
                 """;
     }
 
-    /** Adds the three fields, with portraitLooks placed before "hero" so it is written first. */
-    static Map<String, Object> withPortraitFields(Map<String, Object> player) {
+    /**
+     * Adds the three fields after "hero" (with a sheet: looks only for unsure rows), or with
+     * portraitLooks placed before "hero" so it is written first (without a sheet: every row).
+     */
+    static Map<String, Object> withPortraitFields(Map<String, Object> player, boolean referenceSheet) {
+        Map<String, Object> looks = Map.of("type", "string", "description", referenceSheet
+                ? "Only when heroSure is false: what the portrait shows in a few words."
+                : "What the portrait shows in a few words, written before choosing the hero.");
         Map<String, Object> out = new java.util.LinkedHashMap<>();
         for (Map.Entry<String, Object> e : player.entrySet()) {
-            if (e.getKey().equals("hero")) {
-                out.put("portraitLooks", Map.of("type", "string",
-                        "description", "What the portrait shows in a few words, written before choosing the hero."));
+            if (e.getKey().equals("hero") && !referenceSheet) {
+                out.put("portraitLooks", looks);
             }
             out.put(e.getKey(), e.getValue());
             if (e.getKey().equals("hero")) {
-                out.put("heroSure", Map.of("type", "boolean",
-                        "description", "True only when the portrait clearly shows this hero's own features."));
+                out.put("heroSure", Map.of("type", "boolean", "description", referenceSheet
+                        ? "True when the portrait clearly matches one picture on HERO PORTRAITS."
+                        : "True only when the portrait clearly shows this hero's own features."));
+                if (referenceSheet) {
+                    out.put("portraitLooks", looks);
+                }
                 out.put("heroAlternatives", Map.of("type", "array", "items", Map.of("type", "string"),
                         "maxItems", MAX_ALTERNATIVES,
-                        "description", "When unsure: other heroes it could be, most likely first; empty when sure."));
+                        "description", "Only when unsure: other heroes it could be, most likely first."));
             }
         }
         return out;
     }
 
-    /** The required-field list with the new fields added. */
-    static List<String> withPortraitRequired(List<String> required) {
+    /** The required-field list with the new fields added (looks only when every row is described). */
+    static List<String> withPortraitRequired(boolean referenceSheet, List<String> required) {
         List<String> out = new ArrayList<>(required);
-        out.add("portraitLooks");
+        if (!referenceSheet) {
+            out.add("portraitLooks");
+        }
         out.add("heroSure");
         return out;
     }

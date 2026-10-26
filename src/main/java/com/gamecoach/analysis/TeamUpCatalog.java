@@ -44,11 +44,28 @@ public class TeamUpCatalog {
         return teamUpsByHero.getOrDefault(HeroRoleCatalog.baseName(hero), List.of());
     }
 
-    /** The hero's team-up whose partner is this hero, if there is one. */
+    /**
+     * The team-up between these two heroes, if there is one. The table lists each team-up under one
+     * hero, but the scoreboard can show it from either side (Doctor Strange's box shows Magik for
+     * Magik's Chain of Cyttorak), so the partner's own list is checked too.
+     */
     public Optional<TeamUp> find(String hero, String partner) {
-        return forHero(hero).stream()
+        Optional<TeamUp> own = forHero(hero).stream()
                 .filter(t -> HeroRoleCatalog.sameHero(t.partner(), partner))
                 .findFirst();
+        return own.isPresent() ? own : forHero(partner).stream()
+                .filter(t -> HeroRoleCatalog.sameHero(t.partner(), hero))
+                .findFirst();
+    }
+
+    /** Every hero this hero can share a team-up with, from either side of the table, in table order. */
+    public List<String> partnersOf(String hero) {
+        java.util.LinkedHashSet<String> partners = new java.util.LinkedHashSet<>();
+        forHero(hero).forEach(t -> partners.add(t.partner()));
+        teamUpsByHero.values().forEach(list -> list.stream()
+                .filter(t -> HeroRoleCatalog.sameHero(t.partner(), hero))
+                .forEach(t -> partners.add(t.hero())));
+        return List.copyOf(partners);
     }
 
     private void load(InputStream in) throws IOException {

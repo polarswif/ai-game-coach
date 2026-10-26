@@ -55,7 +55,7 @@ class ClaudeScoreboardParserTest {
     private final FakeClient client = new FakeClient();
     private final ClaudeScoreboardParser parser = new ClaudeScoreboardParser(client,
             new ClaudeProperties("test-key", null, null, null, null), roles,
-            new ScoreboardValidator(roles, new TeamUpCatalog()), new HeroPortraitSheet());
+            new ScoreboardValidator(roles, new TeamUpCatalog()), new HeroPortraitSheet(), new TeamUpCatalog());
 
     private static MessagesResponse reply(Map<String, Object> input) {
         return new MessagesResponse("msg", "claude-sonnet-5-5",
@@ -175,16 +175,29 @@ class ClaudeScoreboardParserTest {
     }
 
     @Test
-    void theToolAsksForTheLookBeforeTheHero() {
+    void withTheSheetOnlyUnsureRowsAreDescribed() {
         @SuppressWarnings("unchecked")
         Map<String, Object> players = (Map<String, Object>) ScoreboardPrompt.tool().inputSchema().get("properties");
         @SuppressWarnings("unchecked")
         Map<String, Object> row = (Map<String, Object>) ((Map<String, Object>) players.get("players")).get("items");
         @SuppressWarnings("unchecked")
         List<String> keys = List.copyOf(((Map<String, Object>) row.get("properties")).keySet());
-        assertEquals(keys.indexOf("hero") - 1, keys.indexOf("portraitLooks"));
         assertEquals(keys.indexOf("hero") + 1, keys.indexOf("heroSure"));
-        assertTrue(((List<?>) row.get("required")).contains("heroSure"));
+        assertTrue(keys.indexOf("portraitLooks") > keys.indexOf("heroSure"));
+        List<?> required = (List<?>) row.get("required");
+        assertTrue(required.contains("heroSure"));
+        assertTrue(!required.contains("portraitLooks"));
+    }
+
+    @Test
+    void theInstructionsListEachHerosTeamUpPartners() {
+        MessagesRequest request = parser.buildRequest(new Screenshot(PNG, "image/png"));
+        List<?> parts = (List<?>) request.messages().get(0).content();
+        String text = ((TextPart) parts.get(parts.size() - 1)).text();
+        assertTrue(text.contains("TEAM-UP PARTNERS"));
+        String strange = text.lines().filter(l -> l.startsWith("Doctor Strange: ")).findFirst().orElseThrow();
+        assertTrue(strange.contains("Magik"), strange);                 // from Magik's side of the table
+        assertTrue(text.lines().filter(l -> l.startsWith("Deadpool: ")).count() == 1);
     }
 
     @Test

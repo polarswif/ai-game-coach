@@ -48,4 +48,13 @@ class TeamUpCatalogTest {
         assertTrue(catalog.forHero("Not A Hero").isEmpty());
         assertTrue(catalog.find("Venom", "Not A Hero").isEmpty());
     }
+
+    @Test
+    void aTeamUpCountsFromEitherHerosSide() {
+        assertEquals("Chain of Cyttorak", catalog.find("Magik", "Doctor Strange").orElseThrow().name());
+        assertEquals("Chain of Cyttorak", catalog.find("Doctor Strange", "Magik").orElseThrow().name());
+        assertTrue(catalog.find("Thor", "Loki").isEmpty());
+        assertTrue(catalog.find("Psylocke", "Magik").isEmpty());
+        assertTrue(catalog.partnersOf("Doctor Strange").containsAll(List.of("Hulk", "Invisible Woman", "Magik")));
+    }
 }

@@ -43,8 +43,11 @@ final class ScoreboardPrompt {
                 player name, then K / D / A (KOs, deaths, assists), final hits, damage, damage blocked, \
                 healing, accuracy, and the Medals column. MVP and SVP tags mark at most one player each.
                 - Names can be hidden (blacked out or covered by a popup): use null, never guess.
-                - Team-up box: it pictures the partner hero. Full color means enhanced (the partner is on the \
-                team); shaded or grey means not enhanced. Omit the team-up when there's no box.
+                - Team-up box: it pictures the partner hero, who must be one of the row hero's TEAM-UP \
+                PARTNERS (listed after HERO NAMES); compare the small face with those heroes on HERO \
+                PORTRAITS. If it doesn't clearly match one of them, leave teamUpPartner null. Full color \
+                means enhanced (the partner is on the team); shaded or grey means not enhanced. Omit the \
+                team-up when there's no box.
                 - Medals column: per-match medals, each given to the lobby leader in one stat: crossed swords \
                 (most KOs), flame (most damage), shield (most damage blocked), green plus (most healing), fist \
                 (most assists). A red number there is the best multi-kill (3 to 6). Leave both out if unsure.
@@ -77,14 +80,26 @@ final class ScoreboardPrompt {
                 - Never invent a value. If something is unreadable, use null (or leave it out) and add a \
                 warning naming the row and field.
                 - List every row you can see, top half first, in screen order.
-                - Always answer by calling the submit_scoreboard tool exactly once. If the image is not a \
-                Marvel Rivals scoreboard, call it with no players and a warning saying what the image shows.
+                - Always answer by calling the submit_scoreboard tool exactly once, straight away, with no \
+                text before it. If the image is not a Marvel Rivals scoreboard, call it with no players and \
+                a warning saying what the image shows.
+                - Keep warnings short and only for real doubts; don't repeat what heroSure already says.
                 """;
     }
 
-    /** The user message text that follows the image: the exact hero names to use. */
-    static String instructions(List<String> heroNames) {
-        return "Transcribe this scoreboard.\n\nHERO NAMES\n" + String.join(", ", heroNames) + "\n";
+    /** The user message text that follows the images: the exact hero names and each hero's team-up partners. */
+    static String instructions(List<String> heroNames, java.util.function.Function<String, List<String>> partners) {
+        StringBuilder b = new StringBuilder("Transcribe this scoreboard.\n\nHERO NAMES\n")
+                .append(String.join(", ", heroNames)).append("\n\nTEAM-UP PARTNERS (the heroes a row's team-up box can show)\n");
+        java.util.Set<String> listed = new java.util.HashSet<>();
+        for (String hero : heroNames) {
+            String key = com.gamecoach.analysis.HeroRoleCatalog.isDeadpool(hero) ? "Deadpool" : hero;
+            List<String> list = partners.apply(key);
+            if (listed.add(key) && !list.isEmpty()) {
+                b.append(key).append(": ").append(String.join(", ", list)).append("\n");
+            }
+        }
+        return b.toString();
     }
 
     static Tool tool() {
@@ -109,8 +124,8 @@ final class ScoreboardPrompt {
 
         Map<String, Object> playerSchema = Map.of(
                 "type", "object",
-                "properties", PortraitCheck.withPortraitFields(player),
-                "required", PortraitCheck.withPortraitRequired(List.of("name", "team", "role", "hero", "kills",
+                "properties", PortraitCheck.withPortraitFields(player, true),
+                "required", PortraitCheck.withPortraitRequired(true, List.of("name", "team", "role", "hero", "kills",
                         "deaths", "assists", "finalHits", "damage", "blocked", "healing", "accuracyPercent", "uploader")));
 
         Map<String, Object> properties = new LinkedHashMap<>();
