@@ -24,6 +24,7 @@ class HeroPortraitSheetTest {
     @Test
     void everyHeroHasAPortraitAndEveryPortraitIsAHero() {
         Set<String> pictured = sheet.entries().stream()
+                .filter(e -> !HeroRoleCatalog.isDeadpool(e.label()))      // listed per role in the table
                 .map(e -> roles.officialName(e.label()).orElseThrow(() -> new AssertionError("Not a hero: " + e.label())))
                 .collect(Collectors.toSet());
         List<String> missing = roles.heroNames().stream()
