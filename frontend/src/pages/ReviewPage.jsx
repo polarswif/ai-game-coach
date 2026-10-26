@@ -54,17 +54,10 @@ export default function ReviewPage({ theme }) {
   // The reader's doubt about a row, until the player deals with it.
   const doubtFor = (index) => (settled.has(index) ? null : doubts.find((d) => d.index === index) ?? null);
 
-  // Rows to check: a structured doubt, or (older style) a warning that names the player and their hero.
-  const isFlagged = (player, index) => {
-    if (settled.has(index)) return false;
-    if (doubtFor(index)) return true;
-    if (!warnings || !player.name) return false;
-    const name = player.name.toLowerCase();
-    return warnings.some((w) => {
-      const text = w.toLowerCase();
-      return text.includes(name) && (text.includes('portrait') || text.includes('hero'));
-    });
-  };
+  // Rows to check: only the reader's own structured doubts. (Matching player names inside warning
+  // text used to flag rows too, but a team-up warning that mentions a "partner portrait" would then
+  // flag a row whose hero was fine, such as your own after you typed your hero in.)
+  const isFlagged = (_player, index) => doubtFor(index) != null;
 
   const settle = (index) => setSettled((current) => new Set(current).add(index));
 
