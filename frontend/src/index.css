@@ -18,6 +18,7 @@
   --primary: #1B1209;
   --primary-text: #FFF6E5;
   --badge: #FFC23D;
+  --you-bar: #FFB020;
   --badge-text: #1B1209;
   --warn-bg: #FFF0CC;
   --warn-border: #F2B84B;
@@ -65,12 +66,13 @@
   --primary: #FFB020;
   --primary-text: #1B1209;
   --badge: #1B1209;
+  --you-bar: #FFB020;
   --badge-text: #FFD9A0;
   --warn-bg: #33260C;
   --warn-border: #8A6A1E;
   --warn-text: #FFCF70;
   --win: #6FD08F;
-  --row-you: #2B2216;
+  --row-you: #221D17;
   --row-flag: #2E2410;
   --flag: #FF8A3D;
   --dash: #FF8A3D;
@@ -232,6 +234,9 @@ th:last-child, td:last-child { padding-right: 22px; }
 .center { text-align: center; }
 .row--you { background: var(--row-you); }
 .row--flagged { background: var(--row-flag); }
+/* A bar on the row's left edge tells "your row" (solid gold) apart from "check this hero" (dashed orange). */
+.row--you > td:first-child { box-shadow: inset 4px 0 0 var(--you-bar); }
+.row--flagged > td:first-child, .row--mismatch > td:first-child { background-image: repeating-linear-gradient(0deg, var(--flag) 0 6px, transparent 6px 10px); background-size: 4px 100%; background-repeat: no-repeat; box-shadow: none; }
 .row--mismatch { background: var(--warn-bg); }
 .role-note { display: block; margin-top: 6px; font-size: 12px; line-height: 1.4; color: var(--warn-text); font-weight: 600; }
 .link-button { font: inherit; color: inherit; background: none; border: none; padding: 0; text-decoration: underline; cursor: pointer; }
