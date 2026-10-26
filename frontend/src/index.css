@@ -312,3 +312,9 @@ input[type='radio'] { width: 20px; height: 20px; accent-color: var(--accent); }
 .button--small { padding: 10px 14px; font-size: 14px; }
 .icon-button--small { width: 40px; height: 40px; }
 .empty { align-items: flex-start; }
+
+/* Login and sign-up */
+.auth-panel { max-width: 560px; margin: 0 auto; width: 100%; }
+.auth-panel .filter-tabs { align-self: flex-start; }
+.auth-panel .field { flex: none; }
+.pill--button { font-family: inherit; background: none; border: none; cursor: pointer; color: inherit; }

@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router';
 import { LogoMark, MoonIcon, SunIcon } from './Icons.jsx';
+import { auth, useAuth } from '../auth.js';
 
 const STEPS = ['Upload', 'Review', 'Coaching'];
 
@@ -9,6 +10,7 @@ const STEPS = ['Upload', 'Review', 'Coaching'];
  */
 export default function Header({ theme, step }) {
   const dark = theme.theme === 'dark';
+  const session = useAuth();
   return (
     <header className="header">
       <Link to="/" className="brand">
@@ -16,8 +18,8 @@ export default function Header({ theme, step }) {
         <span>Game Coach</span>
       </Link>
       <div className="header__right">
-        <NavLink to="/matches" className="pill">My matches</NavLink>
-        {step ? (
+        {session && <NavLink to="/matches" className="pill">My matches</NavLink>}
+        {session && step ? (
           <ol className="steps">
             {STEPS.map((label, index) => (
               <li key={label} className={index + 1 === step ? 'steps__item steps__item--current' : 'steps__item'}
@@ -26,10 +28,21 @@ export default function Header({ theme, step }) {
               </li>
             ))}
           </ol>
-        ) : (
+        ) : session ? (
           <nav className="nav">
             <NavLink to="/" end className="pill">Upload</NavLink>
           </nav>
+        ) : (
+          <nav className="nav">
+            <NavLink to="/sample" className="pill">Sample</NavLink>
+            <NavLink to="/login" className="pill">Log in</NavLink>
+          </nav>
+        )}
+        {session && (
+          <button type="button" className="pill pill--button" onClick={auth.signOut}
+            title={`Signed in as ${session.username}`}>
+            Log out
+          </button>
         )}
         <button type="button" className="icon-button" onClick={theme.toggle}
           aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>

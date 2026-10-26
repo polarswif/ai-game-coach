@@ -3,13 +3,27 @@
  * fetch() directly, so URLs and error handling live here.
  */
 
+import { auth } from './auth.js';
+
+/**
+ * Where the API lives. Empty while developing (Vite passes /api on to Spring Boot); on the hosted
+ * site it's the server's address, set at build time with VITE_API_BASE.
+ */
+const API_BASE = (import.meta.env.VITE_API_BASE ?? '').replace(/\/$/, '');
+
 /** Sends a request and returns the parsed JSON, or throws an Error with the server's explanation. */
 async function request(path, options = {}) {
+  const token = auth.token();
+  const headers = { ...(options.headers ?? {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) };
   let response;
   try {
-    response = await fetch(`/api${path}`, options);
+    response = await fetch(`${API_BASE}/api${path}`, { ...options, headers });
   } catch {
-    throw new Error('Can’t reach the Game Coach server. Is the Spring Boot app running?');
+    throw new Error('Can’t reach the Game Coach server. It may be starting up: try again in 30 seconds.');
+  }
+  if (response.status === 401 && token && !path.startsWith('/auth/')) {
+    auth.signOut(); // the login expired: the pages send you to the login screen
+    throw new Error('Your login has expired. Please log in again.');
   }
   const text = await response.text();
   let body = null;
@@ -40,7 +54,13 @@ function once(key, makeRequest) {
   return pending.get(key);
 }
 
+const json = (body) => ({ method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+
 export const api = {
+  login: (username, password) => request('/auth/login', json({ username, password })),
+
+  signup: (username, password, inviteCode) => request('/auth/signup', json({ username, password, inviteCode })),
+
   heroes: (game) => request(`/${game}/heroes`),
 
   /** Saved matches, newest first. game is 'rivals', 'overwatch', or left out for both. */

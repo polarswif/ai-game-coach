@@ -3,6 +3,9 @@ import UploadPage from './pages/UploadPage.jsx';
 import ReviewPage from './pages/ReviewPage.jsx';
 import ResultsPage from './pages/ResultsPage.jsx';
 import MatchesPage from './pages/MatchesPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import RequireAuth from './components/RequireAuth.jsx';
+import { SAMPLE } from './sample.js';
 import { useTheme } from './theme.js';
 
 /**
@@ -13,10 +16,14 @@ export default function App() {
   const theme = useTheme();
   return (
     <Routes>
-      <Route path="/" element={<UploadPage theme={theme} />} />
-      <Route path="/matches" element={<MatchesPage theme={theme} />} />
-      <Route path="/:game/matches/:matchId/review" element={<ReviewPage theme={theme} />} />
-      <Route path="/:game/matches/:matchId/results" element={<ResultsPage theme={theme} />} />
+      {/* Open to everyone */}
+      <Route path="/login" element={<LoginPage theme={theme} />} />
+      <Route path="/sample" element={<ResultsPage theme={theme} sample={SAMPLE} />} />
+      {/* Need an account: RequireAuth sends visitors to /login first */}
+      <Route path="/" element={<RequireAuth><UploadPage theme={theme} /></RequireAuth>} />
+      <Route path="/matches" element={<RequireAuth><MatchesPage theme={theme} /></RequireAuth>} />
+      <Route path="/:game/matches/:matchId/review" element={<RequireAuth><ReviewPage theme={theme} /></RequireAuth>} />
+      <Route path="/:game/matches/:matchId/results" element={<RequireAuth><ResultsPage theme={theme} /></RequireAuth>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

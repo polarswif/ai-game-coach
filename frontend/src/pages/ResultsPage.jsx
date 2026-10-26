@@ -9,20 +9,25 @@ import { formatNumber, titleCase } from '../format.js';
 
 const CLOSENESS = { CLOSE: 'Close', CLEAR_EDGE: 'Clear edge', ONE_SIDED: 'One-sided' };
 
-/** Step 3: the coaching, next to the numbers it's based on. */
-export default function ResultsPage({ theme }) {
-  const { game: gameId, matchId } = useParams();
+/**
+ * Step 3: the coaching, next to the numbers it's based on. With a `sample` prop it shows that
+ * ready-made match instead of loading one (the /sample page for visitors).
+ */
+export default function ResultsPage({ theme, sample }) {
+  const params = useParams();
+  const gameId = sample?.gameId ?? params.game;
+  const matchId = params.matchId;
   const version = useLocation().state?.version ?? '';
   const game = gameOf(gameId);
 
-  const [match, setMatch] = useState(null);
-  const [analysis, setAnalysis] = useState(null);
-  const [feedback, setFeedback] = useState(null);
+  const [match, setMatch] = useState(sample?.match ?? null);
+  const [analysis, setAnalysis] = useState(sample?.analysis ?? null);
+  const [feedback, setFeedback] = useState(sample?.feedback ?? null);
   const [error, setError] = useState(null);
   const [attempt, setAttempt] = useState(0); // bumping this re-runs the effect: "try again"
 
   useEffect(() => {
-    if (!game) return undefined;
+    if (!game || sample) return undefined;
     let ignore = false;
     setError(null);
     // The match and analysis are free and quick; the coaching is a paid Claude call that takes a while.
@@ -33,7 +38,7 @@ export default function ResultsPage({ theme }) {
       .then((f) => { if (!ignore) setFeedback(f); })
       .catch((err) => { if (!ignore) setError(err.message); });
     return () => { ignore = true; };
-  }, [game, gameId, matchId, version, attempt]);
+  }, [game, gameId, matchId, version, attempt, sample]);
 
   // useCallback keeps the same function between renders, handy when it's passed to a child.
   const retry = useCallback(() => {
@@ -48,12 +53,13 @@ export default function ResultsPage({ theme }) {
   return (
     <div className="page page--inner">
       <div className="stripe" />
-      <Header theme={theme} step={3} />
+      <Header theme={theme} step={sample ? undefined : 3} />
       <main className="container stack-md">
         <section className="result-banner">
           <div className="stack-xs result-banner__text">
             <span className="eyebrow eyebrow--dark">{[hero, match?.mode, match?.map, resultText(match)].filter(Boolean).join(' · ')}</span>
-            <h1 className="page-title">Your coaching</h1>
+            <h1 className="page-title">{sample ? 'Sample coaching' : 'Your coaching'}</h1>
+            {sample && <p className="small">A real Overwatch match with the names hidden. Uploading your own is invite-only.</p>}
             <p>{feedback?.matchContext ?? 'Your coach is looking at the match…'}</p>
           </div>
           {analysis?.closeness && (
@@ -78,7 +84,7 @@ export default function ResultsPage({ theme }) {
               </>
             )}
           </div>
-          {analysis && <StatsPanel game={game} analysis={analysis} />}
+          {analysis && <StatsPanel game={game} analysis={analysis} sample={Boolean(sample)} />}
         </div>
       </main>
     </div>
@@ -102,7 +108,7 @@ function FeedbackList({ title, tone, items, empty }) {
 }
 
 /** Your numbers from the analysis: value, rank, share of your team, and for Overwatch the same-role enemy. */
-function StatsPanel({ game, analysis }) {
+function StatsPanel({ game, analysis, sample }) {
   const entries = Object.entries(analysis.stats ?? {});
   const role = game.roles[analysis.role]?.toLowerCase();
   return (
@@ -124,7 +130,9 @@ function StatsPanel({ game, analysis }) {
           <div className="bar"><div className="bar__fill" style={{ width: `${Math.min(100, stat.teamSharePercent ?? 0)}%` }} /></div>
         </div>
       ))}
-      <Link to="/" className="button button--primary">Coach another match</Link>
+      {sample
+        ? <Link to="/login" className="button button--primary">Log in or use an invite</Link>
+        : <Link to="/" className="button button--primary">Coach another match</Link>}
     </aside>
   );
 }

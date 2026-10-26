@@ -9,7 +9,8 @@ import './index.css';
 // StrictMode runs extra checks while developing (it runs effects twice to catch bugs).
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    {/* basename: on GitHub Pages the site lives under /ai-game-coach/, set by Vite's base option. */}
+    <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
       <App />
     </BrowserRouter>
   </StrictMode>,
