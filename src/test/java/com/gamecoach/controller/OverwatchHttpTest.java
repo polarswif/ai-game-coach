@@ -37,16 +37,16 @@ class OverwatchHttpTest {
             if (battleTag.equals("Down-1")) {
                 throw new CareerStatsUnavailableException("OverFast API is limiting requests right now.", null);
             }
-            if (!battleTag.equals("Swift-1234")) {
+            if (!battleTag.equals("Player-1234")) {
                 throw new NoSuchElementException("No Overwatch profile found for " + battleTag + ".");
             }
-            return new CareerProfile("Swift-1234", "Swift", mode, platform, null, SUPPORT,
+            return new CareerProfile("Player-1234", "Player", mode, platform, null, SUPPORT,
                     Map.of(OverwatchRole.SUPPORT, SUPPORT), List.of(new HeroCareer("ana", "Ana", OverwatchRole.SUPPORT, ANA)));
         }
 
         @Override
         public List<PlayerMatch> searchPlayers(String name) {
-            return List.of(new PlayerMatch("Swift-1234", "Swift", null, null, null, true));
+            return List.of(new PlayerMatch("Player-1234", "Player", null, null, null, true));
         }
     };
 
@@ -56,7 +56,7 @@ class OverwatchHttpTest {
 
     @Test
     void analysisComparesHeroesWithinTheirRole() throws Exception {
-        mvc.perform(get("/api/overwatch/players/Swift-1234/analysis").param("mode", "competitive"))
+        mvc.perform(get("/api/overwatch/players/Player-1234/analysis").param("mode", "competitive"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.mode").value("COMPETITIVE"))
                 .andExpect(jsonPath("$.mainRole").value("SUPPORT"))
@@ -66,14 +66,14 @@ class OverwatchHttpTest {
 
     @Test
     void searchFindsTheBattleTag() throws Exception {
-        mvc.perform(get("/api/overwatch/players").param("name", "Swift"))
+        mvc.perform(get("/api/overwatch/players").param("name", "Player"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].playerId").value("Swift-1234"));
+                .andExpect(jsonPath("$[0].playerId").value("Player-1234"));
     }
 
     @Test
     void errorsBecomeClearStatusCodes() throws Exception {
-        mvc.perform(get("/api/overwatch/players/Swift-1234/profile").param("mode", "arcade"))
+        mvc.perform(get("/api/overwatch/players/Player-1234/profile").param("mode", "arcade"))
                 .andExpect(status().isBadRequest());
         mvc.perform(get("/api/overwatch/players/Nobody-1/profile"))
                 .andExpect(status().isNotFound())

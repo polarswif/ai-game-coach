@@ -58,20 +58,20 @@ class RestClientOverFastClientTest {
 
     @Test
     void leavesOutThePlatformWhenBothAreWanted() {
-        server.expect(requestTo(BASE + "/players/Swift-1234/stats/summary?gamemode=quickplay"))
+        server.expect(requestTo(BASE + "/players/Player-1234/stats/summary?gamemode=quickplay"))
                 .andRespond(withSuccess("{}", MediaType.APPLICATION_JSON));
-        assertNull(client.statsSummary("Swift-1234", "quickplay", null).general());   // private profile shape
+        assertNull(client.statsSummary("Player-1234", "quickplay", null).general());   // private profile shape
         server.verify();
     }
 
     @Test
     void readsRanksFromTheSummary() {
-        server.expect(requestTo(BASE + "/players/Swift-1234/summary"))
+        server.expect(requestTo(BASE + "/players/Player-1234/summary"))
                 .andRespond(withSuccess("""
-                        {"username":"Swift","avatar":null,"competitive":{"pc":{"season":22,
+                        {"username":"Player","avatar":null,"competitive":{"pc":{"season":22,
                          "tank":null,"damage":{"division":"gold","tier":3,"role_icon":"x","rank_icon":"y","tier_icon":"z"},
                          "support":null,"open":null},"console":null},"last_updated_at":1}""", MediaType.APPLICATION_JSON));
-        OverFastApi.PlayerSummary summary = client.summary("Swift-1234");
+        OverFastApi.PlayerSummary summary = client.summary("Player-1234");
         assertEquals("gold", summary.competitive().pc().damage().division());
         assertEquals(22, summary.competitive().pc().season());
     }
@@ -91,9 +91,9 @@ class RestClientOverFastClientTest {
     void aRateLimitReadsTheRetryAfterHeader() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Retry-After", "5");
-        server.expect(requestTo(BASE + "/players?name=Swift"))
+        server.expect(requestTo(BASE + "/players?name=Player"))
                 .andRespond(withStatus(HttpStatus.TOO_MANY_REQUESTS).headers(headers).body("rate limited"));
-        OverFastException e = assertThrows(OverFastException.class, () -> client.search("Swift"));
+        OverFastException e = assertThrows(OverFastException.class, () -> client.search("Player"));
         assertEquals(429, e.status());
         assertEquals(5, e.retryAfterSeconds());
     }

@@ -68,7 +68,7 @@ class OverFastCareerSourceTest {
             if (error != null) {
                 throw error;
             }
-            return new SearchResult(1, List.of(new PlayerShort("Swift-1234", "Swift", "Grandmaster", "https://x/a.png", 1_760_000_000L, true)));
+            return new SearchResult(1, List.of(new PlayerShort("Player-1234", "Player", "Grandmaster", "https://x/a.png", 1_760_000_000L, true)));
         }
     }
 
@@ -80,7 +80,7 @@ class OverFastCareerSourceTest {
         heroes.put("ana", stats(10, 6, 3600));
         heroes.put("soldier-76", stats(20, 9, 7200));
         heroes.put("brand-new-hero", stats(2, 1, 600));
-        client.summary = new PlayerSummary("Swift", new Competitive(
+        client.summary = new PlayerSummary("Player", new Competitive(
                 new PlatformRanks(22, null, null, null, null),                                   // no PC ranks
                 new PlatformRanks(22, null, null, new Rank("Gold", 3), new Rank("silver", 1))));
         client.stats = new StatsSummary(stats(32, 16, 11400),
@@ -91,11 +91,11 @@ class OverFastCareerSourceTest {
     @Test
     void aCareerIsMappedWithHeroNamesRolesAndOrder() {
         cannedPlayer();
-        CareerProfile p = source.getCareerProfile("Swift#1234", OverwatchMode.QUICKPLAY, null);
-        assertEquals("Swift-1234", client.askedId);                                    // # became -
+        CareerProfile p = source.getCareerProfile("Player#1234", OverwatchMode.QUICKPLAY, null);
+        assertEquals("Player-1234", client.askedId);                                    // # became -
         assertEquals("quickplay", client.askedMode);
         assertNull(client.askedPlatform);
-        assertEquals("Swift", p.name());
+        assertEquals("Player", p.name());
         assertEquals(List.of("soldier-76", "ana", "brand-new-hero"), p.heroes().stream().map(HeroCareer::heroKey).toList());
         HeroCareer soldier = p.heroes().get(0);
         assertEquals("Soldier: 76", soldier.hero());
@@ -110,11 +110,11 @@ class OverFastCareerSourceTest {
     @Test
     void ranksComeFromThePlatformThatHasThem() {
         cannedPlayer();
-        CareerProfile p = source.getCareerProfile("Swift-1234", OverwatchMode.COMPETITIVE, null);
+        CareerProfile p = source.getCareerProfile("Player-1234", OverwatchMode.COMPETITIVE, null);
         assertEquals(22, p.ranks().season());
         assertEquals("Gold 3", p.ranks().byRole().get(OverwatchRole.SUPPORT).toString());
         assertEquals("Silver 1", p.ranks().openQueue().toString());
-        assertNull(source.getCareerProfile("Swift-1234", OverwatchMode.COMPETITIVE, "pc").ranks());
+        assertNull(source.getCareerProfile("Player-1234", OverwatchMode.COMPETITIVE, "pc").ranks());
     }
 
     @Test
@@ -122,7 +122,7 @@ class OverFastCareerSourceTest {
         cannedPlayer();
         client.stats = new StatsSummary(null, null, null);
         NoSuchElementException e = assertThrows(NoSuchElementException.class,
-                () -> source.getCareerProfile("Swift-1234", OverwatchMode.COMPETITIVE, "pc"));
+                () -> source.getCareerProfile("Player-1234", OverwatchMode.COMPETITIVE, "pc"));
         assertTrue(e.getMessage().contains("no competitive stats on pc"));
         assertTrue(e.getMessage().contains("private"));
         assertTrue(e.getMessage().contains("try mode=quickplay"));
@@ -132,8 +132,8 @@ class OverFastCareerSourceTest {
     void anUnknownPlayerIsA404WithWhenToRetry() {
         client.error = new OverFastException(404, "Player not found", 600, null);
         NoSuchElementException e = assertThrows(NoSuchElementException.class,
-                () -> source.getCareerProfile("swift-1234", OverwatchMode.QUICKPLAY, null));
-        assertTrue(e.getMessage().contains("No Overwatch profile found for swift-1234"));
+                () -> source.getCareerProfile("player-1234", OverwatchMode.QUICKPLAY, null));
+        assertTrue(e.getMessage().contains("No Overwatch profile found for player-1234"));
         assertTrue(e.getMessage().contains("use the playerId"));
         assertTrue(e.getMessage().contains("10 minutes"));
     }
@@ -142,19 +142,19 @@ class OverFastCareerSourceTest {
     void rateLimitsAndOutagesAreUnavailable() {
         client.error = new OverFastException(429, "Too many requests", 30, null);
         assertTrue(assertThrows(CareerStatsUnavailableException.class,
-                () -> source.getCareerProfile("Swift-1234", OverwatchMode.QUICKPLAY, null)).getMessage().contains("30 seconds"));
+                () -> source.getCareerProfile("Player-1234", OverwatchMode.QUICKPLAY, null)).getMessage().contains("30 seconds"));
         client.error = new OverFastException(504, "Blizzard timed out", null, null);
         assertTrue(assertThrows(CareerStatsUnavailableException.class,
-                () -> source.searchPlayers("Swift")).getMessage().contains("HTTP 504"));
+                () -> source.searchPlayers("Player")).getMessage().contains("HTTP 504"));
         client.error = new OverFastException(0, "Couldn't reach OverFast API: timeout", null, null);
         assertEquals("Couldn't reach OverFast API: timeout", assertThrows(CareerStatsUnavailableException.class,
-                () -> source.searchPlayers("Swift")).getMessage());
+                () -> source.searchPlayers("Player")).getMessage());
     }
 
     @Test
     void searchResultsAreMapped() {
-        assertEquals(List.of(new PlayerMatch("Swift-1234", "Swift", "Grandmaster", "https://x/a.png",
-                java.time.Instant.ofEpochSecond(1_760_000_000L), true)), source.searchPlayers(" Swift "));
+        assertEquals(List.of(new PlayerMatch("Player-1234", "Player", "Grandmaster", "https://x/a.png",
+                java.time.Instant.ofEpochSecond(1_760_000_000L), true)), source.searchPlayers(" Player "));
     }
 
     @Test

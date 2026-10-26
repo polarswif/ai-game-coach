@@ -38,7 +38,7 @@ class CareerAnalyzerTest {
         Map<OverwatchRole, CareerStats> roles = new EnumMap<>(OverwatchRole.class);
         roles.put(OverwatchRole.SUPPORT, support);
         roles.put(OverwatchRole.TANK, tank);
-        CareerProfile profile = new CareerProfile("Swift-1234", "Swift", OverwatchMode.QUICKPLAY, null, null, overall,
+        CareerProfile profile = new CareerProfile("Player-1234", "Player", OverwatchMode.QUICKPLAY, null, null, overall,
                 roles, List.of(
                         new HeroCareer("mercy", "Mercy", OverwatchRole.SUPPORT, mercy),
                         new HeroCareer("reinhardt", "Reinhardt", OverwatchRole.TANK, tank),
@@ -104,7 +104,7 @@ class CareerAnalyzerTest {
 
     @Test
     void unknownRoleHeroesAreKeptWithoutAComparison() {
-        CareerProfile profile = new CareerProfile("Swift-1234", "Swift", OverwatchMode.QUICKPLAY, null, null, overall,
+        CareerProfile profile = new CareerProfile("Player-1234", "Player", OverwatchMode.QUICKPLAY, null, null, overall,
                 Map.of(), List.of(new HeroCareer("new-hero", "new-hero", null, ana)));
         HeroSummary h = analyzer.analyze(profile).heroes().get(0);
         assertNull(h.role());

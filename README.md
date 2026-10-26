@@ -99,7 +99,7 @@ Coaching includes hero notes for the heroes you played (`overwatch-hero-notes.tx
 Overwatch doesn't publish individual matches through any API, so besides screenshots the app can read a player's career: their public Blizzard profile, read through [OverFast API](https://github.com/TeKrop/overfast-api) (free, no key). `OverFastCareerSource` fetches ranks and stats and maps them into `CareerProfile`; `CareerAnalyzer` then compares each hero with the same player's other heroes in that role (per 10 minutes, and win rate), since without matches the player's own other heroes are the fairest benchmark. Heroes under an hour or 5 games are flagged as small samples.
 
 Search first. Blizzard no longer shows the number after the `#` in search, so several players can share a name; each result carries a `playerId`, plus the title, avatar and last-update time that tell them apart. Use the `playerId` (or a BattleTag with a dash instead of `#`; names are case-sensitive) in the other URLs:
-- Search: `http://localhost:8080/api/overwatch/players?name=Swift`
+- Search: `http://localhost:8080/api/overwatch/players?name=Player`
 - Career as reported: `http://localhost:8080/api/overwatch/players/{playerId}/profile`
 - Analysis: `http://localhost:8080/api/overwatch/players/{playerId}/analysis?mode=competitive&platform=pc`
 
