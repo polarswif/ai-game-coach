@@ -8,6 +8,9 @@ An AI coaching app for competitive games. Players upload a screenshot of the end
 - **Backend:** Java 17, Spring Boot 4.1.1, Maven
 - **Tests:** JUnit 5, run on every push with GitHub Actions
 - **Frontend:** React 19, React Router, Vite
+- **Security:** Spring Security with JWT logins and BCrypt password hashes
+- **Database:** PostgreSQL (Neon when hosted), H2 locally by default
+- **Hosting:** Docker on Render (server), GitHub Pages (website)
 - **AI:** Claude API (Messages API over Spring's `RestClient`)
 
 ## How it works
@@ -79,6 +82,24 @@ Uploaded matches (both games) and their coaching are saved with Spring Data JPA,
 - **API:** `GET /api/matches` (newest first, optional `?game=rivals` or `?game=overwatch`) and `DELETE /api/matches/{matchId}`.
 - Tests use an in-memory H2 database, so they need no PostgreSQL.
 
+## Accounts (invite-only)
+Every screenshot read is a paid Claude call, so uploading needs an account, and signing up needs an invite code. Visitors can open the sample coaching at `/sample`.
+
+- Invite codes come from the `GAMECOACH_INVITE_CODES` environment variable, comma-separated. Each code works once. To invite someone, add a new code and give it to them.
+- Logins are JWTs signed with `GAMECOACH_JWT_SECRET` (32+ characters). Without it, a random key is used and everyone is signed out when the app restarts.
+- Passwords are stored as BCrypt hashes, never as text.
+- Each account sees only its own matches, and has a daily upload cap (`gamecoach.auth.uploads-per-day`, 15 by default).
+- Locally, add `GAMECOACH_INVITE_CODES=some-code` to the IntelliJ run configuration, then sign up on the website with that code.
+
+## Deployment
+| Part | Where | Notes |
+|---|---|---|
+| Server | Render free web service, built from the `Dockerfile` (see `render.yaml`) | Sleeps after 15 idle minutes; the first request then takes about a minute |
+| Database | Neon free PostgreSQL | Doesn't expire; connect with `SPRING_DATASOURCE_URL/USERNAME/PASSWORD` |
+| Website | GitHub Pages (`.github/workflows/pages.yml`) | Publishes on push once the `API_BASE` repository variable is set |
+
+Secrets (Claude key, database password, invite codes) are set in Render's dashboard, never in the repository. `GAMECOACH_ALLOWED_ORIGINS` must name the GitHub Pages address so the browser lets the website call the API.
+
 ## Overwatch match coaching
 The same flow as Rivals, from the end-of-match report (the screen after a match, or the match in your history). Take up to three kinds of screenshot:
 - **Teams** (required): the scoreboard with all 10 players, E / A / D / damage / healing / mitigation.
@@ -120,7 +141,8 @@ In the analysis, a percent difference is `null` when it can't be compared fairly
 - [x] Overwatch hero notes for every hero (researched, plus pro guides for Sombra, Roadhog and Doctrine)
 - [x] React frontend (upload, review with hero fixes, coaching; light and dark)
 - [x] Saved match history (PostgreSQL, with an H2 fallback) and a My matches page
-- [ ] Authentication and deployment
+- [x] Invite-only accounts (Spring Security, JWT, BCrypt), matches per account, daily upload cap
+- [x] Deployment: Docker image on Render, PostgreSQL on Neon, website on GitHub Pages
 
 ## Data sources
 Marvel Rivals and Overwatch match data come from end-of-match screenshots uploaded by the user. The app doesn't access game servers. Overwatch career stats come from public Blizzard career profiles via OverFast API; the Overwatch hero table (`overwatch-heroes.csv`) is taken from OverFast's data (MIT license).
