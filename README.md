@@ -135,7 +135,7 @@ In the analysis, a percent difference is `null` when it can't be compared fairly
 - [x] Team compositions, Season 9 team-ups, medals and proficiency in the analysis
 - [x] Claude-backed coaching feedback
 - [x] Scoreboard screenshot upload and parsing, with consistency checks and a review step
-- [ ] Match history screenshot (round score) and tracker.gg as optional extras
+- [x] Match history screenshot (round score) and tracker.gg as optional extras
 - [x] Overwatch career stats and analysis (OverFast)
 - [x] Overwatch match coaching from match report screenshots
 - [x] Overwatch hero notes for every hero (researched, plus pro guides for Sombra, Roadhog and Doctrine)
