@@ -14,4 +14,11 @@ public interface SavedMatchRepository extends JpaRepository<SavedMatch, String> 
     List<SavedMatch> findAllByOrderByUploadedAtDesc();
 
     List<SavedMatch> findByGameOrderByUploadedAtDesc(String game);
+
+    List<SavedMatch> findByOwnerOrderByUploadedAtDesc(String owner);
+
+    List<SavedMatch> findByOwnerAndGameOrderByUploadedAtDesc(String owner, String game);
+
+    /** Uploads by one account since a moment: the daily upload cap. */
+    long countByOwnerAndUploadedAtAfter(String owner, java.time.Instant since);
 }

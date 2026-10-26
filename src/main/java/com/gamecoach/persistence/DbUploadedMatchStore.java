@@ -4,6 +4,8 @@ import com.gamecoach.model.MatchDetails;
 import com.gamecoach.model.PlayerLine;
 import com.gamecoach.parsing.UploadedMatchStore;
 
+import com.gamecoach.security.CurrentUser;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +34,11 @@ public class DbUploadedMatchStore implements UploadedMatchStore {
     @Transactional
     public void save(MatchDetails match) {
         Instant now = Instant.now();
-        SavedMatch row = repository.findById(match.matchId()).orElseGet(() -> new SavedMatch(match.matchId(), GAME, now));
+        SavedMatch row = repository.findById(match.matchId())
+                .orElseGet(() -> new SavedMatch(match.matchId(), GAME, now, CurrentUser.username().orElse(null)));
+        if (!CurrentUser.canSee(row.getOwner())) {
+            throw new java.util.NoSuchElementException("No match with id " + match.matchId());
+        }
         PlayerLine you = match.players().stream().filter(PlayerLine::uploader).findFirst().orElse(null);
         row.update(match.map(), match.mode(),
                 match.result() == null ? null : match.result().name(),
@@ -49,6 +55,7 @@ public class DbUploadedMatchStore implements UploadedMatchStore {
     public Optional<MatchDetails> find(String matchId) {
         return repository.findById(matchId)
                 .filter(row -> GAME.equals(row.getGame()))
+                .filter(row -> CurrentUser.canSee(row.getOwner()))     // someone else's match stays hidden
                 .map(row -> json.read(row.getMatchJson(), MatchDetails.class));
     }
 }

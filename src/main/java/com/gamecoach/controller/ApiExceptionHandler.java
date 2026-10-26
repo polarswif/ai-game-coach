@@ -39,6 +39,12 @@ public class ApiExceptionHandler {
         return problem(503, e.getMessage());
     }
 
+    /** Wrong username or password: 401. */
+    @ExceptionHandler(com.gamecoach.security.LoginFailedException.class)
+    public ResponseEntity<ProblemDetail> loginFailed(com.gamecoach.security.LoginFailedException e) {
+        return problem(401, e.getMessage());
+    }
+
     /** A request parameter the user can fix: 400. */
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ProblemDetail> badRequest(BadRequestException e) {

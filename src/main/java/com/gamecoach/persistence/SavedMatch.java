@@ -58,6 +58,10 @@ public class SavedMatch {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
+    /** The account that uploaded it (username key); null for matches saved before accounts existed. */
+    @Column(length = 20)
+    private String owner;
+
     /** The whole match record as JSON. */
     @Column(name = "match_json", nullable = false, length = 1_000_000)
     private String matchJson;
@@ -67,8 +71,13 @@ public class SavedMatch {
     }
 
     public SavedMatch(String matchId, String game, Instant uploadedAt) {
+        this(matchId, game, uploadedAt, null);
+    }
+
+    public SavedMatch(String matchId, String game, Instant uploadedAt, String owner) {
         this.matchId = matchId;
         this.game = game;
+        this.owner = owner;
         this.uploadedAt = uploadedAt;
         this.updatedAt = uploadedAt;
     }
@@ -99,4 +108,5 @@ public class SavedMatch {
     public Instant getUploadedAt() { return uploadedAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public String getMatchJson() { return matchJson; }
+    public String getOwner() { return owner; }
 }

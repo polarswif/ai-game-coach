@@ -4,6 +4,8 @@ import com.gamecoach.model.OverwatchMatch;
 import com.gamecoach.model.OverwatchPlayerLine;
 import com.gamecoach.parsing.OverwatchMatchStore;
 
+import com.gamecoach.security.CurrentUser;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +30,11 @@ public class DbOverwatchMatchStore implements OverwatchMatchStore {
     @Transactional
     public void save(OverwatchMatch match) {
         Instant now = Instant.now();
-        SavedMatch row = repository.findById(match.matchId()).orElseGet(() -> new SavedMatch(match.matchId(), GAME, now));
+        SavedMatch row = repository.findById(match.matchId())
+                .orElseGet(() -> new SavedMatch(match.matchId(), GAME, now, CurrentUser.username().orElse(null)));
+        if (!CurrentUser.canSee(row.getOwner())) {
+            throw new java.util.NoSuchElementException("No match with id " + match.matchId());
+        }
         OverwatchPlayerLine you = match.players().stream().filter(OverwatchPlayerLine::uploader).findFirst().orElse(null);
         row.update(match.map(), match.mode(),
                 match.result() == null ? null : match.result().name(),
@@ -45,6 +51,7 @@ public class DbOverwatchMatchStore implements OverwatchMatchStore {
     public Optional<OverwatchMatch> find(String matchId) {
         return repository.findById(matchId)
                 .filter(row -> GAME.equals(row.getGame()))
+                .filter(row -> CurrentUser.canSee(row.getOwner()))     // someone else's match stays hidden
                 .map(row -> json.read(row.getMatchJson(), OverwatchMatch.class));
     }
 }

@@ -3,6 +3,8 @@ package com.gamecoach.controller;
 import com.gamecoach.persistence.SavedMatch;
 import com.gamecoach.persistence.SavedMatchRepository;
 
+import com.gamecoach.security.CurrentUser;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,9 +42,14 @@ public class MatchHistoryController {
     @GetMapping
     @Transactional(readOnly = true)
     public List<MatchListItem> list(@RequestParam(name = "game", required = false) String game) {
-        List<SavedMatch> rows = game == null || game.isBlank()
-                ? matches.findAllByOrderByUploadedAtDesc()
-                : matches.findByGameOrderByUploadedAtDesc(game.strip().toLowerCase(Locale.ROOT));
+        String g = game == null || game.isBlank() ? null : game.strip().toLowerCase(Locale.ROOT);
+        String me = CurrentUser.username().orElse(null);
+        List<SavedMatch> rows;
+        if (me == null) {   // no accounts in play (tests): everything
+            rows = g == null ? matches.findAllByOrderByUploadedAtDesc() : matches.findByGameOrderByUploadedAtDesc(g);
+        } else {            // only your own uploads
+            rows = g == null ? matches.findByOwnerOrderByUploadedAtDesc(me) : matches.findByOwnerAndGameOrderByUploadedAtDesc(me, g);
+        }
         return rows.stream().map(MatchHistoryController::item).toList();
     }
 
@@ -50,7 +57,8 @@ public class MatchHistoryController {
     @DeleteMapping("/{matchId}")
     @Transactional
     public ResponseEntity<Void> delete(@PathVariable("matchId") String matchId) {
-        if (!matches.existsById(matchId)) {
+        SavedMatch row = matches.findById(matchId).orElse(null);
+        if (row == null || !CurrentUser.canSee(row.getOwner())) {
             throw new NoSuchElementException("No saved match with id " + matchId);
         }
         matches.deleteById(matchId);
