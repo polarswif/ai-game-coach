@@ -20,6 +20,17 @@ class HeroRoleCatalogTest {
     }
 
     @Test
+    void otherNamesForAHeroMatchItButAreNotListedTwice() {
+        assertEquals(java.util.Optional.of("Hulk"), catalog.officialName("bruce banner"));
+        assertEquals(java.util.Optional.of("Gorr"), catalog.officialName("Gorr the God Butcher"));
+        assertEquals(java.util.Optional.of("Cloak & Dagger"), catalog.officialName("Cloak and Dagger"));
+        assertTrue(catalog.heroNames().contains("Hulk"));
+        assertFalse(catalog.heroNames().contains("Bruce Banner"));
+        assertFalse(catalog.heroNames().contains("Cloak and Dagger"));
+        assertEquals(catalog.heroNames().size(), new java.util.HashSet<>(catalog.heroNames()).size());
+    }
+
+    @Test
     void newerHeroesAreListed() {
         assertEquals(Role.DUELIST, catalog.roleOf("Gorr"));
         assertEquals(Role.DUELIST, catalog.roleOf("Gorr the God Butcher"));

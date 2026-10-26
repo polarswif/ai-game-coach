@@ -59,7 +59,7 @@ public class HeroRoleCatalog {
     }
 
     /**
-     * Every name in the table, as written there, in file order (alternate spellings included).
+     * One name per hero, as written first in the table, in file order (other names like "Bruce Banner" left out).
      * The screenshot reader gives this list to Claude so it uses the exact names.
      */
     public List<String> heroNames() {
@@ -93,11 +93,16 @@ public class HeroRoleCatalog {
                 continue;   // skip blank lines and comments
             }
             int comma = line.lastIndexOf(',');
-            String hero = line.substring(0, comma);
             Role role = Role.valueOf(line.substring(comma + 1).strip());
-            rolesByHero.put(normalize(hero), role);
-            names.add(hero.strip());
-            namesByKey.put(normalize(hero), hero.strip());
+            // "Hulk/Bruce Banner": one hero under several names. The first is the name we use;
+            // the others still match it, so a reader or player saying "Bruce Banner" gets Hulk.
+            String[] spellings = line.substring(0, comma).split("/");
+            String hero = spellings[0].strip();
+            names.add(hero);
+            for (String spelling : spellings) {
+                rolesByHero.put(normalize(spelling), role);
+                namesByKey.put(normalize(spelling), hero);
+            }
         }
     }
 
