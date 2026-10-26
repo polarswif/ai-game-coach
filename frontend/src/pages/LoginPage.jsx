@@ -13,6 +13,7 @@ export default function LoginPage({ theme }) {
   const [mode, setMode] = useState('login'); // 'login' or 'signup'
   const [form, setForm] = useState({ username: '', password: '', inviteCode: '' });
   const [busy, setBusy] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
 
   if (session) return <Navigate to={from} replace />;
@@ -63,8 +64,14 @@ export default function LoginPage({ theme }) {
             </label>
             <label className="field">
               <span className="field__label">Password {signup && <span className="muted">(8 or more characters)</span>}</span>
-              <input className="input" type="password" name="password" value={form.password} onChange={change}
-                autoComplete={signup ? 'new-password' : 'current-password'} required minLength={signup ? 8 : 1} />
+              <span className="password-field">
+                <input className="input" type={showPassword ? 'text' : 'password'} name="password" value={form.password}
+                  onChange={change} autoComplete={signup ? 'new-password' : 'current-password'} required minLength={signup ? 8 : 1} />
+                <button type="button" className="password-toggle" onClick={() => setShowPassword((v) => !v)}
+                  aria-pressed={showPassword} aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </span>
             </label>
             {signup && (
               <label className="field">

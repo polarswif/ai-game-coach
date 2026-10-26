@@ -318,3 +318,7 @@ input[type='radio'] { width: 20px; height: 20px; accent-color: var(--accent); }
 .auth-panel .filter-tabs { align-self: flex-start; }
 .auth-panel .field { flex: none; }
 .pill--button { font-family: inherit; background: none; border: none; cursor: pointer; color: inherit; }
+.password-field { position: relative; display: block; }
+.password-field .input { padding-right: 76px; }
+.password-toggle { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font: inherit; font-size: 14px; font-weight: 700;
+  padding: 6px 12px; border-radius: 8px; border: none; background: var(--chip); color: var(--chip-text); cursor: pointer; }
