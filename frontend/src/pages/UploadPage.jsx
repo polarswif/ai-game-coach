@@ -14,7 +14,8 @@ export default function UploadPage({ theme }) {
   const navigate = useNavigate();
 
   // State: values that change while the page is open. Each setX call re-renders the page.
-  const [gameId, setGameId] = useState('overwatch');
+  // Start on the game picked last time, so "Upload again" returns to it.
+  const [gameId, setGameId] = useState(() => (gameOf(readSaved(GAME_KEY)) ? readSaved(GAME_KEY) : 'overwatch'));
   const [shots, setShots] = useState({ screenshot: [], teams: [], summary: [], personal: [] });
   const [score, setScore] = useState('');
   const [hero, setHero] = useState('');
@@ -77,7 +78,7 @@ export default function UploadPage({ theme }) {
 
         <section aria-labelledby="game-label" className="stack-sm">
           <h2 id="game-label" className="section-label">1 · Choose your game</h2>
-          <GamePicker value={gameId} onChange={(id) => { setGameId(id); setHero(''); setError(null); }} />
+          <GamePicker value={gameId} onChange={(id) => { setGameId(id); save(GAME_KEY, id); setHero(''); setError(null); }} />
         </section>
 
         <form className="panel stack-md" onSubmit={handleSubmit} aria-labelledby="shots-label">
@@ -124,4 +125,15 @@ export default function UploadPage({ theme }) {
       </main>
     </div>
   );
+}
+
+const GAME_KEY = 'gamecoach.game';
+
+// Browser storage can be missing or blocked (private windows, strict settings): fall back quietly.
+function readSaved(key) {
+  try { return window.localStorage.getItem(key); } catch { return null; }
+}
+
+function save(key, value) {
+  try { window.localStorage.setItem(key, value); } catch { /* not remembered this time; nothing breaks */ }
 }
