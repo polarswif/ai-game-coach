@@ -1,0 +1,48 @@
+# Publishes the website to GitHub Pages on every push to master. It only runs once the repository
+# variable API_BASE is set (Settings > Secrets and variables > Actions > Variables) to the server's
+# address, e.g. https://game-coach-api.onrender.com, so it doesn't fail before hosting is set up.
+name: pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: vars.API_BASE != ''
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build the website
+        working-directory: frontend
+        env:
+          VITE_API_BASE: ${{ vars.API_BASE }}
+          VITE_BASE: /${{ github.event.repository.name }}/
+        run: |
+          npm install
+          npm run build
+          # GitHub Pages has no server-side routing: serving index.html for unknown paths lets
+          # links like /ai-game-coach/matches open the app instead of a 404 page.
+          cp dist/index.html dist/404.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

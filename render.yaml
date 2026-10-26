@@ -1,0 +1,27 @@
+# Render "Blueprint": tells Render how to run the server. In Render, choose New > Blueprint and pick
+# this repository. Values marked sync: false are secrets you type into Render's dashboard once; they
+# never go in the repository.
+services:
+  - type: web
+    name: game-coach-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/rivals/heroes
+    envVars:
+      - key: GAMECOACH_COACH_PROVIDER
+        value: claude
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: SPRING_DATASOURCE_URL
+        sync: false          # from Neon, e.g. jdbc:postgresql://ep-xxx.neon.tech/neondb?sslmode=require
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: GAMECOACH_JWT_SECRET
+        generateValue: true  # Render makes a random secret
+      - key: GAMECOACH_INVITE_CODES
+        sync: false
+      - key: GAMECOACH_ALLOWED_ORIGINS
+        sync: false          # your GitHub Pages address, e.g. https://polarswif.github.io

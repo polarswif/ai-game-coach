@@ -40,3 +40,20 @@ jobs:
         run: |
           npm install
           npm run build
+
+  # Builds the server's Docker image the same way the host will, so a broken Dockerfile shows up here first.
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the Docker image
+        run: docker build -t game-coach-api .
+      - name: Start it and check it answers
+        run: |
+          docker run -d --name api -p 8080:8080 game-coach-api
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:8080/api/rivals/heroes > /dev/null; then echo "Server is up"; exit 0; fi
+            sleep 2
+          done
+          docker logs api | tail -40
+          exit 1
