@@ -11,6 +11,7 @@ import com.gamecoach.parsing.OverwatchMatchReader;
 import com.gamecoach.parsing.OverwatchMatchStore;
 import com.gamecoach.parsing.OverwatchMatchValidator;
 import com.gamecoach.parsing.OverwatchScreens;
+import com.gamecoach.parsing.HeroDoubt;
 import com.gamecoach.parsing.ParsedOverwatchMatch;
 import com.gamecoach.parsing.Screenshot;
 import com.gamecoach.service.CoachingUnavailableException;
@@ -155,7 +156,7 @@ public class OverwatchMatchController {
         if (you == null) {
             List<String> warnings = new ArrayList<>(parsed.warnings());
             warnings.add("Your row wasn't identified, so the hero you gave (" + hero + ") wasn't applied.");
-            return new ParsedOverwatchMatch(match, warnings);
+            return new ParsedOverwatchMatch(match, warnings, parsed.heroDoubts());
         }
         OverwatchMatch fixed = match.withPlayers(match.players().stream()
                 .map(p -> p == you ? p.withHero(hero) : p).toList());
@@ -172,7 +173,8 @@ public class OverwatchMatchController {
                     + (you.hero() == null ? "no hero" : you.hero()) + ").");
         }
         warnings.addAll(validator.check(fixed));
-        return new ParsedOverwatchMatch(fixed, List.copyOf(warnings));
+        return new ParsedOverwatchMatch(fixed, List.copyOf(warnings),
+                HeroDoubt.without(parsed.heroDoubts(), match.players().indexOf(you)));
     }
 
     /** The validator's warnings are recomputed after the change, so the old ones are dropped. */

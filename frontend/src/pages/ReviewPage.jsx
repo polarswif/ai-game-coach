@@ -19,6 +19,11 @@ export default function ReviewPage({ theme }) {
   const [match, setMatch] = useState(null);
   const [heroes, setHeroes] = useState([]);
   const [warnings, setWarnings] = useState(location.state?.warnings ?? null);
+  // Rows whose portrait the reader wasn't sure of, each with likely alternatives.
+  const [doubts] = useState(location.state?.heroDoubts ?? []);
+  // Row indexes the player has dealt with (changed the hero or pressed "It's right").
+  // A Set can't be changed in place in React state, so every update makes a new one.
+  const [settled, setSettled] = useState(() => new Set());
   const [changed, setChanged] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -46,8 +51,13 @@ export default function ReviewPage({ theme }) {
 
   if (!game) return <Navigate404 />;
 
-  // Rows the reader flagged: a warning that names the player and mentions their portrait or hero.
-  const isFlagged = (player) => {
+  // The reader's doubt about a row, until the player deals with it.
+  const doubtFor = (index) => (settled.has(index) ? null : doubts.find((d) => d.index === index) ?? null);
+
+  // Rows to check: a structured doubt, or (older style) a warning that names the player and their hero.
+  const isFlagged = (player, index) => {
+    if (settled.has(index)) return false;
+    if (doubtFor(index)) return true;
     if (!warnings || !player.name) return false;
     const name = player.name.toLowerCase();
     return warnings.some((w) => {
@@ -55,6 +65,8 @@ export default function ReviewPage({ theme }) {
       return text.includes(name) && (text.includes('portrait') || text.includes('hero'));
     });
   };
+
+  const settle = (index) => setSettled((current) => new Set(current).add(index));
 
   // Changing a hero keeps the row's role as the reader saw it: role icons are read very reliably,
   // so a hero from another role is more often a slip than a real change. The row then shows a note
@@ -65,6 +77,7 @@ export default function ReviewPage({ theme }) {
       players: current.players.map((p, i) => (i === index ? { ...p, [game.heroField]: heroName } : p)),
     }));
     setChanged(true);
+    settle(index);
   }
 
   function changeRole(index, role) {
@@ -104,9 +117,11 @@ export default function ReviewPage({ theme }) {
   }
 
   const rowsFor = (team) => (match?.players ?? [])
-    .map((player, index) => ({ player, index, flagged: isFlagged(player), heroRole: roleMismatch(player) }))
+    .map((player, index) => ({
+      player, index, flagged: isFlagged(player, index), doubt: doubtFor(index), heroRole: roleMismatch(player),
+    }))
     .filter(({ player }) => player.team === team);
-  const flaggedCount = (match?.players ?? []).filter(isFlagged).length;
+  const flaggedCount = (match?.players ?? []).filter((p, i) => isFlagged(p, i)).length;
   const mismatchCount = (match?.players ?? []).filter((p) => roleMismatch(p)).length;
   const you = match?.players.find((p) => p.uploader);
 
@@ -131,15 +146,21 @@ export default function ReviewPage({ theme }) {
           )}
         </section>
 
-        {warnings && warnings.length > 0 && (
-          <section className="warning-box" aria-labelledby="warn-title">
+        {(flaggedCount > 0 || (warnings && warnings.length > 0)) && (
+          <section className="warning-box" aria-labelledby="warn-title" aria-live="polite">
             <WarningIcon />
             <div className="stack-xs">
               <h2 id="warn-title">{flaggedCount > 0 ? `${flaggedCount} ${flaggedCount === 1 ? 'hero needs' : 'heroes need'} a quick check` : 'A few things to check'}</h2>
-              <details>
-                <summary>Everything the reader noted ({warnings.length})</summary>
-                <ul>{warnings.map((w) => <li key={w}>{w}</li>)}</ul>
-              </details>
+              {flaggedCount > 0 && (
+                <p>The reader wasn't sure about the highlighted {flaggedCount === 1 ? 'portrait' : 'portraits'}. Pick the
+                  right hero, or press <strong>It's right</strong> if the guess is correct.</p>
+              )}
+              {warnings && warnings.length > 0 && (
+                <details>
+                  <summary>Everything the reader noted ({warnings.length})</summary>
+                  <ul>{warnings.map((w) => <li key={w}>{w}</li>)}</ul>
+                </details>
+              )}
             </div>
           </section>
         )}
@@ -158,9 +179,9 @@ export default function ReviewPage({ theme }) {
         {match && (
           <>
             <TeamTable game={game} title="Your team" headKind="own" rows={rowsFor('A')} heroesByRole={heroesByRole}
-              onHeroChange={changeHero} onRoleChange={changeRole} onYouChange={changeYou} />
+              onHeroChange={changeHero} onRoleChange={changeRole} onYouChange={changeYou} onConfirm={settle} />
             <TeamTable game={game} title="Enemy team" headKind="enemy" rows={rowsFor('B')} heroesByRole={heroesByRole}
-              onHeroChange={changeHero} onRoleChange={changeRole} />
+              onHeroChange={changeHero} onRoleChange={changeRole} onConfirm={settle} />
             <div className="actions">
               <Link to="/" className="button button--outline">Upload again</Link>
               <button type="button" className="button button--primary button--large" onClick={continueToCoaching}

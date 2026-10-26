@@ -244,6 +244,11 @@ th:last-child, td:last-child { padding-right: 22px; }
 .hero-pick__flag { font-size: 12px; font-weight: 700; color: var(--warn-text); }
 .select { font: inherit; font-size: 15px; padding: 8px 10px; border-radius: 10px; border: 1.5px solid var(--input-border); background: var(--input-bg); color: var(--text); }
 .select--flagged { border: 2px solid var(--flag); }
+.doubt-note { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; font-size: 12px; line-height: 1.4; color: var(--warn-text); }
+.doubt-note__seen { color: var(--muted); font-style: italic; }
+.doubt-note__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-weight: 600; }
+.chip-button { font: inherit; font-weight: 700; padding: 3px 10px; border-radius: 999px; border: 1.5px solid var(--flag); background: transparent; color: var(--text); cursor: pointer; }
+.chip-button:hover { background: var(--row-flag); }
 input[type='radio'] { width: 20px; height: 20px; accent-color: var(--accent); }
 .actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: flex-end; align-items: center; }
 

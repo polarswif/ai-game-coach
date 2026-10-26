@@ -4,7 +4,7 @@ import { formatNumber } from '../format.js';
  * One team's rows. Each hero cell is a dropdown so a wrong portrait read can be fixed, and the
  * "You" column marks whose row gets coached. Rows the reader was unsure about are highlighted.
  */
-export default function TeamTable({ game, title, rows, heroesByRole, onHeroChange, onRoleChange, onYouChange, headKind }) {
+export default function TeamTable({ game, title, rows, heroesByRole, onHeroChange, onRoleChange, onYouChange, onConfirm, headKind }) {
   return (
     <section className={`team-table team-table--${headKind}`}>
       <div className="team-table__head">
@@ -24,7 +24,7 @@ export default function TeamTable({ game, title, rows, heroesByRole, onHeroChang
             </tr>
           </thead>
           <tbody>
-            {rows.map(({ player, index, flagged, heroRole }) => (
+            {rows.map(({ player, index, flagged, doubt, heroRole }) => (
               <tr key={index} className={heroRole ? 'row--mismatch' : player.uploader ? 'row--you' : flagged ? 'row--flagged' : undefined}>
                 <td>
                   <span className="player">
@@ -53,6 +53,20 @@ export default function TeamTable({ game, title, rows, heroesByRole, onHeroChang
                       ))}
                     </select>
                   </label>
+                  {flagged && (
+                    <span className="doubt-note">
+                      {doubt?.seen && <span className="doubt-note__seen">Reader saw: {doubt.seen}</span>}
+                      <span className="doubt-note__actions">
+                        {doubt?.alternatives.length > 0 && <span>Maybe:</span>}
+                        {doubt?.alternatives.map((name) => (
+                          <button key={name} type="button" className="chip-button" onClick={() => onHeroChange(index, name)}>
+                            {name}
+                          </button>
+                        ))}
+                        <button type="button" className="link-button" onClick={() => onConfirm(index)}>It's right</button>
+                      </span>
+                    </span>
+                  )}
                   {heroRole && (
                     <span className="role-note">
                       The icon showed {game.roles[player.role] ?? player.role}, but {player[game.heroField]} is

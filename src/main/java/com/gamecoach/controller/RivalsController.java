@@ -10,6 +10,7 @@ import com.gamecoach.model.MatchSummary;
 import com.gamecoach.model.PlayerLine;
 import com.gamecoach.model.RoundScore;
 import com.gamecoach.parsing.BadUploadException;
+import com.gamecoach.parsing.HeroDoubt;
 import com.gamecoach.parsing.ParsedScoreboard;
 import com.gamecoach.parsing.ScoreboardParser;
 import com.gamecoach.parsing.ScoreboardValidator;
@@ -170,7 +171,7 @@ public class RivalsController {
         if (you == null) {
             List<String> warnings = new java.util.ArrayList<>(parsed.warnings());
             warnings.add("No highlighted row was found, so the hero you gave (" + hero + ") wasn't applied.");
-            return new ParsedScoreboard(match, warnings);
+            return new ParsedScoreboard(match, warnings, parsed.heroDoubts());
         }
         List<PlayerLine> players = match.players().stream()
                 .map(p -> p == you ? p.withLastHero(hero) : p)
@@ -190,7 +191,8 @@ public class RivalsController {
                     + (you.lastHero() == null ? "no hero" : you.lastHero()) + ").");
         }
         warnings.addAll(validator.check(fixed));
-        return new ParsedScoreboard(fixed, List.copyOf(warnings));
+        return new ParsedScoreboard(fixed, List.copyOf(warnings),
+                HeroDoubt.without(parsed.heroDoubts(), match.players().indexOf(you)));
     }
 
     /** "3-2" or "3:2" → RoundScore(3, 2); null when absent. */

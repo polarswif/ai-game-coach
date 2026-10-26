@@ -21,6 +21,11 @@ final class ScoreboardPrompt {
     private ScoreboardPrompt() {
     }
 
+    static final String ZOOM_LABEL = "PORTRAITS (zoomed):";
+
+    /** How much of the screenshot's width the zoom keeps: role icons, portraits and names. */
+    static final double ZOOM_FRACTION = 0.36;
+
     static String systemPrompt() {
         return """
                 You transcribe Marvel Rivals end-of-match scoreboard screenshots into exact data. Accuracy \
@@ -49,6 +54,12 @@ final class ScoreboardPrompt {
                 wings), GUARDIAN (pink, large wings), CHAMPION (red and gold flames). Use UNREADABLE for a \
                 badge you can see but not identify, and the lower tier when torn between two. Most rows \
                 have neither: use DEFAULT and NONE.
+
+                A second image, PORTRAITS (zoomed), may follow: the left part of the same screenshot, \
+                enlarged so the portraits are easier to see. Use it to identify heroes, matching rows by \
+                order and player name; take every other value from the full screenshot.
+
+                """ + PortraitCheck.rules() + """
 
                 Rules:
                 - Use hero names exactly as in the HERO NAMES list. For Deadpool, add the role from the row's \
@@ -89,9 +100,9 @@ final class ScoreboardPrompt {
 
         Map<String, Object> playerSchema = Map.of(
                 "type", "object",
-                "properties", player,
-                "required", List.of("name", "team", "role", "hero", "kills", "deaths", "assists", "finalHits",
-                        "damage", "blocked", "healing", "accuracyPercent", "uploader"));
+                "properties", PortraitCheck.withPortraitFields(player),
+                "required", PortraitCheck.withPortraitRequired(List.of("name", "team", "role", "hero", "kills",
+                        "deaths", "assists", "finalHits", "damage", "blocked", "healing", "accuracyPercent", "uploader")));
 
         Map<String, Object> properties = new LinkedHashMap<>();
         properties.put("result", Map.of("type", "string", "enum", List.of("VICTORY", "DEFEAT")));

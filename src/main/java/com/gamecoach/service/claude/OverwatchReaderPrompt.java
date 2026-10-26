@@ -51,10 +51,16 @@ final class OverwatchReaderPrompt {
                 uploader's row is the one highlighted brighter than the others in the top block; if you \
                 can't tell, mark no row and add a warning.
 
+                A PORTRAITS (zoomed) image may follow TEAMS: the left part of the TEAMS screen, enlarged so \
+                the portraits are easier to see. Use it to identify heroes, matching rows by order and player \
+                name; take every other value from the full screens.
+
+                """ + PortraitCheck.rules() + """
+
                 Rules:
                 - Use hero names exactly as in the HERO NAMES list. A hero named in text on SUMMARY or \
-                PERSONAL is certain; a portrait is a judgment, so add a warning for any portrait you are \
-                unsure of, naming the row.
+                PERSONAL is certain (so the uploader's row can be sure when it matches); every other \
+                portrait is a judgment.
                 - The uploader's row portrait must be one of the heroes on SUMMARY when it's sent (the last \
                 one they played).
                 - Copy numbers digit by digit without commas. Never invent a value: if a number is hidden \
@@ -87,9 +93,9 @@ final class OverwatchReaderPrompt {
         player.put("uploader", Map.of("type", "boolean"));
         Map<String, Object> playerSchema = Map.of(
                 "type", "object",
-                "properties", player,
-                "required", List.of("name", "team", "role", "hero", "eliminations", "assists", "deaths",
-                        "damage", "healing", "mitigation", "uploader"));
+                "properties", PortraitCheck.withPortraitFields(player),
+                "required", PortraitCheck.withPortraitRequired(List.of("name", "team", "role", "hero",
+                        "eliminations", "assists", "deaths", "damage", "healing", "mitigation", "uploader")));
 
         Map<String, Object> heroTime = Map.of(
                 "type", "object",

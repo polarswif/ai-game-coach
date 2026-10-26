@@ -5,6 +5,7 @@ import com.gamecoach.model.OverwatchMatch;
 import com.gamecoach.parsing.OverwatchMatchReader;
 import com.gamecoach.parsing.OverwatchMatchValidator;
 import com.gamecoach.parsing.OverwatchScreens;
+import com.gamecoach.parsing.HeroDoubt;
 import com.gamecoach.parsing.ParsedOverwatchMatch;
 import com.gamecoach.parsing.ScoreboardUnreadableException;
 import com.gamecoach.parsing.Screenshot;
@@ -41,6 +42,9 @@ public class ClaudeOverwatchReader implements OverwatchMatchReader {
     /** Ten rows plus hero tiles; the same room the Rivals reader gets. */
     static final int MAX_TOKENS = 8000;
 
+    /** How much of the Teams screen's width the portrait zoom keeps: role icons, portraits and names. */
+    static final double ZOOM_FRACTION = 0.40;
+
     private final ClaudeClient client;
     private final ClaudeProperties properties;
     private final OverwatchHeroCatalog heroes;
@@ -74,18 +78,21 @@ public class ClaudeOverwatchReader implements OverwatchMatchReader {
         Map<String, Object> input = toolInput(response);
         List<String> warnings = new ArrayList<>(ToolInput.strings(input, "warnings"));
         OverwatchMatch match = OverwatchToolInput.toMatch(input, matchId, warnings);
+        List<HeroDoubt> doubts = PortraitCheck.doubts(ToolInput.objects(input, "players"), heroes::officialName);
         if (match.players().isEmpty()) {
             throw new ScoreboardUnreadableException("No scoreboard rows could be read from the Teams screen"
                     + (warnings.isEmpty() ? "." : ": " + ToolInput.firstSentence(warnings.get(0))));
         }
         warnings.addAll(validator.check(match));
-        return new ParsedOverwatchMatch(match, List.copyOf(warnings));
+        return new ParsedOverwatchMatch(match, List.copyOf(warnings), doubts);
     }
 
     /** Label, image, label, image..., then the instructions. Package-private for tests. */
     MessagesRequest buildRequest(OverwatchScreens screens) {
         List<Object> parts = new ArrayList<>();
         addImage(parts, "TEAMS screen:", screens.teams());
+        PortraitZoom.leftStrip(screens.teams(), ZOOM_FRACTION)
+                .ifPresent(zoom -> addImage(parts, "PORTRAITS (zoomed):", zoom));
         if (screens.summary() != null) {
             addImage(parts, "SUMMARY screen:", screens.summary());
         }

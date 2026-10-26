@@ -3,6 +3,7 @@ package com.gamecoach.service.claude;
 import com.gamecoach.analysis.HeroRoleCatalog;
 import com.gamecoach.model.MatchDetails;
 import com.gamecoach.model.RoundScore;
+import com.gamecoach.parsing.HeroDoubt;
 import com.gamecoach.parsing.ParsedScoreboard;
 import com.gamecoach.parsing.ScoreboardParser;
 import com.gamecoach.parsing.ScoreboardUnreadableException;
@@ -10,9 +11,11 @@ import com.gamecoach.parsing.ScoreboardValidator;
 import com.gamecoach.parsing.Screenshot;
 import com.gamecoach.service.CoachingUnavailableException;
 import com.gamecoach.service.claude.ClaudeApi.ContentBlock;
+import com.gamecoach.service.claude.ClaudeApi.ImagePart;
 import com.gamecoach.service.claude.ClaudeApi.Message;
 import com.gamecoach.service.claude.ClaudeApi.MessagesRequest;
 import com.gamecoach.service.claude.ClaudeApi.MessagesResponse;
+import com.gamecoach.service.claude.ClaudeApi.TextPart;
 import com.gamecoach.service.claude.ClaudeApi.ToolChoice;
 
 import org.slf4j.Logger;
@@ -71,6 +74,7 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
         Map<String, Object> input = toolInput(response);
         List<String> warnings = new ArrayList<>(ToolInput.strings(input, "warnings"));
         MatchDetails match = ScoreboardToolInput.toMatch(input, matchId, warnings);
+        List<HeroDoubt> doubts = PortraitCheck.doubts(ToolInput.objects(input, "players"), roles::officialName);
         if (match.players().isEmpty()) {
             throw new ScoreboardUnreadableException("No scoreboard rows could be read from this image"
                     + (warnings.isEmpty() ? "." : ": " + ToolInput.firstSentence(warnings.get(0))));
@@ -79,20 +83,30 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
             match = match.withScore(score);
         }
         warnings.addAll(validator.check(match));
-        return new ParsedScoreboard(match, List.copyOf(warnings));
+        return new ParsedScoreboard(match, List.copyOf(warnings), doubts);
     }
 
     /** Package-private so tests can check the request without sending it. */
+    /** The screenshot, then a zoomed copy of its portraits when it can be made, then the instructions. */
     MessagesRequest buildRequest(Screenshot screenshot) {
-        String base64 = Base64.getEncoder().encodeToString(screenshot.bytes());
+        List<Object> parts = new ArrayList<>();
+        parts.add(image(screenshot));
+        PortraitZoom.leftStrip(screenshot, ScoreboardPrompt.ZOOM_FRACTION).ifPresent(zoom -> {
+            parts.add(TextPart.of(ScoreboardPrompt.ZOOM_LABEL));
+            parts.add(image(zoom));
+        });
+        parts.add(TextPart.of(ScoreboardPrompt.instructions(roles.heroNames())));
         return new MessagesRequest(
                 properties.model(),
                 MAX_TOKENS,
                 ScoreboardPrompt.systemPrompt(),
-                List.of(Message.userWithImage(screenshot.mediaType(), base64,
-                        ScoreboardPrompt.instructions(roles.heroNames()))),
+                List.of(new Message("user", parts)),
                 List.of(ScoreboardPrompt.tool()),
                 ToolChoice.auto());
+    }
+
+    private static ImagePart image(Screenshot screenshot) {
+        return ImagePart.base64(screenshot.mediaType(), Base64.getEncoder().encodeToString(screenshot.bytes()));
     }
 
     private static Map<String, Object> toolInput(MessagesResponse response) {

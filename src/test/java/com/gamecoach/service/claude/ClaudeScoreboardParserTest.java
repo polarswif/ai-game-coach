@@ -125,4 +125,62 @@ class ClaudeScoreboardParserTest {
                 () -> parser.parse(new Screenshot(PNG, "image/png"), "u", null));
         assertTrue(e.getMessage().contains("ANTHROPIC_API_KEY"));
     }
+
+    @Test
+    void unsureRowsComeBackAsDoubtsWithValidAlternatives() {
+        Map<String, Object> input = ScoreboardInputs.of(player29);
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> rows = (List<Map<String, Object>>) input.get("players");
+        String hero = roles.officialName((String) rows.get(2).get("hero")).orElseThrow();
+        List<String> others = roles.heroNames().stream().map(n -> roles.officialName(n).orElseThrow())
+                .distinct().filter(n -> !n.equals(hero)).limit(2).toList();
+        rows.get(2).put("portraitLooks", "blond hair, red jacket");
+        rows.get(2).put("heroSure", false);
+        rows.get(2).put("heroAlternatives", List.of(hero, "Not A Hero", others.get(0).toLowerCase(), others.get(1)));
+        rows.get(5).put("heroSure", true);
+        client.reply = reply(input);
+
+        ParsedScoreboard parsed = parser.parse(new Screenshot(PNG, "image/png"), "u", null);
+        assertEquals(1, parsed.heroDoubts().size());
+        var doubt = parsed.heroDoubts().get(0);
+        assertEquals(2, doubt.index());
+        assertEquals(hero, doubt.hero());
+        assertEquals(others, doubt.alternatives());      // own hero and unknown names dropped, spelling fixed
+        assertEquals("blond hair, red jacket", doubt.seen());
+        assertEquals(player29.players(), parsed.match().players());   // the match itself is unchanged
+    }
+
+    @Test
+    void aRealScreenshotAlsoGetsAZoomedPortraitStrip() throws Exception {
+        java.awt.image.BufferedImage image = new java.awt.image.BufferedImage(2000, 1125,
+                java.awt.image.BufferedImage.TYPE_INT_RGB);
+        java.io.ByteArrayOutputStream png = new java.io.ByteArrayOutputStream();
+        javax.imageio.ImageIO.write(image, "png", png);
+
+        MessagesRequest request = parser.buildRequest(new Screenshot(png.toByteArray(), "image/png"));
+        List<?> parts = (List<?>) request.messages().get(0).content();
+        assertEquals(4, parts.size());                                   // screenshot, label, zoom, instructions
+        assertEquals(ScoreboardPrompt.ZOOM_LABEL, ((TextPart) parts.get(1)).text());
+        ImagePart zoom = assertInstanceOf(ImagePart.class, parts.get(2));
+        assertEquals("image/jpeg", zoom.source().mediaType());
+        java.awt.image.BufferedImage strip = javax.imageio.ImageIO.read(
+                new java.io.ByteArrayInputStream(Base64.getDecoder().decode(zoom.source().data())));
+        assertTrue((long) strip.getWidth() * strip.getHeight() <= PortraitZoom.MAX_PIXELS);
+        assertTrue(strip.getHeight() > 1125);                            // enlarged, not shrunk
+        assertTrue(Math.abs((double) strip.getWidth() / strip.getHeight() - 720.0 / 1125) < 0.01);
+        assertTrue(((TextPart) parts.get(3)).text().contains("HERO NAMES"));
+    }
+
+    @Test
+    void theToolAsksForTheLookBeforeTheHero() {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> players = (Map<String, Object>) ScoreboardPrompt.tool().inputSchema().get("properties");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> row = (Map<String, Object>) ((Map<String, Object>) players.get("players")).get("items");
+        @SuppressWarnings("unchecked")
+        List<String> keys = List.copyOf(((Map<String, Object>) row.get("properties")).keySet());
+        assertEquals(keys.indexOf("hero") - 1, keys.indexOf("portraitLooks"));
+        assertEquals(keys.indexOf("hero") + 1, keys.indexOf("heroSure"));
+        assertTrue(((List<?>) row.get("required")).contains("heroSure"));
+    }
 }

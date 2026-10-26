@@ -56,8 +56,9 @@ export default function UploadPage({ theme }) {
     if (hero.trim()) form.append('hero', hero.trim());
     try {
       const parsed = await api.upload(gameId, form);
-      // Go to the review page. `state` carries the warnings along (they aren't stored on the server).
-      navigate(`/${gameId}/matches/${parsed.match.matchId}/review`, { state: { warnings: parsed.warnings } });
+      // Go to the review page. `state` carries the warnings and hero doubts along (they aren't stored on the server).
+      navigate(`/${gameId}/matches/${parsed.match.matchId}/review`,
+        { state: { warnings: parsed.warnings, heroDoubts: parsed.heroDoubts } });
     } catch (err) {
       setError(err.message);
       setBusy(false);
