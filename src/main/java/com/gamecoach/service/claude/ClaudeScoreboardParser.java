@@ -46,13 +46,15 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
     private final ClaudeProperties properties;
     private final HeroRoleCatalog roles;
     private final ScoreboardValidator validator;
+    private final HeroPortraitSheet portraits;
 
     public ClaudeScoreboardParser(ClaudeClient client, ClaudeProperties properties, HeroRoleCatalog roles,
-                                  ScoreboardValidator validator) {
+                                  ScoreboardValidator validator, HeroPortraitSheet portraits) {
         this.client = client;
         this.properties = properties;
         this.roles = roles;
         this.validator = validator;
+        this.portraits = portraits;
     }
 
     @Override
@@ -73,7 +75,7 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
 
         Map<String, Object> input = toolInput(response);
         List<String> warnings = new ArrayList<>(ToolInput.strings(input, "warnings"));
-        MatchDetails match = ScoreboardToolInput.toMatch(input, matchId, warnings);
+        MatchDetails match = officialHeroNames(ScoreboardToolInput.toMatch(input, matchId, warnings));
         List<HeroDoubt> doubts = PortraitCheck.doubts(ToolInput.objects(input, "players"), roles::officialName);
         if (match.players().isEmpty()) {
             throw new ScoreboardUnreadableException("No scoreboard rows could be read from this image"
@@ -87,13 +89,20 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
     }
 
     /** Package-private so tests can check the request without sending it. */
-    /** The screenshot, then a zoomed copy of its portraits when it can be made, then the instructions. */
+    /**
+     * The screenshot, a zoomed copy of its portraits when it can be made, the labeled sheet of every
+     * hero's portrait to compare against, then the instructions.
+     */
     MessagesRequest buildRequest(Screenshot screenshot) {
         List<Object> parts = new ArrayList<>();
         parts.add(image(screenshot));
         PortraitZoom.leftStrip(screenshot, ScoreboardPrompt.ZOOM_FRACTION).ifPresent(zoom -> {
             parts.add(TextPart.of(ScoreboardPrompt.ZOOM_LABEL));
             parts.add(image(zoom));
+        });
+        portraits.image().ifPresent(sheet -> {
+            parts.add(TextPart.of(ScoreboardPrompt.SHEET_LABEL));
+            parts.add(image(sheet));
         });
         parts.add(TextPart.of(ScoreboardPrompt.instructions(roles.heroNames())));
         return new MessagesRequest(
@@ -103,6 +112,14 @@ public class ClaudeScoreboardParser implements ScoreboardParser {
                 List.of(new Message("user", parts)),
                 List.of(ScoreboardPrompt.tool()),
                 ToolChoice.auto());
+    }
+
+    /** "loki (Lady Loki costume)" → "Loki": one spelling per hero for the rest of the app. */
+    private MatchDetails officialHeroNames(MatchDetails match) {
+        return match.withPlayers(match.players().stream()
+                .map(p -> roles.officialName(p.lastHero()).filter(n -> !n.equals(p.lastHero()))
+                        .map(p::withLastHero).orElse(p))
+                .toList());
     }
 
     private static ImagePart image(Screenshot screenshot) {

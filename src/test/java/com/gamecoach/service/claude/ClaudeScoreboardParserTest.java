@@ -55,7 +55,7 @@ class ClaudeScoreboardParserTest {
     private final FakeClient client = new FakeClient();
     private final ClaudeScoreboardParser parser = new ClaudeScoreboardParser(client,
             new ClaudeProperties("test-key", null, null, null, null), roles,
-            new ScoreboardValidator(roles, new TeamUpCatalog()));
+            new ScoreboardValidator(roles, new TeamUpCatalog()), new HeroPortraitSheet());
 
     private static MessagesResponse reply(Map<String, Object> input) {
         return new MessagesResponse("msg", "claude-sonnet-5-5",
@@ -69,7 +69,9 @@ class ClaudeScoreboardParserTest {
         ImagePart image = assertInstanceOf(ImagePart.class, parts.get(0));
         assertEquals("image/png", image.source().mediaType());
         assertEquals(Base64.getEncoder().encodeToString(PNG), image.source().data());
-        TextPart text = assertInstanceOf(TextPart.class, parts.get(1));
+        assertEquals(ScoreboardPrompt.SHEET_LABEL, ((TextPart) parts.get(1)).text());   // the portrait chart
+        assertInstanceOf(ImagePart.class, parts.get(2));
+        TextPart text = assertInstanceOf(TextPart.class, parts.get(parts.size() - 1));
         assertTrue(text.text().contains("Rocket Raccoon"));                  // the exact hero names
         assertEquals(ScoreboardPrompt.TOOL_NAME, request.tools().get(0).name());
         assertEquals("auto", request.toolChoice().type());
@@ -159,7 +161,7 @@ class ClaudeScoreboardParserTest {
 
         MessagesRequest request = parser.buildRequest(new Screenshot(png.toByteArray(), "image/png"));
         List<?> parts = (List<?>) request.messages().get(0).content();
-        assertEquals(4, parts.size());                                   // screenshot, label, zoom, instructions
+        assertEquals(6, parts.size());                   // screenshot, zoom label + zoom, sheet label + sheet, instructions
         assertEquals(ScoreboardPrompt.ZOOM_LABEL, ((TextPart) parts.get(1)).text());
         ImagePart zoom = assertInstanceOf(ImagePart.class, parts.get(2));
         assertEquals("image/jpeg", zoom.source().mediaType());
@@ -168,7 +170,8 @@ class ClaudeScoreboardParserTest {
         assertTrue((long) strip.getWidth() * strip.getHeight() <= PortraitZoom.MAX_PIXELS);
         assertTrue(strip.getHeight() > 1125);                            // enlarged, not shrunk
         assertTrue(Math.abs((double) strip.getWidth() / strip.getHeight() - 720.0 / 1125) < 0.01);
-        assertTrue(((TextPart) parts.get(3)).text().contains("HERO NAMES"));
+        assertEquals(ScoreboardPrompt.SHEET_LABEL, ((TextPart) parts.get(3)).text());
+        assertTrue(((TextPart) parts.get(5)).text().contains("HERO NAMES"));
     }
 
     @Test
@@ -182,5 +185,18 @@ class ClaudeScoreboardParserTest {
         assertEquals(keys.indexOf("hero") - 1, keys.indexOf("portraitLooks"));
         assertEquals(keys.indexOf("hero") + 1, keys.indexOf("heroSure"));
         assertTrue(((List<?>) row.get("required")).contains("heroSure"));
+    }
+
+    @Test
+    void aCostumeLabelFromTheSheetBecomesTheHerosName() {
+        Map<String, Object> input = ScoreboardInputs.of(player29);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> row = (Map<String, Object>) ((List<Object>) input.get("players")).get(7);
+        row.put("hero", "Loki (Lady Loki costume)");
+        row.put("role", "STRATEGIST");
+        client.reply = reply(input);
+        ParsedScoreboard parsed = parser.parse(new Screenshot(PNG, "image/png"), "u", null);
+        assertEquals("Loki", parsed.match().players().get(7).lastHero());
+        assertTrue(parsed.warnings().stream().noneMatch(w -> w.contains("isn't in the hero table")));
     }
 }

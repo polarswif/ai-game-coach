@@ -1,0 +1,59 @@
+# Reference portraits for the screenshot reader: label,file. The label is what the reader sees
+# under the picture; it starts with the hero name from marvel-rivals-roles.csv. Icons from the
+# Marvel Rivals wiki, supplied by the user (Oct 2026). Add a line and a 150x150 PNG for new heroes.
+Adam Warlock,adam-warlock.png
+Angela,angela.png
+Black Cat,black-cat.png
+Black Panther,black-panther.png
+Black Widow,black-widow.png
+Blade,blade.png
+Captain America,captain-america.png
+Cloak & Dagger,cloak-and-dagger.png
+Cyclops,cyclops.png
+Daredevil,daredevil.png
+Deadpool,deadpool.png
+Devil Dinosaur,devil-dinosaur.png
+Doctor Strange,doctor-strange.png
+Elsa Bloodstone,elsa-bloodstone.png
+Emma Frost,emma-frost.png
+Gambit,gambit.png
+Gorr,gorr.png
+Groot,groot.png
+Hawkeye,hawkeye.png
+Hela,hela.png
+Hulk,hulk.png
+Hulk (as Bruce Banner),hulk-bruce-banner.png
+Human Torch,human-torch.png
+Invisible Woman,invisible-woman.png
+Iron Fist,iron-fist.png
+Iron Man,iron-man.png
+Jeff the Land Shark,jeff-the-land-shark.png
+Jubilee,jubilee.png
+Loki,loki.png
+Loki (Lady Loki costume),loki-lady-loki.png
+Luna Snow,luna-snow.png
+Magik,magik.png
+Magneto,magneto.png
+Mantis,mantis.png
+Mister Fantastic,mister-fantastic.png
+Moon Knight,moon-knight.png
+Namor,namor.png
+Peni Parker,peni-parker.png
+Phoenix,phoenix.png
+Psylocke,psylocke.png
+Rocket Raccoon,rocket-raccoon.png
+Rogue,rogue.png
+Scarlet Witch,scarlet-witch.png
+Spider-Man,spider-man.png
+Squirrel Girl,squirrel-girl.png
+Star-Lord,star-lord.png
+Storm,storm.png
+The Hood,the-hood.png
+The Punisher,the-punisher.png
+The Thing,the-thing.png
+Thor,thor.png
+Ultron,ultron.png
+Venom,venom.png
+White Fox,white-fox.png
+Winter Soldier,winter-soldier.png
+Wolverine,wolverine.png

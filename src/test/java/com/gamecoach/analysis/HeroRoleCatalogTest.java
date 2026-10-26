@@ -24,6 +24,8 @@ class HeroRoleCatalogTest {
         assertEquals(java.util.Optional.of("Hulk"), catalog.officialName("bruce banner"));
         assertEquals(java.util.Optional.of("Gorr"), catalog.officialName("Gorr the God Butcher"));
         assertEquals(java.util.Optional.of("Cloak & Dagger"), catalog.officialName("Cloak and Dagger"));
+        assertEquals(java.util.Optional.of("Loki"), catalog.officialName("Loki (Lady Loki costume)"));
+        assertEquals(java.util.Optional.empty(), catalog.officialName("Deadpool (Healer)"));
         assertTrue(catalog.heroNames().contains("Hulk"));
         assertFalse(catalog.heroNames().contains("Bruce Banner"));
         assertFalse(catalog.heroNames().contains("Cloak and Dagger"));

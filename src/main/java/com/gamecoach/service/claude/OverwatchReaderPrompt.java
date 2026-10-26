@@ -55,7 +55,7 @@ final class OverwatchReaderPrompt {
                 the portraits are easier to see. Use it to identify heroes, matching rows by order and player \
                 name; take every other value from the full screens.
 
-                """ + PortraitCheck.rules() + """
+                """ + PortraitCheck.rules(false) + """
 
                 Rules:
                 - Use hero names exactly as in the HERO NAMES list. A hero named in text on SUMMARY or \

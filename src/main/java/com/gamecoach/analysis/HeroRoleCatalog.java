@@ -55,7 +55,15 @@ public class HeroRoleCatalog {
      * isn't listed. Used for names people type, so the rest of the app sees one spelling.
      */
     public Optional<String> officialName(String hero) {
-        return hero == null ? Optional.empty() : Optional.ofNullable(namesByKey.get(normalize(hero)));
+        if (hero == null) {
+            return Optional.empty();
+        }
+        String exact = namesByKey.get(normalize(hero));
+        if (exact != null || isDeadpool(hero) || !hero.contains("(")) {
+            return Optional.ofNullable(exact);
+        }
+        // "Loki (Lady Loki costume)", as labeled on the portrait sheet: the hero is the part before "(".
+        return Optional.ofNullable(namesByKey.get(normalize(hero.substring(0, hero.indexOf('(')))));
     }
 
     /**

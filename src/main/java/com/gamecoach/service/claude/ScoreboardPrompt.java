@@ -22,6 +22,7 @@ final class ScoreboardPrompt {
     }
 
     static final String ZOOM_LABEL = "PORTRAITS (zoomed):";
+    static final String SHEET_LABEL = "HERO PORTRAITS (reference, not part of this match):";
 
     /** How much of the screenshot's width the zoom keeps: role icons, portraits and names. */
     static final double ZOOM_FRACTION = 0.36;
@@ -59,7 +60,15 @@ final class ScoreboardPrompt {
                 enlarged so the portraits are easier to see. Use it to identify heroes, matching rows by \
                 order and player name; take every other value from the full screenshot.
 
-                """ + PortraitCheck.rules() + """
+                HERO PORTRAITS (reference) may follow: every hero's portrait icon with their name printed \
+                under it. It is a lookup chart, not part of the match. Identify each row's hero by finding \
+                the matching face on it: compare hair color and style, face, mask or helmet, horns, ears and \
+                costume colors. The scoreboard shows a wider crop of the same art (and Lord or animated \
+                Champion versions keep the same face), so match the character, not the framing. The small \
+                square in a row's team-up box is drawn like these icons. A costume can change a portrait \
+                (the sheet shows Lady Loki for Loki); a hero absent from the sheet can still appear.
+
+                """ + PortraitCheck.rules(true) + """
 
                 Rules:
                 - Use hero names exactly as in the HERO NAMES list. For Deadpool, add the role from the row's \
