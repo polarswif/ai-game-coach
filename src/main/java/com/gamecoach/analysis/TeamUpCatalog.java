@@ -45,27 +45,19 @@ public class TeamUpCatalog {
     }
 
     /**
-     * The team-up between these two heroes, if there is one. The table lists each team-up under one
-     * hero, but the scoreboard can show it from either side (Doctor Strange's box shows Magik for
-     * Magik's Chain of Cyttorak), so the partner's own list is checked too.
+     * The hero's own team-up with this partner, if there is one. Team-ups go one way: a row's box
+     * shows a partner from that hero's own list (Doctor Strange: Hulk or Invisible Woman), even
+     * when another hero lists him as their partner (Magik's Chain of Cyttorak).
      */
     public Optional<TeamUp> find(String hero, String partner) {
-        Optional<TeamUp> own = forHero(hero).stream()
+        return forHero(hero).stream()
                 .filter(t -> HeroRoleCatalog.sameHero(t.partner(), partner))
-                .findFirst();
-        return own.isPresent() ? own : forHero(partner).stream()
-                .filter(t -> HeroRoleCatalog.sameHero(t.partner(), hero))
                 .findFirst();
     }
 
-    /** Every hero this hero can share a team-up with, from either side of the table, in table order. */
+    /** The partners a hero's team-up box can show: their own team-ups only, in table order. */
     public List<String> partnersOf(String hero) {
-        java.util.LinkedHashSet<String> partners = new java.util.LinkedHashSet<>();
-        forHero(hero).forEach(t -> partners.add(t.partner()));
-        teamUpsByHero.values().forEach(list -> list.stream()
-                .filter(t -> HeroRoleCatalog.sameHero(t.partner(), hero))
-                .forEach(t -> partners.add(t.hero())));
-        return List.copyOf(partners);
+        return forHero(hero).stream().map(TeamUp::partner).distinct().toList();
     }
 
     private void load(InputStream in) throws IOException {

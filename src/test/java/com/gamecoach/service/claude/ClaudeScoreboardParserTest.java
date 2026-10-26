@@ -196,7 +196,7 @@ class ClaudeScoreboardParserTest {
         String text = ((TextPart) parts.get(parts.size() - 1)).text();
         assertTrue(text.contains("TEAM-UP PARTNERS"));
         String strange = text.lines().filter(l -> l.startsWith("Doctor Strange: ")).findFirst().orElseThrow();
-        assertTrue(strange.contains("Magik"), strange);                 // from Magik's side of the table
+        assertEquals("Doctor Strange: Hulk, Invisible Woman", strange);
         assertTrue(text.lines().filter(l -> l.startsWith("Deadpool: ")).count() == 1);
     }
 

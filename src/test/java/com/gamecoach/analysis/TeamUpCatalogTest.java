@@ -50,11 +50,11 @@ class TeamUpCatalogTest {
     }
 
     @Test
-    void aTeamUpCountsFromEitherHerosSide() {
+    void teamUpsGoOneWay() {
         assertEquals("Chain of Cyttorak", catalog.find("Magik", "Doctor Strange").orElseThrow().name());
-        assertEquals("Chain of Cyttorak", catalog.find("Doctor Strange", "Magik").orElseThrow().name());
+        assertTrue(catalog.find("Doctor Strange", "Magik").isEmpty());   // Strange's box: Hulk or Invisible Woman
         assertTrue(catalog.find("Thor", "Loki").isEmpty());
         assertTrue(catalog.find("Psylocke", "Magik").isEmpty());
-        assertTrue(catalog.partnersOf("Doctor Strange").containsAll(List.of("Hulk", "Invisible Woman", "Magik")));
+        assertEquals(List.of("Hulk", "Invisible Woman"), catalog.partnersOf("Doctor Strange"));
     }
 }

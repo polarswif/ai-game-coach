@@ -43,8 +43,8 @@ final class ScoreboardPrompt {
                 player name, then K / D / A (KOs, deaths, assists), final hits, damage, damage blocked, \
                 healing, accuracy, and the Medals column. MVP and SVP tags mark at most one player each.
                 - Names can be hidden (blacked out or covered by a popup): use null, never guess.
-                - Team-up box: it pictures the partner hero, who must be one of the row hero's TEAM-UP \
-                PARTNERS (listed after HERO NAMES); compare the small face with those heroes on HERO \
+                - Team-up box: it pictures the partner hero, who must be one of the row hero's own TEAM-UP \
+                PARTNERS (listed after HERO NAMES; team-ups go one way); compare the small face with those heroes on HERO \
                 PORTRAITS. If it doesn't clearly match one of them, leave teamUpPartner null. Full color \
                 means enhanced (the partner is on the team); shaded or grey means not enhanced. Omit the \
                 team-up when there's no box.
